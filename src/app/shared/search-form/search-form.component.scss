@@ -1,0 +1,301 @@
+@import '../theme/base';
+@import '../theme/search-helpers';
+
+.search-form-container {
+    @extend %source-sans;
+
+    font-size: 1rem;
+    @media screen and (min-width: bp(afl_medium)) {
+        font-size: 1.2rem;
+    }
+}
+
+.search__advanced {
+    color: color(primary);
+
+    padding-top: em(4);
+
+    @media screen and (min-width: bp(afl_medium)) {
+      padding-top: em(6);
+    }
+}
+
+.search__routerLink {
+@extend %source-sans;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.resetFieldsToDefault { // very similar to search__submit
+  @extend %source-sans-semi-bold;
+
+  background-color: color(primary);
+  border-radius: 0;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.1rem;
+  height: 3rem;
+  letter-spacing: .5px;
+  transition: box-shadow .15s ease-in-out;
+  margin: em(8) em(8) em(16); // top, left and right, bottom
+
+  @media screen and (min-width: bp(afl_medium)) {
+    font-size: 1.2rem;
+  }
+
+  &:hover,
+  &:focus {
+      box-shadow: inset 0 0 5px rgba(51,51,51,.6);
+      background-color: color(secondary);
+  }
+
+}
+
+.search__submit {
+  @extend %source-sans-semi-bold;
+
+  background-color: color(primary);
+  border:1px color(primary); // defined for accessibility, so that a border is rendered in the Windows High Contrast mode
+  border-radius: 0;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.2rem;
+  height: $buttonHeight;
+  letter-spacing: .5px;
+  margin-top: em(8);
+  transition: box-shadow .15s ease-in-out;
+
+  @media screen and (max-width: bp(afl_medium_just_before)) {
+    margin-bottom: gutter(thmda-big);
+    margin-top: 0;
+  }
+
+  &:hover,
+  &:focus {
+      box-shadow: inset 0 0 5px rgba(51,51,51,.6);
+      background-color: color(secondary);
+  }
+
+}
+
+.search__submit__disabled {
+  @extend %source-sans-semi-bold;
+
+  background-color: color(primary);
+  border:1px color(primary); // defined for accessibility, so that a border is rendered in the Windows High Contrast mode
+  border-radius: 0;
+  color: #fff;
+  font-size: 1.2rem;
+  height: $buttonHeight;
+  letter-spacing: .5px;
+  margin-top: em(8);
+
+  @media screen and (max-width: bp(afl_medium_just_before)) {
+    margin-top: 0; // some narrow views will wrap this into a different line, needing a margin for better layout
+    margin-bottom: gutter(thmda-big);
+  }
+
+  // adjust look for "disabled"
+  cursor: not-allowed;
+  opacity: .4;
+
+}
+
+.search__fields-container {
+  margin: 0;
+  margin-top: em(10);
+  margin-bottom: em(10);
+}
+
+.search__rpp-container {
+  margin: auto;
+  width: auto;
+  max-width: em(290);
+
+  @media screen and (max-width: bp(thmda_narrow_just_before)) {
+    margin-top: em(8); // some narrow views will wrap this into a different line, needing a margin for better layout
+  }
+}
+
+.search__submit-icon {
+  height: 2rem;
+  margin-right: 0.5rem;
+}
+
+.search__input {
+  @extend %source-sans;
+
+  border: 1px solid color(dark-grey);
+  border-radius: 0;
+  font-size: 1rem;
+  height: 3rem;
+  margin-bottom: em(10);
+  padding-left: 0.5em;
+  width: 100%;
+
+  @media screen and (min-width: bp(afl_medium)) {
+      font-size: 1.2rem;
+      height: 3rem;
+  }
+
+  // opacity used to override Firefox default value for placeholders
+  // no longer needed as we retired placeholders
+  //&::placeholder {
+  //    color: #999;
+  //    opacity: 1;
+  //    text-transform: capitalize;
+  //}
+
+  // Safari will "zoom in" on the input element with font-size like this, so it needs more space.
+  // Rather than "fight it" and try to control Safari html-select element styling, give it the space
+  // to do what it is doing (at least for Safari 13 on mobile, works as of May 2020).
+  &:not(:root:root) {
+    width: 95%;
+  }
+}
+
+.search-field-select {
+  @extend %source-sans;
+
+  background-color: #fff;
+  border: 1px solid color(ok-grey);
+  border-radius: 0;
+  height: 1.875rem;
+  min-width: 10rem;
+  width: 100%;
+  font-size: 1rem;
+
+  @media screen and (min-width: bp(afl_medium)) {
+      font-size: 1.2rem;
+      height: 2rem;
+  }
+
+  // Safari will "zoom in" on the select with font-size like this, so it needs more space.
+  // Rather than "fight it" and try to control Safari html-select element styling, give it the space
+  // to do what it is doing (at least for Safari 13 on mobile, works as of May 2020).
+  &:not(:root:root) {
+    margin-left: em(8);
+  }
+
+}
+
+.search-field-option {
+  text-align: center;
+}
+
+.search__links-container {
+  margin-bottom: em(5);
+  width: 100%;
+
+  &--no-rpp {
+    width: auto;
+  }
+}
+
+.helptext {
+  font-size: 1rem;
+  color: black;
+  &.bold {
+    font-weight: bold;
+  }
+}
+
+.helptextOpener {
+  font-size: 1rem;
+  color: black;
+  &.bold {
+    font-weight: bold;
+  }
+  margin-top: 0; // forget extra lead-in above for this "opener"
+}
+
+.markOffLegend {
+  margin: em(8) 0; // top, left and right, bottom
+}
+
+
+/* Increase space between checkbox and its text */
+label input {
+  margin-right: 5px;
+}
+
+input {
+  color: #1E1810;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 1.2rem;
+}
+
+/* Courtesy of http://stackoverflow.com/questions/306252/how-to-align-checkboxes-and-their-labels-consistently-cross-browsers
+*/
+input[type=checkbox] {
+vertical-align: middle;
+position: relative;
+top: -3px;
+}
+
+/* Use noBreak class on outer label enclosing a checkbox to keep label and checkbox on same line.
+*/
+.noBreak {
+white-space: nowrap;
+font-size: 1.2rem;
+font-weight: normal;
+color: #1E1810;
+}
+
+.interview_date_panel {
+  background-color: color(secondary);
+  border-radius: 0;
+  border: 1px solid color(ok-grey);
+  box-shadow: none;
+  // leave height out of style; figured out based on need for space for the min/max date when checked "on"
+  margin: em(8) 0 em(12); // top, left and right, bottom
+  padding: 0.2em 0.2em 0.2em 0.2em;
+  width: 90%;
+
+.date-panel-piece {
+  min-width: 280px;
+  padding: 0;
+  margin-bottom: 0.3em;
+}
+}
+
+.interview_date_area_terse {
+@extend %oswald;
+color: white;
+font-size: 1rem;
+margin: 0;
+padding: 0;
+padding-bottom: 0.5em;
+width: 100%;
+align-content: center;
+}
+
+.interview_date_area_wordy {
+@extend %oswald;
+color: white;
+font-size: 1.1rem;
+margin: 0;
+padding: 0;
+width: 100%;
+}
+
+@media screen and (max-width: bp(thmda_narrow_just_before)) {
+.interview_date_area_wordy {
+  display: none !important;
+}
+}
+
+@media screen and (min-width: bp(thmda_narrow)) {
+.interview_date_area_terse {
+  display: none !important;
+}
+}
+
+.interview-date-preface-label {
+@extend %oswald;
+color: white;
+font-size: 1rem;
+padding-top: em(2);
+padding-right: em(5);
+}

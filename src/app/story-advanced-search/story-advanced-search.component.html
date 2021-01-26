@@ -1,0 +1,62 @@
+<h1 id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title mobile-only" (mousedown)="noMouseFocus($event)">{{storyAdvSearchPageTitle}}</h1>
+<h1 id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title desktop-only" (mousedown)="noMouseFocus($event)">{{storyAdvSearchPageTitleLong}}</h1>
+
+<div fxLayout="row" fxLayoutAlign="start">
+  <div fxFlex="0 1 calc(800px)">
+      <!-- Search Form (capped at 800px width via fxflex line in container div) and with
+           showAdvancedStoryOptions as !biographyIDForLimitingSearch, i.e., only show advanced
+           options when not searching inside a person, to show more advanced options within it (the parameter
+           showAdvancedSearchLink is false because we are already at advanced search info). -->
+      <search-form #myStorySearchForm [showResultsPerPage]="true" [showAdvancedSearchLink]="false" [showFieldOptions]="true"
+        [showAdvancedStoryOptions]="!biographyIDForLimitingSearch" ></search-form>
+  </div>
+</div>
+
+<!-- Optionally describe searching within a person first (elements conditional on biographyIDForLimitingSearch). -->
+<h3 *ngIf="biographyIDForLimitingSearch" class="mysubheading-gap-before">Searching Inside a Single Person</h3>
+<p *ngIf="biographyIDForLimitingSearch" class="helptext">You are in a single person's landing page,
+  and your search will be just inside that person's stories, clued in via the "Search this person's stories..."
+  prompt in the query input area.  From the <a routerLink="/home" routerLinkActive="active">Home</a> page,
+  you can issue a search across all people and see a broader resulting set of stories.</p>
+
+  <!-- Same heading, different style, dependent on  biographyIDForLimitingSearch -->
+<h3 *ngIf="biographyIDForLimitingSearch" class="mysubheading">Search Syntax and Special Characters</h3>
+<h3 *ngIf="!biographyIDForLimitingSearch" class="mysubheading-gap-before">Search Syntax and Special Characters</h3>
+
+<p class="helptext">There are special characters that add meaning to a query:  *&nbsp;&nbsp;+&nbsp;&nbsp;-&nbsp;&nbsp;(&nbsp;&nbsp;) and quotes to mark a phrase.
+<p class="helptext bold">Examples of the use of special characters and their meaning:</p>
+<ul>
+    <li class="helptext">"coffee cup" &mdash; matches documents with the two word phrase: coffee cup</li>
+    <li class="helptext">coffee cup &mdash; matches documents with both words, i.e., coffee and cup are in story (by default with no other syntactical markers, all terms must be found in the returned documents)</li>
+    <li class="helptext">coffee | cup &mdash; matches documents with one or both words, i.e., this is the least precise query</li>
+    <li class="helptext">drink + (coffee | cup) &mdash; matches documents with drink and at least one of coffee or cup: + is "and", | is "or", and parentheses mark precedence
+    </li>
+</ul>
+<p class="helptext bold">Use * as a wildcard</p>
+<ul>
+    <li class="helptext">snow* &mdash; matches any word beginning with snow, e.g., snow or snowing or snowstorm</li>
+</ul>
+<p class="helptext bold">Use - to start a term to negate (i.e., not search)</p>
+<ul>
+    <li class="helptext">coffee -cup &mdash; matches documents with coffee and without cup</li>
+</ul>
+<p class="helptext">As an example tying all of this together, a user looking for voting stories that mention John Lewis and at least one of SNCC or CORE or SCLC could issue:</p>
+<p class="helptext">vot* "John Lewis" + (SNCC | CORE | SCLC)</p>
+<h3 class="mysubheading">Summary of Searching in the Digital Archive</h3>
+<p class="helptext">The default search behavior is to match all terms, so the more terms you add, the more precise your query and the fewer documents will be returned.
+  Search in the Digital Archive makes use of Azure Search with a Lucene-based query parser called simple query.  For details, visit the
+  <a href = "https://lucene.apache.org/core/4_7_0/queryparser/org/apache/lucene/queryparser/simple/SimpleQueryParser.html">Simple Query Parser</a>
+  documentation (note: this page is outside of the Digital Archive).  In Azure Search, the simple query syntax excludes the fuzzy/slop options.</p>
+<p class="helptext">Separate fields can be searched within stories, namely just the title field, or just the transcript field.  As with the story results per page setting,
+  once you change the search field it remains at your choice until you change it again, so be aware if you are searching into just transcripts, just
+  titles, or all the fields (i.e., both) as told to you by the interface.
+<p class="helptext">There are two types of searches in the Digital Archive:</p>
+<ol>
+    <li class="helptext">"HistoryMakers", i.e., the people that were interviewed in the archive</li>
+    <li class="helptext">Stories, i.e., what these people spoke about</li>
+</ol>
+<p class="helptext">
+    From the <a routerLink="/home" routerLinkActive="active">Home</a> page, you can issue a search and see a resulting set of stories.
+    From the <a routerLink="/all" routerLinkActive="active">Maker Directory</a> page, you will see a set of HistoryMakers.
+    You can issue a search to the biographies and see a resulting set of people.  It has its own advanced search capability as well.
+</p>

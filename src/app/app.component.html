@@ -1,0 +1,276 @@
+﻿<!-- Assumptions on content to go into the app-contents section:
+(1) for mobile-only class there is an eleement with ID mmainHeader, and
+(2) for desktop-only class (i.e., all other instances, these two cover 100% of possibilities), there is an element with ID dmainHeader
+ note: took out fxLayoutAlign="start stretch"  from parent div... -->
+<div fxFlexFill fxLayout="column" class="appHeaderPlusContents">
+  <header fxFlex.xs="1 1 5rem" fxFlex.lt-xs="1 1 8.8rem" fxFlex.gt-sm="1 1 9.15rem" fxFlex.gt-md="1 1 9.2rem" id="header" class="header">
+    <a *ngIf="!inContentLinksRoute" [routerLink]="" fragment="'mmainHeader'" routerLinkActive="active" class="skip mobile-only" (click)="scrollHeaderIntoView('mmainHeader')">Skip to content</a>
+    <a *ngIf="!inContentLinksRoute" [routerLink]="" fragment="'dmainHeader'" routerLinkActive="active" class="skip desktop-only" (click)="scrollHeaderIntoView('dmainHeader')">Skip to content</a>
+    <div class="header__content-container" fxLayout="column">
+        <div class="header__top-flex-row" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="calc(4px)">
+            <div fxFlex.gt-xs="3 3 calc(17em)" fxFlex.lt-sm="60%" fxLayout="row" fxLayoutAlign="start">
+                <!-- Logo that if clicked takes one to the home page (even if on home page, for consistency based on accessibility review) -->
+                <a routerLink="/home">
+                    <svg class="header__logo" width="449" height="36" xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 460.8 35.72">
+                        <title>The HistoryMakers Digital Archive home</title>
+                        <g>
+                            <g>
+                                <polygon points="212.43 2.86 220.04 0 217.18 7.61 212.43 2.86" style="fill:#ef5323;fill-rule:evenodd"/>
+                                <polygon points="191.9 32.87 184.29 35.72 187.15 28.11 191.9 32.87" style="fill:#ef5323;fill-rule:evenodd"/>
+                                <path d="M7.35,7.11H.72A.72.72,0,0,1,0,6.38V5.28a.72.72,0,0,1,.72-.72H16.88a.72.72,0,0,1,.72.72V6.38a.72.72,0,0,1-.72.72H10.25V30.5a.75.75,0,0,1-.72.72H8.08a.75.75,0,0,1-.72-.72Z" style="fill:#231f20"/>
+                                <path d="M26.08,5.28a.75.75,0,0,1,.72-.72h1.49a.72.72,0,0,1,.72.72V16.4H44.48V5.28a.72.72,0,0,1,.72-.72h1.49a.75.75,0,0,1,.72.72V30.5a.75.75,0,0,1-.72.72H45.21a.72.72,0,0,1-.72-.72V19H29V30.5a.72.72,0,0,1-.72.72H26.81a.75.75,0,0,1-.72-.72Z" style="fill:#231f20"/>
+                                <path d="M59.48,5.28a.72.72,0,0,1,.72-.72h15a.72.72,0,0,1,.72.72V6.38a.72.72,0,0,1-.72.72H62.41v9.3H73.35a.75.75,0,0,1,.72.72v1.11a.72.72,0,0,1-.72.72H62.41v9.72h12.8a.72.72,0,0,1,.72.72V30.5a.72.72,0,0,1-.72.72h-15a.72.72,0,0,1-.72-.72Z" style="fill:#231f20"/>
+                                <path d="M90.29,5.28A.75.75,0,0,1,91,4.55h4.53a.72.72,0,0,1,.72.72v9.6h10.9V5.28a.72.72,0,0,1,.72-.72h4.53a.75.75,0,0,1,.72.72V30.5a.75.75,0,0,1-.72.72h-4.53a.72.72,0,0,1-.72-.72v-10H96.27v10a.72.72,0,0,1-.72.72H91a.75.75,0,0,1-.72-.72Z" style="fill:#231f20"/>
+                                <path d="M124,5.28a.75.75,0,0,1,.72-.72h4.57a.75.75,0,0,1,.72.72V30.5a.75.75,0,0,1-.72.72h-4.57a.75.75,0,0,1-.72-.72Z" style="fill:#231f20"/>
+                                <path d="M139.33,27.61l1.79-3.16a1,1,0,0,1,1.3-.23c.15.08,2.9,2.1,5.41,2.1A2.39,2.39,0,0,0,150.45,24c0-1.6-1.33-2.82-3.92-3.85-3.28-1.29-7.39-3.85-7.39-8.42,0-3.77,2.93-7.58,8.8-7.58A14.16,14.16,0,0,1,156.09,7a1,1,0,0,1,.23,1.22l-1.94,2.93c-.27.42-1,.76-1.3.5S150,9.39,147.63,9.39a2.21,2.21,0,0,0-2.4,1.94c0,1.41,1.14,2.48,4.15,3.7s7.7,3.51,7.7,8.69c0,3.92-3.39,7.89-9,7.89-5,0-7.7-2.06-8.57-2.93C139.14,28.29,139,28.14,139.33,27.61Z" style="fill:#231f20"/>
+                                <path d="M169.45,10.15H164a.72.72,0,0,1-.72-.72V5.28a.72.72,0,0,1,.72-.72h16.92a.72.72,0,0,1,.72.72V9.43a.72.72,0,0,1-.72.72h-5.45V30.5a.75.75,0,0,1-.72.72h-4.57a.75.75,0,0,1-.72-.72Z" style="fill:#231f20"/>
+                                <path d="M225.94,5.28a.72.72,0,0,1,.72-.72h11.39a8.29,8.29,0,0,1,8.3,8.23c0,3.51-2.32,6.33-5.64,7.66l5.22,9.68a.72.72,0,0,1-.65,1.1h-5.07a.7.7,0,0,1-.61-.34l-5.07-10.1h-2.63V30.5a.75.75,0,0,1-.72.72h-4.53a.72.72,0,0,1-.72-.72Zm11.62,10.67a3.05,3.05,0,0,0,2.9-3,2.92,2.92,0,0,0-2.9-2.9h-5.64v5.94Z" style="fill:#231f20"/>
+                                <path d="M260.55,18.38,252.13,5.66a.71.71,0,0,1,.61-1.1h5a.76.76,0,0,1,.61.34l5.3,7.81,5.3-7.81a.7.7,0,0,1,.61-.34h5a.71.71,0,0,1,.61,1.1l-8.54,12.69V30.5a.75.75,0,0,1-.72.72h-4.54a.72.72,0,0,1-.72-.72Z" style="fill:#231f20"/>
+                                <path d="M286,4.71a.73.73,0,0,1,.69-.53h.61a.73.73,0,0,1,.65.42l7.54,21h.19l7.43-21a.73.73,0,0,1,.65-.42h.61a.73.73,0,0,1,.69.53L310,30.31c.12.53-.11.91-.69.91h-1.52a.79.79,0,0,1-.69-.53l-3.39-19.62h-.15l-7,20.12a.77.77,0,0,1-.65.42h-.69a.77.77,0,0,1-.65-.42l-7.09-20.12h-.15L284,30.69a.74.74,0,0,1-.69.53H281.8c-.57,0-.8-.38-.69-.91Z" style="fill:#231f20"/>
+                                <path d="M316.49,30.23,328.08,4.59a.69.69,0,0,1,.65-.42h.38a.69.69,0,0,1,.65.42l11.51,25.64a.67.67,0,0,1-.65,1h-1.52a.7.7,0,0,1-.65-.42l-2.82-6.29H322.09l-2.78,6.29a.7.7,0,0,1-.65.42h-1.53A.67.67,0,0,1,316.49,30.23Zm18.1-8.08c-1.87-4.15-3.7-8.34-5.56-12.5h-.3l-5.56,12.5Z" style="fill:#231f20"/>
+                                <path d="M349.7,5.47a.9.9,0,0,1,.91-.91h1.11a.93.93,0,0,1,.91.92V16.25L364.52,4.93a1.13,1.13,0,0,1,.72-.38h1.87a.73.73,0,0,1,.46,1.33l-12,11.24L368.14,30a.75.75,0,0,1-.65,1.18h-1.94a1,1,0,0,1-.69-.27L352.63,18.19V30.31a.93.93,0,0,1-.91.91h-1.11a.9.9,0,0,1-.91-.91Z" style="fill:#231f20"/>
+                                <path d="M377.35,5.28a.72.72,0,0,1,.72-.72h15a.72.72,0,0,1,.72.72V6.38a.72.72,0,0,1-.72.72h-12.8v9.3h10.93a.75.75,0,0,1,.72.72v1.11a.72.72,0,0,1-.72.72H380.28v9.72h12.8a.72.72,0,0,1,.72.72V30.5a.72.72,0,0,1-.72.72h-15a.72.72,0,0,1-.72-.72Z" style="fill:#231f20"/>
+                                <path d="M404.19,5.28a.72.72,0,0,1,.72-.72h9.87a8.19,8.19,0,0,1,8.31,8.12,8.51,8.51,0,0,1-5.64,7.77l5.22,9.68a.72.72,0,0,1-.65,1.1h-1.94a.65.65,0,0,1-.61-.34l-5.07-10.1h-7.28V30.5a.75.75,0,0,1-.72.72h-1.49a.72.72,0,0,1-.72-.72Zm10.4,13a5.55,5.55,0,0,0,5.49-5.56,5.54,5.54,0,0,0-5.49-5.37H407.2V18.27Z" style="fill:#231f20"/>
+                                <path d="M432,27.22c.19-.23.38-.5.57-.72.38-.5.8-.8,1.33-.34.27.23,3,2.9,6.44,2.9,3.09,0,5.11-1.94,5.11-4.19,0-2.63-2.29-4.19-6.67-6C434.54,17,432,15.3,432,11c0-2.59,2.06-6.78,8.12-6.78a12.46,12.46,0,0,1,6.52,1.94.85.85,0,0,1,.23,1.3c-.15.23-.3.5-.46.72a.86.86,0,0,1-1.33.34,10.68,10.68,0,0,0-5-1.75c-4,0-5.26,2.59-5.26,4.19,0,2.55,1.94,4,5.14,5.37,5.14,2.1,8.46,4,8.46,8.46,0,4-3.77,6.86-8.23,6.86a12.42,12.42,0,0,1-8-3.09A.84.84,0,0,1,432,27.22Z" style="fill:#231f20"/>
+                                <path d="M208.67,13.72a7.59,7.59,0,0,1-6.35,11.79,7.5,7.5,0,0,1-4.17-1.27l-4.39,4.39A13.73,13.73,0,0,0,213.05,9.35Z" style="fill:#ef5323"/>
+                                <path d="M196,22.13a7.5,7.5,0,0,1-1.29-4.2,7.67,7.67,0,0,1,7.58-7.66,7.52,7.52,0,0,1,4.25,1.32l4.37-4.37a13.73,13.73,0,0,0-19.3,19.3Z" style="fill:#ef5323"/>
+                                <path d="M459.86,32a3.21,3.21,0,1,1,.94-2.27A3.08,3.08,0,0,1,459.86,32Zm-4.21-4.22a2.79,2.79,0,0,0,0,3.91,2.75,2.75,0,0,0,3.9,0,2.79,2.79,0,0,0,0-3.91,2.74,2.74,0,0,0-3.89,0Zm1.88.18a2.66,2.66,0,0,1,1,.13A.87.87,0,0,1,459,29a.77.77,0,0,1-.34.69,1.34,1.34,0,0,1-.51.17.85.85,0,0,1,.6.34,1,1,0,0,1,.19.54V31c0,.08,0,.17,0,.26a.56.56,0,0,0,0,.18l0,0h-.58V31a.86.86,0,0,0-.33-.8,1.47,1.47,0,0,0-.69-.11h-.49v1.38h-.62V27.94Zm.67.55a1.61,1.61,0,0,0-.75-.13h-.53v1.27h.56a1.69,1.69,0,0,0,.59-.08.63.63,0,0,0,.13-1.06Z" style="fill:#231f20"/>
+                            </g>
+                        </g>
+                    </svg>
+                </a>
+            </div>
+            <div fxFlex="auto" class="mobile-top-row-icon-area">
+                <div fxFlex="auto" fxLayout="row" fxLayoutAlign="end">
+                    <!-- "Search" menu icon -->
+                    <a *ngIf="!inSearchFormRoute && !inContentLinksRoute" class="header__icon" href="javascript:void(0)" (click)="openMySimpleSearch()">
+                        <span class="sr-only">Simple Search Interface</span>
+                        <svg aria-hidden="true" width="34" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                            <title>
+                                Simple Search Interface
+                            </title>
+                            <path d="M27.964 4.036C25.274 1.346 21.746 0 18.22 0c-3.527 0-7.054 1.345-9.745 4.036-4.858 4.858-5.33 12.44-1.416 17.828l-6.422 6.42c-.85.85-.85 2.23 0 3.078.424.425.98.638 1.538.638.557 0 1.114-.213 1.54-.638l6.42-6.42c2.403 1.745 5.243 2.62 8.083 2.62 3.526 0 7.053-1.346 9.744-4.037 5.38-5.382 5.38-14.107 0-19.49zM25.81 21.37c-2.028 2.028-4.723 3.145-7.59 3.145-2.868 0-5.564-1.116-7.59-3.144-4.186-4.184-4.186-10.995 0-15.18 2.026-2.027 4.722-3.144 7.59-3.144 2.867 0 5.562 1.116 7.59 3.144 2.027 2.028 3.144 4.723 3.144 7.59 0 2.868-1.117 5.564-3.144 7.59z" fill-rule="nonzero" fill="currentColor"/>
+                        </svg>
+                    </a>
+                </div>
+                <div fxFlex="auto" fxLayout="row" fxLayoutAlign="end">
+                    <!-- "Hamburger" menu icon -->
+                    <a *ngIf="!inContentLinksRoute" class="header__icon" href="javascript:void(0)" (click)="openContentLinks()">
+                        <span class="sr-only">Site Navigation</span>
+                        <svg aria-hidden="true" width="39" height="30" viewBox="0 0 39 30" xmlns="http://www.w3.org/2000/svg" >
+                            <title>
+                                Site Navigation
+                            </title>
+                            <path d="M0 2C0 .895.964 0 2.152 0h34.696C38.036 0 39 .888 39 2c0 1.105-.964 2-2.152 2H2.152C.964 4 0 3.112 0 2zm0 13c0-1.105.964-2 2.152-2h34.696c1.188 0 2.152.888 2.152 2 0 1.105-.964 2-2.152 2H2.152C.964 17 0 16.112 0 15zm0 13c0-1.105.964-2 2.152-2h34.696c1.188 0 2.152.888 2.152 2 0 1.105-.964 2-2.152 2H2.152C.964 30 0 29.112 0 28z" fill-rule="nonzero" fill="currentColor"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div fxFlex="40%" class="desktop-top-row-tagline-area">
+              <p aria-hidden="true" class="header__tagline">The Nation’s Largest African American <br />Video Oral History Collection</p>
+              <p class="sr-only">The Nation’s Largest African American Video Oral History Collection</p>
+            </div>
+        </div>
+        <nav *ngIf="!inContentLinksRoute" fxFlex="grow" class="nav-across-width" aria-label="Site">
+            <h2 id="site-nav-heading" class="sr-only">Site Navigation</h2>
+            <ul class="nav__links" fxLayout="row" fxLayoutAlign="space-between center" aria-labelledby="site-nav-heading">
+                <li fxFlex="auto">
+                    <a class="nav__link" routerLink="/home" routerLinkActive="active">
+                        Home
+                    </a>
+                </li>
+                <li fxFlex="auto">
+                    <a class="nav_terse nav__link" routerLink="/all" routerLinkActive="active">
+                        Makers
+                    </a>
+                    <a class="nav_verbose nav__link" routerLink="/all" routerLinkActive="active">
+                        Maker Directory
+                    </a>
+                </li>
+                <li *ngIf="showTopicSearch" fxFlex="auto">
+                    <a class="nav_terse nav__link" routerLink="/tag" routerLinkActive="active">
+                        Topics
+                    </a>
+                    <a class="nav_verbose nav__link" routerLink="/tag" routerLinkActive="active">
+                        Topic Search
+                    </a>
+                </li>
+                <li fxFlex="auto">
+                    <a class="nav__link" routerLink="/settings" routerLinkActive="active">
+                        Settings
+                    </a>
+                </li>
+                <li fxFlex="auto">
+                    <a class="nav__link nav__link--myclips" [attr.aria-label]="myClipsWithCountMsg" routerLink="/stories/4" routerLinkActive="active">
+                        My Clips <span class="nav__badge" >{{myClips.length}}</span>
+                    </a>
+                </li>
+                <li fxFlex="auto">
+                    <a class="nav__link" href="javascript:void(0)" (click)="openMyContactUsModalForm()">
+                        Contact Us
+                    </a>
+                </li>
+                <li fxFlex="auto">
+                    <a class="nav__link" routerLink="/help" routerLinkActive="active">
+                        FAQ/Help
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+  </header>
+  <app-contents fxFlex="grow" class="imposeMaxContentsWidth" role="main">
+      <!-- NOTE: via app-contents, this is where the router contents will get placed per route (page) -->
+  </app-contents>
+</div>
+<!-- NOTE: in order for the trick of having the contents get a vertical scroll bar and completely fill the remaining
+display space for all browsers without needing to resort to vh units which cause problems on mobile browsers, we
+cannot have a visible footer (as it either would need to be improperly nested within the contents, or else would
+cause additional vertical scroll bars - bars within bars - if tacked on to the end as done here.  Instead, these
+"back to top" links are like the "skip" links at start: available for screen reader users but hidden otherwise so
+as not to disturb the scroll-bar mechanics used in the rest of this page layout.) -->
+<footer class="imposeMaxWidth" *ngIf="inShowingManyItemsRoute">
+  <h2 class="sr-only">Footer</h2>
+  <a [routerLink]="" fragment="'mmainHeader'" routerLinkActive="active" class="skip mobile-only" (click)="scrollHeaderIntoView('mmainHeader')">Back to Top</a>
+  <a [routerLink]="" fragment="'dmainHeader'" routerLinkActive="active" class="skip desktop-only" (click)="scrollHeaderIntoView('dmainHeader')">Back to Top</a>
+</footer>
+
+<!-- Modal form for Contact Us -->
+<div #myContactUsModalForm *ngIf="showMyContactUsModalForm" fxLayout="column" fxLayoutAlign="space-between stretch"
+  aria-labelledby="modalFeedbackHeading"
+  class="mymodal" role="dialog" (keydown.esc)="cancelFeedbackAndCloseMyModal()" cdkTrapFocus cdkTrapFocusAutoCapture>
+  <!-- Purpose of cdkTrapFocus: Tab and Shift + Tab will not leave this element. See https://material.angular.io/cdk/a11y/overview. -->
+  <!-- Purpose of cdkTrapFocusAutoCapture: Set focus immediately to element marked with cdkFocusInitial. -->
+  <!-- Modal content-->
+  <div class="mymodal-header" fxFlex="grow" fxLayout="row" fxLayoutAlign="space-between start">
+      <div fxFlex="grow" class="noSpacing">
+          <!-- Hide this intro text because title text is to be given AFTER the close button (via the sr-only h1 element). -->
+          <p class="mymodal-title" aria-hidden="true">How can we make the experience better for you?</p>
+      </div>
+      <div fxFlex="1 0 calc(28px)">
+          <button class="close" (click)="cancelFeedbackAndCloseMyModal()" cdkFocusRegionStart>
+              <span class="sr-only">Cancel dialog with no action taken</span>
+              <svg aria-hidden="true" width="17px" height="24px" viewBox="0 -2 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <title>Cancel dialog with no action taken</title>
+                  <g id="close-modal" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                      <path d="M7.29241999,-1.85786438 C6.78933126,-1.85786438 6.38432326,-1.45285565 6.38432326,-0.949767649 L6.38432326,6.38432326 L-0.949767649,6.38432326 C-1.45285492,6.38432326 -1.85786438,6.78933126 -1.85786438,7.29241999 L-1.85786438,8.99185126 C-1.85786438,9.49493999 -1.45285492,9.89994799 -0.949767649,9.89994799 L6.38432326,9.89994799 L6.38432326,17.2340389 C6.38432326,17.7371269 6.78933126,18.1421356 7.29241999,18.1421356 L8.99185126,18.1421356 C9.49493999,18.1421356 9.89994799,17.7371269 9.89994799,17.2340389 L9.89994799,9.89994799 L17.2340389,9.89994799 C17.7371269,9.89994799 18.1421356,9.49493999 18.1421356,8.99185126 L18.1421356,7.29241999 C18.1421356,6.78933126 17.7371269,6.38432326 17.2340389,6.38432326 L9.89994799,6.38432326 L9.89994799,-0.949767649 C9.89994799,-1.45285565 9.49493999,-1.85786438 8.99185126,-1.85786438 L7.29241999,-1.85786438 Z" fill="#FFFFFF" fill-rule="nonzero" transform="translate(8.142136, 8.142136) rotate(-315.000000) translate(-8.142136, -8.142136) "></path>
+                  </g>
+              </svg>
+          </button>
+          <h1 id="modalFeedbackHeading" class="sr-only">How can we make the experience better for you?</h1>
+      </div>
+  </div>
+  <div class="mymodal-body" fxFlexFill fxLayout="column" fxLayoutAlign="space-between stretch">
+      <div fxFlex="grow" class="noSpacing">
+          <label for="feedbackInput">Suggestions:</label>
+          <textarea id="feedbackInput" [(ngModel)]="givenFeedback" maxlength="1024" rows="4"
+            placeholder="Your suggestions and/or complaints will greatly help us..."
+            cdkFocusInitial>
+          </textarea>
+      </div>
+      <div fxFlex="grow" class="noSpacing">
+          <label for="feedbackEmailInput">Email (optional):</label>
+          <input id="feedbackEmailInput" type="email" class="email_input" maxlength="256" [(ngModel)]="optionalFeedbackEmail"
+            placeholder="Your email address for a possible response"/>
+      </div>
+      <div fxFlex="grow" class="noSpacing">
+          <p class="form-message">You are welcome to email us as well at <a href="mailto:info@thehistorymakers.org">info@thehistorymakers.org</a>.</p>
+      </div>
+  </div>
+  <div class="mymodal-footer" fxFlex="grow" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="calc(2em)">
+    <button class="button-secondary" fxFlex="grow" (click)="clearFeedback()">Clear</button>
+    <button fxFlex="grow" (click)="postFeedbackAndCloseMyModal()" cdkFocusRegionEnd>Submit</button>
+  </div>
+</div>
+
+<!-- Modal form for Export My Clips -->
+<div #myExportMyClipsModalForm *ngIf="showMyExportMyClipsModalForm" fxLayout="column" fxLayoutAlign="space-between stretch"
+  aria-labelledby="exportMyClipsHeading"
+  class="mymodal" role="dialog" (keydown.esc)="closeMyExportMyClipsModalForm()" cdkTrapFocus cdkTrapFocusAutoCapture>
+  <div class="mymodal-header" fxFlex="grow" fxLayout="row" fxLayoutAlign="space-between start">
+      <div fxFlex="grow" class="noSpacing">
+          <!-- Hide this intro text because title text is to be given AFTER the close button (via the sr-only h1 element). -->
+          <p class="mymodal-title" aria-hidden="true">Save URL for Story Set with a Title</p>
+      </div>
+      <div fxFlex="1 0 calc(28px)">
+          <button class="close" (click)="closeMyExportMyClipsModalForm()" cdkFocusRegionStart cdkFocusInitial>
+              <span class="sr-only">Close dialog</span>
+              <svg aria-hidden="true" width="17px" height="24px" viewBox="0 -2 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <title>Close dialog</title>
+                  <g id="close-myclips-modal" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                      <path d="M7.29241999,-1.85786438 C6.78933126,-1.85786438 6.38432326,-1.45285565 6.38432326,-0.949767649 L6.38432326,6.38432326 L-0.949767649,6.38432326 C-1.45285492,6.38432326 -1.85786438,6.78933126 -1.85786438,7.29241999 L-1.85786438,8.99185126 C-1.85786438,9.49493999 -1.45285492,9.89994799 -0.949767649,9.89994799 L6.38432326,9.89994799 L6.38432326,17.2340389 C6.38432326,17.7371269 6.78933126,18.1421356 7.29241999,18.1421356 L8.99185126,18.1421356 C9.49493999,18.1421356 9.89994799,17.7371269 9.89994799,17.2340389 L9.89994799,9.89994799 L17.2340389,9.89994799 C17.7371269,9.89994799 18.1421356,9.49493999 18.1421356,8.99185126 L18.1421356,7.29241999 C18.1421356,6.78933126 17.7371269,6.38432326 17.2340389,6.38432326 L9.89994799,6.38432326 L9.89994799,-0.949767649 C9.89994799,-1.45285565 9.49493999,-1.85786438 8.99185126,-1.85786438 L7.29241999,-1.85786438 Z" fill="#FFFFFF" fill-rule="nonzero" transform="translate(8.142136, 8.142136) rotate(-315.000000) translate(-8.142136, -8.142136) "></path>
+                  </g>
+              </svg>
+          </button>
+          <h1 id="exportMyClipsHeading" class="sr-only">Save URL for Story Set with a Title</h1>
+      </div>
+  </div>
+  <div class="mymodal-body" fxFlexFill fxLayout="column" fxLayoutAlign="space-between stretch">
+      <div fxFlex="grow" class="noSpacing">
+          <label for="myClipsTitleInput">Story Set Title:</label>
+          <textarea #myClipsTitleInput class="form-control textarea-feedback" [(ngModel)]="myClipsTitleCandidate"
+            [attr.maxLength]="myClipsTitleMaxLength" rows="4" placeholder="Your title goes here..."
+            [attr.aria-describedby]="myClipsTitleLengthHelper"(keyup)="thinToLegalMyClipsTitleKeyUp()"
+            (input)="handleMyClipsTitleInput()" (blur)="handleMyClipsTitleInputBlur()"></textarea>
+      </div>
+      <p id="lengthLimitInfoForMyClipsTitle" *ngIf="myClipsTitleInput.value.length <= myClipsTitleMaxLength" class="tightOnTop">
+        {{myClipsTitleMaxLength - myClipsTitleInput.value.length}} characters left of {{myClipsTitleMaxLength}} total.</p>
+      <div role="alert" class="sr-only" *ngIf="myClipsTitleInput.value.length == myClipsTitleMaxLength">
+        Title input has stopped as limit of {{myClipsTitleMaxLength}} characters has been reached.
+      </div>
+      <div role="alert" *ngIf="myClipsURLCopyActionFresh">
+        <p class="tightOnTopInItalics">Story set URL successfully copied to clipboard</p>
+      </div>
+      <div fxFlex="grow" class="noSpacing">
+          <label for="myClipsURLEchoArea">Story Set URL (read-only):</label>
+          <textarea readonly #myClipsURLEchoArea class="form-control textarea-feedback"
+            rows="4">{{myTitledMyClipsURI()}}</textarea>
+      </div>
+  </div>
+  <div class="mymodal-footer" fxFlex="grow" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="calc(2em)">
+      <button class="copy_URI_verbose" fxFlex="grow"
+        [disabled]="myClipsTitleCandidate.length == 0"
+        [cdkCopyToClipboard]="myTitledMyClipsURI()" (click)="markMyClipsURICopyAsDone()">Copy URL to Clipboard</button>
+      <button class="copy_URI_terse" fxFlex="grow"
+        [disabled]="myClipsTitleCandidate.length == 0"
+        [cdkCopyToClipboard]="myTitledMyClipsURI()" (click)="markMyClipsURICopyAsDone()">Copy URL</button>
+      <button fxFlex="grow" (click)="closeMyExportMyClipsModalForm()" cdkFocusRegionEnd>Close</button>
+  </div>
+</div>
+
+<!-- Modal form for Confirm Clearing of My Clips -->
+<div #myConfirmClearingMyClipsModalForm *ngIf="showMyConfirmClearingMyClipsModalForm" fxLayout="column" fxLayoutAlign="space-between stretch"
+  aria-labelledby="confirmMyClipsClearHeading"
+  class="mymodal" role="dialog" (keydown.esc)="closeMyConfirmClearMyClipsModalForm()" cdkTrapFocus cdkTrapFocusAutoCapture>
+  <div class="mymodal-header" fxFlex="grow" fxLayout="row" fxLayoutAlign="space-between start">
+      <div fxFlex="grow" class="noSpacing">
+          <!-- Hide this intro text because title text is to be given AFTER the close button (via the sr-only h1 element). -->
+          <p class="mymodal-title" aria-hidden="true">Empty out My Clips</p>
+      </div>
+      <div fxFlex="1 0 calc(28px)">
+          <button class="close" (click)="closeMyConfirmClearMyClipsModalForm()" cdkFocusRegionStart>
+              <span class="sr-only">Cancel and close dialog</span>
+              <svg aria-hidden="true" width="17px" height="24px" viewBox="0 -2 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <title>Cancel and close dialog</title>
+                  <g id="close-myclips-modal" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                      <path d="M7.29241999,-1.85786438 C6.78933126,-1.85786438 6.38432326,-1.45285565 6.38432326,-0.949767649 L6.38432326,6.38432326 L-0.949767649,6.38432326 C-1.45285492,6.38432326 -1.85786438,6.78933126 -1.85786438,7.29241999 L-1.85786438,8.99185126 C-1.85786438,9.49493999 -1.45285492,9.89994799 -0.949767649,9.89994799 L6.38432326,9.89994799 L6.38432326,17.2340389 C6.38432326,17.7371269 6.78933126,18.1421356 7.29241999,18.1421356 L8.99185126,18.1421356 C9.49493999,18.1421356 9.89994799,17.7371269 9.89994799,17.2340389 L9.89994799,9.89994799 L17.2340389,9.89994799 C17.7371269,9.89994799 18.1421356,9.49493999 18.1421356,8.99185126 L18.1421356,7.29241999 C18.1421356,6.78933126 17.7371269,6.38432326 17.2340389,6.38432326 L9.89994799,6.38432326 L9.89994799,-0.949767649 C9.89994799,-1.45285565 9.49493999,-1.85786438 8.99185126,-1.85786438 L7.29241999,-1.85786438 Z" fill="#FFFFFF" fill-rule="nonzero" transform="translate(8.142136, 8.142136) rotate(-315.000000) translate(-8.142136, -8.142136) "></path>
+                  </g>
+              </svg>
+          </button>
+          <h1 id="confirmMyClipsClearHeading" class="sr-only">Confirm the clearing out of My Clips?</h1>
+      </div>
+  </div>
+  <div class="mymodal-body" fxFlexFill fxLayout="column" fxLayoutAlign="space-between stretch">
+      <div fxFlex="grow" class="noSpacing">
+        <p>(Note: action cannot be undone.)</p>
+      </div>
+  </div>
+  <div class="mymodal-footer" fxFlex="grow" fxLayout="row" fxLayoutAlign="space-evenly center" fxLayoutGap="calc(2em)">
+      <button fxFlex="grow" (click)="clearMyClipsConfirmed()">Yes</button>
+      <button fxFlex="grow" (click)="closeMyConfirmClearMyClipsModalForm()" cdkFocusRegionEnd>No</button>
+  </div>
+</div>
+
+<!-- Modal underlay (obscuring rest of application from sight and eliminating mouse clicks into that other content) -->
+<div *ngIf="showMyContactUsModalForm || showMyExportMyClipsModalForm || showMyConfirmClearingMyClipsModalForm" class="mymodal-overlay"></div>

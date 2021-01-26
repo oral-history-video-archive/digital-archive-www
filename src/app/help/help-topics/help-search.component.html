@@ -1,0 +1,21 @@
+<h1 id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title mobile-only" (mousedown)="noMouseFocus($event)">How to Search</h1>
+<h1 id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title desktop-only" (mousedown)="noMouseFocus($event)">How to Search</h1>
+<p class="helptext-before-list">There are two primary types of searches in the Digital Archive:</p>
+<ul class="helptext-no-nargin-top">
+    <li class="helptext"><span class="helpEmphasis">1000s of "HistoryMakers"</span>, i.e., the people that were interviewed in the archive.
+      From the <a routerLink="/all" routerLinkActive="active">Maker Directory</a> page, you will see a set of HistoryMakers.
+      You can issue a search to the biographies and see a resulting set of people.
+      You can use <a routerLink="/bioadvs" routerLinkActive="active">
+      advanced biography-search</a> capabilities, such as whether to search on just the name.</li>
+    <li class="helptext"><span class="helpEmphasis">100,000s of Stories</span>, i.e., what these people spoke about.
+      From the <a routerLink="/home" routerLinkActive="active">Home</a> page, you can issue a search and see a resulting set of stories.
+      It has its own <a routerLink="/storyadvs" routerLinkActive="active">advanced story-search</a> capability as well.
+      Typical searches work against the story transcript (spoken words plus any transcription notes) and story title (created by people to represent the story).
+    </li>
+</ul>
+<p class="helptext" *ngIf="showTopicSearch && tagMatchDetails && tagMatchDetails.length > 0">
+  In addition, there is a <a routerLink="/tag" routerLinkActive="active">Topic Search</a> page where stories that have been manually tagged into topics can be retrieved.
+  Currently, {{tagMatchDetails}} <a routerLink="/tag" routerLinkActive="active">Topic Search</a> page.
+</p>
+<p class="helptext"><a routerLink="/help" routerLinkActive="active">Back to FAQ/Help</a></p>
+

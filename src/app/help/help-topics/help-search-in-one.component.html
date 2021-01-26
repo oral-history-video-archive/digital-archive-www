@@ -1,0 +1,26 @@
+<h1 id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title mobile-only" (mousedown)="noMouseFocus($event)">How to Search Within One Person's Stories Only</h1>
+<h1 id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title desktop-only" (mousedown)="noMouseFocus($event)">How to Search Within One Person's Stories Only</h1>
+<p class="helptext">Searching inside a single HistoryMaker is done from the HistoryMaker's landing page.
+  For example, suppose you are on the <a [routerLink]="['/storiesForBio',  {ID: 'A2001.082'}]" routerLinkActive="active">landing page for Barack Obama</a>.
+  You wish to search inside his stories for "Michelle" and can do so by using the controls on the top of the landing page.
+</p>
+
+<p class="helptext mobile-only">
+  For mobile (narrow width browsers), click the search icon (magnifying glass) and proceed to "Search this person's stories" entry area.
+  Type the word Michelle into the entry area and either also type the Enter/Return key or tap/click the "Search" (magnifying glass) button.
+</p>
+<div class="mobile-only" fxLayout="column" fxLayoutAlign="space-around center">
+  <img fxFlex="0 0 auto" class="help__img" src="assets/help-search-within-1m.jpg" alt="screen shot of one person's stories search area" />
+</div>
+<p class="helptext desktop-only">
+  For widescreen browsers, you will have a "Search this person's stories" entry box and can type there directly.
+  Type the word Michelle into the entry area and either also type the Enter/Return key or click/tap the "Search" (magnifying glass) button.
+</p>
+<div class="desktop-only" fxLayout="column" fxLayoutAlign="space-around center">
+  <img fxFlex="0 0 auto" class="help__img" src="assets/help-search-within-1.jpg" alt="screen shot of one person's stories search area" />
+</div>
+<p class="helptext">
+  You will get a set of stories from Barack Obama which mention "Michelle": <a [routerLink]="['/stories/2',  {q: 'Michelle', ip: '102', ia: 'A2001.082'}]" routerLinkActive="active">story results for "Michelle" query within just Barack Obama</a>.
+</p>
+<p class="helptext"><a routerLink="/help" routerLinkActive="active">Back to FAQ/Help</a></p>
+

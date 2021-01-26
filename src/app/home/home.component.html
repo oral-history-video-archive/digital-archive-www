@@ -1,0 +1,81 @@
+﻿<!-- Formerly, at 992 pixels plus, went to 2/3 for title and search form, 1/3 for About.
+    At  under 992 pixels, had rows of welcome, search form, About.
+    New way will use Angular Flex Layout default breakpoint value of 960, i.e.,
+    lt-md for at or under 959 and gt-sm for at or over 960. -->
+<div fxLayout="row wrap" fxLayoutAlign="space-between flex-start" fxLayoutGap.lt-md="0" fxLayoutGap="calc(20px)">
+    <div fxFlex.lt-md="100%" fxFlex.md="calc(66% - 20px)" fxFlex.gt-md="calc(70% - 20px)" fxLayout="column" fxLayoutAlign="space-between stretch" >
+        <div class="mobile-only" fxFlex="100%">
+            <!-- Mobile -->
+            <h1 id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title" (mousedown)="noMouseFocus($event)">Welcome to The HistoryMakers Digital Archive</h1>
+        </div>
+        <!-- Desktop: title plus search form -->
+        <div class="desktop-only" fxFlex="100%">
+            <h1 id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title" (mousedown)="noMouseFocus($event)">Welcome to The HistoryMakers Digital Archive</h1>
+        </div>
+        <!-- Speak this welcome here right after the <h1> heading, rather than in its flex layout ordering below. -->
+        <p class="sr-only" *ngIf="biographyCount">{{storyCount}} stories are assembled here from life oral history interviews with {{biographyCount}} historically significant African Americans {{lastUpdateDatePhrase}}.</p>
+
+        <div class="desktop-only extra-margin-whitespace" fxFlex="100%" fxLayout="row" fxLayoutAlign="start">
+            <div fxFlex.lt-md="100%" fxFlex="0 1 calc(800px)">
+                <!-- Search Form (capped at 800px width via fxflex line in container div) -->
+                <search-form [showResultsPerPage]="true" [showFieldOptions]="false" [showAdvancedSearchLink]="true" ></search-form>
+            </div>
+        </div>
+    </div>
+    <div fxFlex.lt-md="100%" fxFlex.md="33%" fxFlex.gt-md="30%" >
+        <!-- Rather than speak this welcome here, speak it sooner right after the <h1> heading. -->
+        <p class="welcome-paragraph" aria-hidden="true" *ngIf="biographyCount"><span class="welcome-paragraph__stories">{{storyCount}}</span> stories are assembled here from life oral history interviews with {{biographyCount}} historically significant African Americans {{lastUpdateDatePhrase}}.</p>
+    </div>
+</div>
+<!-- Either consume rest of space with "born this day" HistoryMakers, or also leave space for mixtapes. -->
+<div *ngIf="!showMixtapes" fxLayout="column" fxLayoutAlign="space-between stretch">
+    <div fxFlex="100%">
+        <h2 id="born_headingA" class="homepage__heading">HistoryMakers Born this Day</h2>
+    </div>
+    <div fxFlex="100%" *ngIf="confirmedNoBirthdays">
+        <p class="birthdays__empty-message">There are no History Makers born on this day, {{today | date: 'MMMM'}} {{today | date: 'd'}}.</p>
+    </div>
+    <div fxFlex="100%" *ngIf="biographies && biographies.length > 0">
+        <!-- FYI, lay out the items using CSS grid (note the thda component has ONLY a card grid layout, nothing else).
+              That is, biographies are ALWAYS shown in a card view in this layout. -->
+        <ul class="biographies" aria-labelledby="born_headingA">
+            <li class="biography" *ngFor="let oneBio of biographies;let i=index">
+              <thda-bio [bio]="biographies[i]" [selectedID]="signalFocusToBiographyID"></thda-bio>
+            </li>
+        </ul>
+    </div>
+</div>
+<div *ngIf="showMixtapes" fxLayout="row wrap" fxLayoutAlign="space-between start" fxLayoutGap.lt-md="0" fxLayoutGap="calc(20px)">
+    <section aria-labelledby="born_heading" fxFlex.lt-md="100%" fxFlex.md="calc(66% - 20px)" fxFlex.gt-md="calc(70% - 20px)"
+      fxLayout="column" fxLayoutAlign="space-between stretch" >
+        <div fxFlex="100%">
+            <h2 id="born_headingB" class="homepage__heading">HistoryMakers Born this Day</h2>
+        </div>
+        <div fxFlex="100%" *ngIf="confirmedNoBirthdays">
+            <p class="birthdays__empty-message">There are no History Makers born on this day, {{today | date: 'MMMM'}} {{today | date: 'd'}}.</p>
+        </div>
+        <div fxFlex="100%" *ngIf="biographies && biographies.length > 0">
+            <!-- FYI, lay out the items using CSS grid (note the thda component has ONLY a card grid layout, nothing else).
+                  That is, biographies are ALWAYS shown in a card view in this layout. -->
+            <ul class="biographies" aria-labelledby="born_headingB">
+                <li class="biography" *ngFor="let oneBio of biographies;let i=index">
+                  <thda-bio [bio]="biographies[i]" [selectedID]="signalFocusToBiographyID"></thda-bio>
+                </li>
+            </ul>
+        </div>
+    </section>
+    <section aria-labelledby="mixtape_heading" *ngIf="mixtapes" fxFlex.lt-md="100%" fxFlex.md="33%" fxFlex.gt-md="30%">
+      <div fxFlex="auto" fxLayout="column" fxLayoutAlign="start stretch">
+          <div fxFlex="100%">
+              <h2 id="mixtape_heading" class="homepage__heading">Featured Mixtapes</h2>
+          </div>
+          <div fxFlex="100%" class="mixtape-list-container">
+            <ul class="mixtape-list" aria-labelledby="mixtape_heading" fxLayout="row wrap" fxLayoutAlign="start center">
+                <li class="mixtape-item" *ngFor="let oneMixtape of mixtapes;let k=index">
+                    <thda-mix [mixtapeInput]="mixtapes[k]" [selectedID]="signalFocusToMixtapeID"></thda-mix>
+                </li>
+            </ul>
+          </div>
+      </div>
+    </section>
+</div>

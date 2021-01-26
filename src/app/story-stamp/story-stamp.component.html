@@ -1,0 +1,32 @@
+﻿<!-- NOTE: stamp view leading to route of form /story/ID, e.g., "['/story/' + story.storyID]"
+Because this stamp may be nested at different points within a page, either at an h3 level or an h4 level,
+gate which is used by the overrideToH4Nesting flag. -->
+<a tabindex="0" role="link" [ngClass]="{'card': cardView,'list':!cardView}"
+  [routerLink]="queryForTranscript ? ['/story/' + story.storyID, {q: queryForTranscript}] : ['/story/' + story.storyID]"
+  routerLinkActive="active"
+  fxLayout="column" fxLayoutAlign="space-between stretch" fxLayoutGap="0"
+  [thdaScrollToMe]="isSelected(story.storyID)">
+    <div *ngIf="cardView" fxFlex="1 0 calc(150px)" class="card_img-backdrop">
+      <img class="card__img" src="{{myMediaBase}}story/image/{{story.storyID}}" alt="" />
+    </div>
+    <div *ngIf="cardView" fxFlexFill class="card__info-overlay">
+        <h3 *ngIf="!overrideToH4Nesting" class="card__story-title">{{truncatedAsNeeded(story.title)}}</h3>
+        <h4 *ngIf="overrideToH4Nesting" class="card__story-title">{{truncatedAsNeeded(story.title)}}</h4>
+        <p class="card__story-duration" [attr.aria-label]="'length ' + convertToMMSS(story.duration)">
+            {{convertToMMSS(story.duration)}}
+        </p>
+    </div>
+    <div *ngIf="!cardView" fxFlex="auto">
+        <h3 *ngIf="!overrideToH4Nesting && (!highlights || !highlights.title)" class="list__name">{{truncatedAsNeeded(story.title)}}</h3>
+        <h3 *ngIf="!overrideToH4Nesting && highlights && highlights.title" class="list__name" [innerHTML]="highlights.title"></h3>
+        <h4 *ngIf="overrideToH4Nesting && (!highlights || !highlights.title)" class="list__name">{{truncatedAsNeeded(story.title)}}</h4>
+        <h4 *ngIf="overrideToH4Nesting && highlights && highlights.title" class="list__name" [innerHTML]="highlights.title"></h4>
+        <p class="list__contents">Length: {{convertToMMSS(story.duration)}}</p>
+        <p *ngIf="!hideInterviewDate" class="list__storydate">Interview Date: {{makeDatePretty(story.interviewDate)}}</p>
+        <div *ngIf="highlights && highlights.transcript">
+            <span *ngFor="let transcript of highlights.transcript"
+              class="list__contents" [innerHTML]="transcript"></span>
+        </div>
+    </div>
+</a>
+

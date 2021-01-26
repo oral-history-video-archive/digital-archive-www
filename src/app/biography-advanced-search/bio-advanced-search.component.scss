@@ -1,0 +1,9 @@
+@import '../shared/theme/base';
+
+.helptext {
+  font-size: 1rem;
+  color: black;
+  &.bold {
+    font-weight: bold;
+  }
+}

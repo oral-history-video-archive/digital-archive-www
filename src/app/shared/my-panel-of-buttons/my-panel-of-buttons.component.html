@@ -1,0 +1,45 @@
+<!-- bordered panel that opens/closes under user control,
+  but unlike my-panel thie one, my-panel-of-buttons, is presumed to contain a list of radio buttons
+  such that there needs to be extra keyboard control and an aria-haspopup attribute on the container div;
+  with one of 3 "looks" dependent on markAsGrandparent and markAsReverse and one of 2 structures,
+  h3 by default and h4 with overrideToH4Nesting as true -->
+<div [ngClass]="{'panel-parent': !markAsGrandparent && !markAsReverse,
+  'panel-GRANDparent': markAsGrandparent && !markAsReverse,
+  'panel-reverse-parent': markAsReverse}">
+
+    <h3 *ngIf="!overrideToH4Nesting" class="h3-container">
+        <button [ngClass]="{'panel-open-close': !markAsGrandparent && !markAsReverse,
+        'panel-GRANDparent-open-close': markAsGrandparent && !markAsReverse,
+        'panel-reverse-open-close': markAsReverse}"
+          fxLayout="row" fxLayoutAlign="space-between center"
+          [attr.aria-haspopup]="hasMenu ? 'menu' : 'false'"
+          [attr.aria-expanded]="opened"
+          [thdaIsFocused]="setFocusToButtonHoldingMenu"
+          (click)="toggle.emit()">
+            <span [ngClass]="{'panel-title-item': !markAsGrandparent && !markAsReverse,
+            'panel-GRANDparent-title-item': markAsGrandparent && !markAsReverse,
+            'panel-reverse-title-item': markAsReverse}" fxFlex="grow">{{title}}</span>
+            <span class="closed-caret" fxFlex="initial" *ngIf="!opened"></span>
+            <span class="opened-caret" fxFlex="initial" *ngIf="opened"></span>
+        </button>
+    </h3>
+    <h4 *ngIf="overrideToH4Nesting" class="h4-container">
+        <button [ngClass]="{'panel-open-close': !markAsGrandparent && !markAsReverse,
+        'panel-GRANDparent-open-close': markAsGrandparent && !markAsReverse,
+        'panel-reverse-open-close': markAsReverse}"
+          fxLayout="row" fxLayoutAlign="space-between center"
+          [attr.aria-haspopup]="hasMenu ? 'menu' : 'false'"
+          [attr.aria-expanded]="opened"
+          [thdaIsFocused]="setFocusToButtonHoldingMenu"
+          (click)="toggle.emit()">
+            <span [ngClass]="{'panel-title-item': !markAsGrandparent && !markAsReverse,
+            'panel-GRANDparent-title-item': markAsGrandparent && !markAsReverse,
+            'panel-reverse-title-item': markAsReverse}" fxFlex="grow">{{title}}</span>
+            <span class="closed-caret" fxFlex="initial" *ngIf="!opened"></span>
+            <span class="opened-caret" fxFlex="initial" *ngIf="opened"></span>
+        </button>
+    </h4>
+    <div class="panel-body" *ngIf="opened">
+         <ng-content></ng-content>
+    </div>
+</div>

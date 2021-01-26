@@ -1,0 +1,39 @@
+@import '../shared/theme/base';
+@import '../shared/theme/button-helpers';
+
+.nav__link-in-one-row {
+    font-size: 1.6rem;
+    font-weight: bold;
+    line-height: 3rem;
+    color: black;
+    text-decoration: none;
+
+    &.active {
+      color: color(nav-highlight-shade);
+      text-decoration: underline;
+    }
+
+    &:hover {
+      color: color(nav-highlight-shade);
+      text-decoration: underline;
+    }
+}
+
+.nav__badge-in-one-row {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-color: color(nav-highlight-shade);
+  border-radius: 10px;
+}
+
+.extra-gap-above {
+    margin-top: 0.5em;
+}

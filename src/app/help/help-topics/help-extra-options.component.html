@@ -1,0 +1,19 @@
+<h1 id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title mobile-only" (mousedown)="noMouseFocus($event)">Extra Options Under Development</h1>
+<h1 id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title desktop-only" (mousedown)="noMouseFocus($event)">Extra Options Under Development</h1>
+<p class="helptext">Some features are under development.  Settings for turning these on and off are at the bottom of the
+  <a routerLink="/settings" routerLinkActive="active">user settings page</a>.
+</p>
+<p class="helptext">
+    Sharing story sets can help others.  Story sets might even get labeled with their author and packaged with extra detail.
+    This type of labeled story set, named a "mixtape", was produced by four people as an example of what a "mixtape" could be.
+    If you wish to see these four mixtapes on your <a routerLink="/home" routerLinkActive="active">home page</a>, you need
+    to turn on the show-mixtapes option in the <a routerLink="/settings" routerLinkActive="active">user settings page</a>.
+</p>
+<p class="helptext" *ngIf="tagMatchDetails && tagMatchDetails.length > 0">
+  Through inferential indexing, a story can be returned because it is tagged with certain topics, even if such topic text
+  is not verbatim in the transcript.  A topic search can then
+  return all stories having selected tags.  To always show this menu option, turn on the show-topic-search option in the
+  <a routerLink="/settings" routerLinkActive="active">user settings page</a>.
+  Currently, {{tagMatchDetails}} <a routerLink="/tag" routerLinkActive="active">Topic Search</a> page.
+</p>
+<p class="helptext"><a routerLink="/help" routerLinkActive="active">Back to FAQ/Help</a></p>

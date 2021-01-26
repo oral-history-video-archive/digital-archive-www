@@ -1,0 +1,22 @@
+<a class="cardLink" tabindex="0" role="link"
+  [routerLink]="['/stories/5',  {mixSetID: mixtapeInput.mixSetID, pg: '1'}]"
+  routerLinkActive="active" fxLayout="row" fxLayoutAlign="space-between center"
+  [thdaScrollToMe]="isSelected(mixtapeInput)">
+    <div fxFlex.lt-md="15" fxFlex="20" class="tightSpacing" >
+        <img class="mixcard__img" src="./assets/{{mixtapeInput.image}}" alt="" />
+    </div>
+    <div fxFlex="grow" class="tightSpacing">
+        <div fxLayout="column" fxLayoutAlign="space-between stretch" class="tightSpacing">
+            <div fxFlex="100%" class="tightSpacing">
+                <h3 class="mixcard__title">
+                  {{mixtapeInput.title}}
+                </h3>
+            </div>
+            <div fxFlex="100%" class="tightSpacing">
+                <p class="mixcard__author">
+                  Curated by {{mixtapeInput.curator}}
+                </p>
+            </div>
+        </div>
+    </div>
+</a>

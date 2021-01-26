@@ -1,0 +1,70 @@
+﻿@import '../shared/theme/base';
+
+// For biographies, the mockup for home page born this day showed a card width of up to 284 (height 272 for the image part).
+// For HistoryMakers biography searches, we don't want to go that tall of image height (or wide), so that we can show more
+// results in limited space; hence a different class of biography-result-stamp was born (which also has a list view option).
+
+.card {
+  border: 1px solid color(ok-grey);
+  color: color(dark-grey);
+  background-color: color(light-grey);
+  text-decoration: none;
+  overflow: hidden; // necessary to hide any overflow of image for narrow card widths
+  height: 100%; // needed to fill all of the allocated flex layout or grid space
+
+  &:focus {
+      // Accessibility review noted:
+      //   Focus outline is missing in Firefox.
+      //   For the :focus psuedo selector, define an outline style which will be visible, such as "outline: 2px dashed black;".
+      // So, here that is:
+      outline: 2px dashed black;
+      border: 1px solid color(secondary);
+      background: color(primary);
+      color: #fff;
+  }
+
+  &:hover {
+      border: 1px solid color(secondary);
+      background: color(primary);
+      color: #fff;
+  }
+
+  &.active {
+      background-color: color(light-grey);
+  }
+}
+
+.card_img-backdrop {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.card__img { // note: source images come in as either 320x240 or 320x180 resolution
+  object-fit: cover;
+  transform: scale(1.05); // scaling to remove rounded corners on the majority of corpus (since others are squared corners) and fill top block always
+  transition: filter .2s ease-in-out;
+  width: 100%;
+  max-width: 280px;
+  height: 240px; // (fills the 240px allocated for image area in fxFlex in html rendering well)
+  &:hover,
+  &:focus {
+    filter: grayscale(100%);
+  }
+  &.active {
+    filter: none;
+  }
+}
+
+.card__info-overlay {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.card__contents {
+  @extend %oswald;
+  font-size: 1rem;
+  padding: em(8) em(11) em(8) em(11); // top right bottom left
+  margin: 0;
+}

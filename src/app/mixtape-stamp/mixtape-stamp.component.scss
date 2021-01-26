@@ -1,0 +1,70 @@
+@import '../shared/theme/base';
+
+.cardLink {
+  text-decoration: none;
+  background-color: color(primary);
+  border: 1px solid color(ok-grey);
+  font-size: 1rem;
+  overflow: hidden;
+  height: auto;
+  transition: border .2s ease-in-out;
+
+  &:hover,
+  &:focus {
+    border: 1px solid color(primary);
+    background-color: color(secondary);
+  }
+
+  &.active {
+    background-color: color(primary);
+  }
+}
+
+.tightSpacing {
+  padding: 0;
+  margin: 0;
+}
+
+.mixcard__img {
+    object-fit: contain;
+    height: 100%;
+    max-height: 140px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    .card:hover & {
+      filter: grayscale(100%);
+    }
+
+    .card:focus & {
+      filter: grayscale(100%);
+    }
+}
+
+.mixcard__title {
+  @extend %oswald;
+
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+  padding: 0.1em 0.1em 0.1em 0.1em;
+  text-align: center;
+  vertical-align: center;
+  color: #ffffff;
+
+  @media screen and (min-width: bp(afl_large)) {
+    font-size: 1.2rem;
+  }
+}
+
+.mixcard__author {
+  @extend %oswald;
+
+  font-size: 1rem;
+  margin: 0;
+  padding: 0.1em 0.1em 0.1em 0.1em; // top right bottom left
+  text-align: center;
+
+  color: #ffffff;
+}

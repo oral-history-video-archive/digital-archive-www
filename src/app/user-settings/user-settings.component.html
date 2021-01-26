@@ -1,0 +1,258 @@
+<h1 id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title mobile-only" (mousedown)="noMouseFocus($event)">{{settingsPageTitle}}</h1>
+<h1 id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title desktop-only" (mousedown)="noMouseFocus($event)">{{settingsPageTitleLong}}</h1>
+<p class="settingstext">You can adjust some settings in this website.  Any change you make is immediately saved.  There is no "default" state to return back to, i.e., use whatever setting works best for you at the moment.
+  Note, though, that some mobile browsers do not allow autoplay.  See the
+  <a routerLink="/help/user-settings" routerLinkActive="active">help page on autoplay</a> for more discussion.
+</p>
+<h2 id="videoSettingsHeader" class="mysubheading">Video Page Settings</h2>
+<ul class="list-unstyled" aria-labeledby="videoSettingsHeader">
+    <!-- Note: same list items appear at end below in "short" form with mobile-only class styling. -->
+    <li class="desktop-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="defaultAutoPlay" (change)="onAutoPlayChange($event.target.checked)"
+              (keyup.enter)="onAutoPlayChange($event.target.checked)">
+              Start video playback immediately ("autoplay" with no click/tap needed) when video loads.
+        </label>
+    </li>
+    <li class="desktop-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="defaultAutoAdvance" (change)="onAutoAdvanceChange($event.target.checked)"
+              (keyup.enter)="onAutoAdvanceChange($event.target.checked)">
+              Advance to the next video story (from same person) automatically when a story playback ends.
+        </label>
+    </li>
+
+    <!-- Note: same list items appear above in "long" form with desktop-only class styling. -->
+    <li class="mobile-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="defaultAutoPlay" (change)="onAutoPlayChange($event.target.checked)"
+              (keyup.enter)="onAutoPlayChange($event.target.checked)">
+              Start video playback immediately, i.e., "autoplay".
+        </label>
+    </li>
+    <li class="mobile-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="defaultAutoAdvance" (change)="onAutoAdvanceChange($event.target.checked)"
+              (keyup.enter)="onAutoAdvanceChange($event.target.checked)">
+              Advance to next video story automatically.
+        </label>
+    </li>
+</ul>
+
+<h2 id="bioFilterSettingsHeader" class="mysubheading">Biography Filters for Maker (HistoryMaker) Sets</h2>
+<ul class="list-unstyled" aria-labeledby="bioFilterSettingsHeader">
+    <li class="desktop-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showBiographyLastNameFacetFilter"
+              (change)="onShowBiographyLastNameFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowBiographyLastNameFacetFilterChange($event.target.checked)">
+              Show "Last Name" as filter for biography sets.
+        </label>
+    </li>
+    <li class="desktop-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showBiographyDecadeOfBirthFacetFilter"
+              (change)="onShowBiographyDecadeOfBirthFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowBiographyDecadeOfBirthFacetFilterChange($event.target.checked)">
+              Show "Decade of Birth" as filter for biography sets.
+        </label>
+    </li>
+    <li class="desktop-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showBiographyBirthStateFacetFilter"
+              (change)="onShowBiographyBirthStateFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowBiographyBirthStateFacetFilterChange($event.target.checked)">
+              Show "Birth State" as filter for biography sets.
+        </label>
+    </li>
+    <li class="desktop-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showBiographyJobTypeFacetFilter"
+              (change)="onShowBiographyJobTypeFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowBiographyJobTypeFacetFilterChange($event.target.checked)">
+              Show "Job Type" as filter for biography sets.
+        </label>
+    </li>
+
+    <!-- Note: same list items appear above in "long" form with desktop-only class styling. -->
+    <li class="mobile-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showBiographyLastNameFacetFilter"
+              (change)="onShowBiographyLastNameFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowBiographyLastNameFacetFilterChange($event.target.checked)">
+              Show "Last Name" as biography set filter.
+        </label>
+    </li>
+    <li class="mobile-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showBiographyDecadeOfBirthFacetFilter"
+              (change)="onShowBiographyDecadeOfBirthFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowBiographyDecadeOfBirthFacetFilterChange($event.target.checked)">
+              Show "Decade of Birth" as biography set filter.
+        </label>
+    </li>
+    <li class="mobile-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showBiographyBirthStateFacetFilter"
+              (change)="onShowBiographyBirthStateFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowBiographyBirthStateFacetFilterChange($event.target.checked)">
+              Show "Birth State" as biography set filter.
+        </label>
+    </li>
+    <li class="mobile-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showBiographyJobTypeFacetFilter"
+              (change)="onShowBiographyJobTypeFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowBiographyJobTypeFacetFilterChange($event.target.checked)">
+              Show "Job Type" as biography set filter.
+        </label>
+    </li>
+</ul>
+
+<h2 id="storyFilterSettingsHeader" class="mysubheading">Story Filters for Story Sets</h2>
+<ul class="list-unstyled" aria-labeledby="storyFilterSettingsHeader">
+
+    <li class="desktop-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showStoryUSStateFacetFilter"
+              (change)="onShowStoryUSStateFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowStoryUSStateFacetFilterChange($event.target.checked)">
+              Show "U.S. State" as filter for story sets.
+        </label>
+    </li>
+    <li class="desktop-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showStoryOrganizationFacetFilter"
+              (change)="onShowStoryOrganizationFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowStoryOrganizationFacetFilterChange($event.target.checked)">
+              Show "Organization" as filter for story sets.
+        </label>
+    </li>
+    <li class="desktop-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showStoryDecadeFacetFilter"
+              (change)="onShowStoryDecadeFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowStoryDecadeFacetFilterChange($event.target.checked)">
+              Show "Decade" as filter for story sets.
+        </label>
+    </li>
+    <li class="desktop-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showStoryYearFacetFilter"
+              (change)="onShowStoryYearFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowStoryYearFacetFilterChange($event.target.checked)">
+              Show "Year" as filter for story sets.
+        </label>
+    </li>
+    <li class="desktop-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showStoryJobTypeFacetFilter"
+              (change)="onShowStoryJobTypeFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowStoryJobTypeFacetFilterChange($event.target.checked)">
+              Show "Job Type" as filter for story sets.
+        </label>
+    </li>
+    <li class="desktop-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showStoryDecadeOfBirthFacetFilter"
+              (change)="onShowStoryDecadeOfBirthFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowStoryDecadeOfBirthFacetFilterChange($event.target.checked)">
+              Show "Decade of Birth" as filter for story sets.
+        </label>
+    </li>
+
+    <!-- Note: same list items appear above in "long" form with desktop-only class styling. -->
+    <li class="mobile-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showStoryUSStateFacetFilter"
+              (change)="onShowStoryUSStateFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowStoryUSStateFacetFilterChange($event.target.checked)">
+              Show "U.S. State" as story set filters.
+        </label>
+    </li>
+    <li class="mobile-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showStoryOrganizationFacetFilter"
+              (change)="onShowStoryOrganizationFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowStoryOrganizationFacetFilterChange($event.target.checked)">
+              Show "Organization" as story set filter.
+        </label>
+    </li>
+    <li class="mobile-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showStoryDecadeFacetFilter"
+              (change)="onShowStoryDecadeFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowStoryDecadeFacetFilterChange($event.target.checked)">
+              Show "Decade" as story set filter.
+        </label>
+    </li>
+    <li class="mobile-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showStoryYearFacetFilter"
+              (change)="onShowStoryYearFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowStoryYearFacetFilterChange($event.target.checked)">
+              Show "Year" as story set filter.
+        </label>
+    </li>
+    <li class="mobile-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showStoryJobTypeFacetFilter"
+              (change)="onShowStoryJobTypeFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowStoryJobTypeFacetFilterChange($event.target.checked)">
+              Show "Job Type" as story set filter.
+        </label>
+    </li>
+    <li class="mobile-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="showStoryDecadeOfBirthFacetFilter"
+              (change)="onShowStoryDecadeOfBirthFacetFilterChange($event.target.checked)"
+              (keyup.enter)="onShowStoryDecadeOfBirthFacetFilterChange($event.target.checked)">
+              Show "Decade of Birth" as story set filter.
+        </label>
+    </li>
+</ul>
+
+<h2 id="experimentalSettingsHeader" class="mysubheading">Experimental (Extra) Settings</h2>
+<p class="settingstext">See the
+  <a routerLink="/help/extra-options" routerLinkActive="active">help page on extra options</a> for more discussion on these two settings below.
+</p>
+<ul class="list-unstyled" aria-labeledby="experimentalSettingsHeader">
+    <!-- Note: same list items appear at end below in "short" form with mobile-only class styling. -->
+    <li class="desktop-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="defaultHomeMixtape" (change)="onHomeMixtapeChange($event.target.checked)"
+              (keyup.enter)="onHomeMixtapeChange($event.target.checked)">
+              Show 4 sample "mixtape" story sets on home page to illustrate a few shared story sets.
+        </label>
+    </li>
+    <li class="desktop-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="defaultShowTopicSearch" (change)="onShowTopicSearchChange($event.target.checked)"
+              (keyup.enter)="onShowTopicSearchChange($event.target.checked)">
+              Show "topic search" against manually added story tags, an ongoing process conducted by the The HistoryMakers staff.
+        </label>
+    </li>
+
+    <!-- Note: same list items appear above in "long" form with desktop-only class styling. -->
+    <li class="mobile-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="defaultHomeMixtape" (change)="onHomeMixtapeChange($event.target.checked)"
+              (keyup.enter)="onHomeMixtapeChange($event.target.checked)">
+              Show 4 sample "mixtape" story sets on home page.
+        </label>
+    </li>
+    <li class="mobile-only gap-a-bit">
+        <label class="noBreak">
+            <input type="checkbox" [(ngModel)]="defaultShowTopicSearch" (change)="onShowTopicSearchChange($event.target.checked)"
+              (keyup.enter)="onShowTopicSearchChange($event.target.checked)">
+              Show "topic search" against manually added story tags.
+        </label>
+    </li>
+</ul>
+<!-- NOTE: if we wish to validate the HTML, which *WILL* produce lots of errors for all the Angular directives like fxflex and _ngcontent... additions,
+we can do so with this link which checks the current page.  Hints on how to improve *Angular* HTML validation are at https://stackoverflow.com/questions/28150293/how-to-validate-angular-html-templates
+but that is not pursued here.  This code is from the bookmarklet provided by Steve Faulkner at https://validator.w3.org/nu/about.html
+
+<a href="javascript:(function(){function c(a,b){var c=document.createElement(&quot;textarea&quot;);c.name=a;c.value=b;d.appendChild(c)}var e=function(a){for(var b=&quot;&quot;,a=a.firstChild;a;){switch(a.nodeType){case Node.ELEMENT_NODE:b+=a.outerHTML;break;case Node.TEXT_NODE:b+=a.nodeValue;break;case Node.CDATA_SECTION_NODE:b+=&quot;<![CDATA[&quot;+a.nodeValue+&quot;]]\>&quot;;break;case Node.COMMENT_NODE:b+=&quot;<\!--&quot;+a.nodeValue+&quot;--\>&quot;;break;case Node.DOCUMENT_TYPE_NODE:b+=&quot;<!DOCTYPE &quot;+a.name+&quot;>\n&quot;}a=a.nextSibling}return b}(document),d=document.createElement(&quot;form&quot;);d.method=&quot;POST&quot;;d.action=&quot;https://validator.w3.org/nu/&quot;;d.enctype=&quot;multipart/form-data&quot;;d.target=&quot;_blank&quot;;d.acceptCharset=&quot;utf-8&quot;;c(&quot;showsource&quot;,&quot;yes&quot;);c(&quot;content&quot;,e);document.body.appendChild(d);d.submit()})();">Check serialized DOM of current page</a>
+
+ -->

@@ -1,0 +1,28 @@
+﻿<h1 id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title mobile-only" (mousedown)="noMouseFocus($event)">{{helpPageTitle}}</h1>
+<h1 id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title desktop-only" (mousedown)="noMouseFocus($event)">{{helpPageTitleLong}}</h1>
+
+<h2 id="help_tasks_heading" class="help-heading">Help on Tasks</h2>
+<ul class="helptext" aria-labelledby="help_tasks_heading">
+    <li class="helptext"><a routerLink="/help/search" routerLinkActive="active">How do I search?</a></li>
+    <li class="helptext"><a routerLink="/help/search-one" routerLinkActive="active">How do I search inside one person's stories?</a></li>
+    <li class="helptext"><a routerLink="/help/facet-origins" routerLinkActive="active">What are facets and how were they produced?</a></li>
+    <li class="helptext"><a routerLink="/help/facets" routerLinkActive="active">How do I use facets to filter down search results?</a></li>
+    <li class="helptext"><a routerLink="/help/return-all" routerLinkActive="active">How do I return all the stories at once?</a></li>
+    <li class="helptext"><a routerLink="/help/myclips" routerLinkActive="active">How do I make, share, clear and reset a group of stories (My Clips)?</a></li>
+    <li class="helptext"><a routerLink="/help/user-settings" routerLinkActive="active">How do I play video stories with less clicking/tapping?</a></li>
+</ul>
+<h2 id="help_details_heading" class="help-heading">Help on Details</h2>
+<ul class="helptext" aria-labelledby="help_details_heading">
+    <li class="helptext"><a routerLink="/help/data" routerLinkActive="active">What is The HistoryMakers and is there more data?</a></li>
+    <li class="helptext"><a routerLink="/help/extra-options" routerLinkActive="active">What features are in progress and can be experimented with here?</a></li>
+    <li class="helptext"><a routerLink="/help/ack" routerLinkActive="active">Who makes this work possible (acknowledgments)?</a></li>
+    <li class="helptext"><a routerLink="/help/pubs" routerLinkActive="active">Are there publications about The HistoryMakers Digital Archive?</a></li>
+    <li class="helptext"><a routerLink="/help/cite" routerLinkActive="active">How do I properly cite material in the archive for my publications and/or school work?</a></li>
+    <li class="helptext"><a routerLink="/help/privacy" routerLinkActive="active">What about my privacy?</a></li>
+    <li class="helptext"><a routerLink="/help/terms" routerLinkActive="active">What are the terms and conditions of use?</a></li>
+</ul>
+
+<h2 class="help-heading">Known Browser Compatibility Issues</h2>
+<p class="helptext">The site works best in modern (2020 or newer) browsers like Chrome, Safari, Edge, and Firefox.  It will not work in Internet Explorer.
+</p>
+

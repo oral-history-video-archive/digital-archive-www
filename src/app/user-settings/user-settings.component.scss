@@ -1,0 +1,15 @@
+@import '../shared/theme/base';
+
+.settingstext {
+  font-size: 1rem;
+  color: black;
+  padding: 0 0.2em 0;
+
+  @media screen and (min-width: bp(afl_small)) {
+      font-size: 1rem;
+  }
+}
+
+.gap-a-bit {
+  margin-bottom: 0.2em;
+}

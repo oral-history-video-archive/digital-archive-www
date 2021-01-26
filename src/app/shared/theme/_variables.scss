@@ -1,0 +1,108 @@
+$breakpoints: (
+  thmda_extreme_narrow: 344px, // take some drastic reductions in padding, etc., when view is very narrow
+  thmda_narrow: 392px, // somewhat arbitrary breakpoint at which 3 instead of 2 stamps can be shown in a row and font size might change
+  video_controls_one_line: 400px, // under this limit and video controls must be on two lines rather than one
+  afl_small: 600px, // Angular Flex Layout (afl) sm, i.e., small; see https://github.com/angular/flex-layout/wiki/Responsive-API
+                    // where lt-sm is 'screen and (max-width: 599px)' and
+                    //  is 'screen and (min-width: 600px)' with afl_small likely to be used as gt-xs is
+                    // e.g., %desktop-only becomes min-width: bp(afl_small)
+  required_video_in_column: 600px, // at less than this width, video is no longer in a column but is full width narrow/mobile 1
+                    // column view; more rewriting of video layout in story.component needed if this value is anything else
+                    // besides the same as afl_small which is the Angular Flex Layout (afl) sm breakpoint
+  need_two_video_control_lines: 675px, // at widths W of (required_video_in_column, need_two_video_control_lines] need 2 control lines
+  max_video_width: 720px, // somewhat arbitrary maximum width for video player (and controls tied to video player)
+  thmda_wideenough: 768px, // somewhat arbitrary breakpoint at which 4 instead of 3 stamps can be shown in a row for 66% or 70% columns
+  afl_medium: 960px,    // Corresponds to the Angular Flex Layout md, i.e., medium
+  afl_large: 1280px,    // Corresponds to the Angular Flex Layout lg, i.e., large
+  thmda_maxwidth: 1600px, // NOTE: with this in play, interface is "shut off" at this pixel width with pillar boxes afterward; rather
+                          // than remove the layout choices for afl_xlarge and xlarge, these are kept here but commented out throughout...
+  // OBSOLETE with use of thmda_maxwidth... afl_xlarge: 1920px,   // Corresponds to the Angular Flex Layout xl, i.e., extra large
+  // OBSOLETE with use of thmda_maxwidth... xlarge: 2400px        // NOTE: xlarge anticipated to be rarely used (and rarely seen by users on very wide desktops)
+
+  // NOTE: instead of @media screen and (min-width: bp(afl_small)) and (max-width: bp(afl_medium) - 1) which leaves a whole pixel
+  // gap that causes issues with fractional pixels and 150% or whatever browser resizing, make use of a ceiling value of value.94 instead
+  // and have the query be: @media screen and (min-width: bp(afl_small)) and (max-width: bp(afl_medium_just_before)) -- the values of these
+  // "just_before" constants are 0.06 less than their corresponding values above.
+  // NOTE that greater precision is not allowing the Angular Flex breakpoint of 600px and our video player (at least)
+  // one to line up, so required_video_in_column_just_before must be 599.94 and not 599.99 or higher.
+  // Experiments to further tweak value between x.94 and x.99 were not conducted, but at 599.99 it did not work.
+  thmda_extreme_narrow_just_before: 343.94px,
+  thmda_narrow_just_before: 391.94px,
+  video_controls_one_line_just_before: 399.94px,
+  afl_small_just_before: 599.94px,
+  required_video_in_column_just_before: 599.94px,
+  need_two_video_control_lines_just_before: 675.94px,
+  max_video_width_just_before: 719.94px,
+  thmda_wideenough_just_before: 767.94px,
+  afl_medium_just_before: 959.94px,
+  afl_large_just_before: 1279.94px,
+  thmda_maxwidth_just_before: 1599.94px,
+  thmda_filterui_maxpt: 1024px // Unclear on origins, added during a style edit for filter helpers styles
+);
+
+$colors: (
+  primary: #2E2B71,
+  primary-on-mid-grey: #141460, // needed when on mid-grey to show up with enough contrast for good accessibility by all
+  secondary: #941A1D,
+  tertiary: #f0511f,
+  nav-highlight-shade: #ac4e0c,
+  light-grey: #f0f0f0,
+  pale-grey: #eeeeee,
+  ok-grey: #949494, // needed to support enough contrast when on white background for accessibility by all (formerly was CCCCCCC)
+  mid-grey: #888888,
+  disabled-shade: #93a1aa,
+  unchosen-shade: #000000, // used to signify "not picked yet" - should be readable on white, differentiable for sighted users from primary and secondary
+  dark-grey: #232323,
+  black: #000000
+);
+
+$gutterSpace: (
+  thmda-extremely_tiny: em(2),
+  thmda-tiny: em(6),
+  thmda-tight: em(10),
+  thmda-medium: em(14),
+  thmda-big: em(18)
+);
+
+$buttonHeight: 42px;
+
+// Font imports moved here from main styles.css due to know bug. See:
+// ng build/serve --prod ignores scss url imports if angular.json contains more than 1 style file #10855
+// https://github.com/angular/angular-cli/issues/10855
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,900');
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,600i,700,700i');
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+
+// font placeholders
+
+%source-sans {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+%source-sans-semi-bold {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 600;
+}
+
+%source-sans-semi-bold-italic {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-style: italic;
+  font-weight: 600;
+}
+
+%source-sans-bold {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 700;
+}
+
+%source-sans-bold-italic {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-style: italic;
+  font-weight: 700;
+}
+
+%oswald {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+}

@@ -1,0 +1,144 @@
+@import '../shared/theme/base';
+
+// For biography result stamps, the mockup for results at 768 width with a column of about 512 for results
+// showed a card image height of about 150, which is 5/8 of the 240 height used with the close BiographyStamp class
+// and its biography-stamp.component.html rendering.
+
+.card {
+  border: 1px solid color(ok-grey);
+  color: color(dark-grey);
+  background-color: color(light-grey);
+  text-decoration: none;
+  overflow: hidden; // necessary to hide any overflow of image for narrow card widths
+  height: 100%; // needed to fill all of the allocated flex layout or grid space
+
+  &:focus {
+      // Accessibility review noted:
+      //   Focus outline is missing in Firefox.
+      //   For the :focus psuedo selector, define an outline style which will be visible, such as "outline: 2px dashed black;".
+      // So, here that is:
+      outline: 2px dashed black;
+      border: 1px solid color(secondary);
+      background: color(primary);
+      color: #fff;
+  }
+
+  &:hover {
+      border: 1px solid color(secondary);
+      background: color(primary);
+      color: #fff;
+  }
+
+  &.active {
+      background-color: color(light-grey);
+  }
+}
+
+.card_img-backdrop {
+  background-color: color(light-grey);
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  .card:hover & {
+      background: color(primary);
+      color: #fff;
+  }
+}
+
+//Maker Directory
+.card__img { // note: source images come in as either 320x240 or 320x180 resolution
+  object-fit: cover;
+  transform: scale(1.05); // scaling to remove rounded corners on the majority of corpus (since others are squared corners) and fill top block always
+  transition: filter .2s ease-in-out;
+  width: 100%;
+  //max-width: 180px;
+  height: 150px; // (fills the 150px allocated for image area in fxFlex in html rendering well)
+  .card:hover & {
+    filter: grayscale(100%);
+  }
+}
+
+.card__info-overlay {
+  background: color(light-grey);
+  color: color(dark-grey);
+  padding: 0;
+  margin: 0;
+  text-align: center;
+
+  .card:hover & {
+      background: color(primary);
+      color: #fff;
+  }
+}
+
+.card__contents {
+  @extend %oswald;
+  font-size: 1rem;
+  line-height: 1.2em;
+  padding: em(8) em(11) em(8) em(11); // top right bottom left
+  margin: 0;
+}
+
+.list {
+    border: 1px solid color(ok-grey);
+    border-radius: 0;
+    background-color: #fff;
+    text-decoration: none;
+    color: color(dark-grey);
+
+    font-size: 1rem;
+    padding: 0 em(4) em(6) em(4); // top right bottom left
+    width: 100%;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+    @media screen and (min-width: bp(afl_small)) and (max-width: bp(afl_medium_just_before)) {
+        font-size: 1.2rem;
+    }
+    @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+        font-size: 1.4rem;
+    }
+    @media screen and (min-width: bp(afl_large)) {
+        font-size: 1.2rem; // at 2 per row, back to smaller font...
+    }
+}
+
+.list__name {
+    @extend %oswald;
+
+    color: color(dark-grey);
+    font-size: 1rem;
+    margin: 0;
+    padding: 0 em(2) 0 em(2); // top right bottom left
+    border: none;
+
+    @media screen and (min-width: bp(afl_small)) and (max-width: bp(afl_medium_just_before)) {
+        font-size: 1.2rem;
+        padding-bottom: em(2);
+    }
+    @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+        font-size: 1.4rem;
+        padding-bottom: em(2);
+    }
+    @media screen and (min-width: bp(afl_large)) {
+        font-size: 1.2rem; // at 2 per row, back to smaller font...
+        padding-bottom: em(2);
+    }
+}
+
+.list__contents {
+  color: color(dark-grey);
+  font-size: 1rem;
+  margin: 0;
+  padding: 0 em(2) 0 em(2); // top right bottom left
+  border: none;
+
+  @media screen and (min-width: bp(afl_small)) and (max-width: bp(afl_medium_just_before)) {
+      font-size: 1rem;
+  }
+  @media screen and (min-width: bp(afl_medium)) {
+      font-size: 1.1rem;
+  }
+}

@@ -1,0 +1,369 @@
+﻿@import '../shared/theme/base';
+@import '../shared/theme/button-helpers';
+
+%video-narrow-view,
+.video-narrow-view {
+  @media screen and (min-width: bp(required_video_in_column)) {
+    display: none !important;
+  }
+}
+
+%video-desktop-view,
+.video-desktop-view {
+  @media screen and (max-width: bp(required_video_in_column_just_before)) {
+    display: none !important;
+  }
+}
+
+.video-desktop-view.button-low-key-toggle {
+    margin-bottom: 12px;
+}
+
+// NOTE: see _base.scss, biography set title in historymakers.component.scss, etc. for similar page-title styling,
+// from which the following is derived but made "special" in its narrow view.
+.page-title-video-page {
+  @extend %oswald;
+
+  color: color(black);
+  font-size: 1.4rem;
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: em(4);
+  padding: 0;
+
+   @media screen and (min-width: bp(afl_medium)) {
+      font-size: 1.7rem;
+  }
+
+  // NOTE: unique look just for this video page for narrow view titles
+  @media screen and (max-width: bp(afl_small_just_before)) {
+    background-color: black;
+    color: #fff;
+    font-size: 1.2rem;
+    margin-bottom: 0;
+    padding: gutter(thmda-tight) gutter(thmda-tiny) gutter(thmda-tight) gutter(thmda-tiny); // top right bottom left
+  }
+
+  &:focus {
+    outline: 0;
+    text-decoration: underline;
+  }
+}
+
+.videoInfoContainer {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; // scrolling taken care of in parent container....
+  overflow-y: hidden; // scrolling taken care of in parent container....
+}
+
+.titleRow {
+  padding: 0;
+
+  @media screen and (min-width: bp(afl_small)) and (max-width: bp(afl_medium_just_before)) {
+    padding-bottom: gutter(thmda-tight); // keep buttons separated from content below at wider views
+  }
+
+  @media screen and (min-width: bp(afl_medium)) {
+    padding-bottom: gutter(thmda-medium); // keep buttons separated from content below at wider views
+  }
+}
+
+.title-buttons-area {
+  min-width: 340px; // gives enough width for 3 buttons to fit with their labels without wrapping
+
+  @media screen and (max-width: bp(thmda_narrow_just_before)) {
+    min-width: 320px; // give up cleaner layout to just get stuff into the narrowing view (match min width of videoColumn)
+  }
+}
+.citationContainer {
+  padding-top: 10px;
+}
+
+.button-bar-piece {
+  padding: 0;
+  margin: 0;
+}
+
+.contentRow {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+.videoColumn {
+  width: 100%;
+  margin: 12px 0;
+  padding: 0;
+  min-width: 320px; // need a bit of width to support match lines, controls, etc.
+}
+
+.transcriptColumnParent {
+  width: 100%;
+
+  // NOTE: this container for transcript will not be shown for narrow views UNLESS video-narrow-view (see transcriptColumnParent--mobile-active)
+  @media screen and (max-width: bp(required_video_in_column_just_before)) {
+    display: none;
+  }
+}
+
+.transcriptColumnParent--mobile-active {
+  display: inherit;
+}
+
+.transcriptColumn {
+  min-height: 240px; // NOTE: Insist on a bit of transcript showing (equivalent to height of video player area for 320x240 cases).
+  max-height: 400px; // ...but not too much transcript...
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 0 0 em(8) 0; // top right bottom left
+  padding: gutter(thmda-tiny) gutter(thmda-tiny) gutter(thmda-tiny) gutter(thmda-tiny); // top right bottom left
+  border: 1px solid color(dark-grey);
+  background-color: color(light-grey);
+  color: black;
+  line-height: 1.125rem;
+  font-size: 1.2rem;
+
+  // !!!TBD!!! !!!TODO: !!! NOTE: REVISIT later (or replace with ngStyle) to fill all available height in its flex container on wide views;
+  // this is a COMPROMISE as for 320x240 videos, a max-height of 400px works fine, but for 320x180 videos, the max-height should be no more than 300px.
+  // A compromise of 328px is used here; !!!TBD!!! !!!TODO: later tune based on 240 video height or 180 video height, plus if there are matches or not.
+  @media screen and (min-width: bp(thmda_wideenough)) {
+      max-height: 328px;
+  }
+}
+.transcriptColumn--mobile-active {
+  // NOTE: when transcript is shown in narrow view ("mobile-active"), use smaller font, etc., layout
+  @media screen and (max-width: bp(required_video_in_column_just_before)) {
+    min-height: 120px; // NOTE: Insist on a bit of transcript showing
+    max-height: 180px; // ...but not too much transcript...
+    line-height: 1rem;
+    font-size: 1.1rem;
+  }
+}
+
+.transcriptArea {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.videoContents {
+  width: 100%;
+}
+
+.about {
+  /* TODO: Later, one could dress this up with gradient backgrounds, e.g.,
+  background-color: transparent;
+  background-image: linear-gradient(to bottom, rgba(30, 87, 153, 0.2) 0%, rgba(125, 185, 232, 0) 100%);
+  background-repeat: repeat;
+  ...but wait for the tri-color scheme to be improved first.
+  */
+  padding: gutter(thmda-tight) 0 0 0; // top right bottom left
+  margin-bottom: 0.5em;
+
+  &--narrow-view {
+      @extend %video-narrow-view;
+
+      display: none;
+  }
+
+  &--mobile-active {
+      @media screen and (max-width: bp(required_video_in_column_just_before)) {
+          display: inherit;
+      }
+  }
+
+  &--desktop {
+      @media screen and (max-width: bp(required_video_in_column_just_before)) , screen and (min-width: bp(thmda_wideenough))  {
+        display: none !important;
+      }
+      margin-bottom: 0;
+  }
+
+  &--wide-desktop {
+      @media screen and (max-width: bp(thmda_wideenough_just_before)) {
+        display: none !important;
+      }
+      margin-bottom: 0;
+  }
+
+  p:last-of-type {
+      font-size: 1.25rem;
+      margin-bottom: em(32);
+  }
+}
+
+.about__section {
+  border-bottom: 1px solid color(ok-grey);
+  margin-bottom: gutter(thmda-big);
+  padding-bottom: gutter(thmda-tight);
+
+  &:first-of-type {
+      margin-top: gutter(thmda-big);
+
+      @media screen and (min-width: bp(afl_small)) {
+          margin-top: 0;
+      }
+  }
+
+  &:last-of-type {
+      border-bottom: 0;
+      margin-bottom: 0;
+      padding-bottom: 0;
+  }
+}
+
+.favorites-list {
+  list-style: none;
+  padding: 0;
+}
+
+.about__heading {
+  @extend %oswald;
+
+  color: color(dark-grey);
+  font-size: 1.4rem;
+  letter-spacing: -.4px;
+  line-height: 1.25rem;
+}
+
+.about__copy--favorites {
+  margin: 0;
+}
+
+.about__copy__widescreen {
+  padding-bottom: 0; // will be in a container that gives a bottom whitespace area
+}
+
+.limitButtonRowWidth {
+  max-width: 448px;
+}
+
+.about__link,
+.about__link:visited {
+  @extend %source-sans-semi-bold;
+  color: color(primary);
+}
+
+// Prev and Next Match Section
+.match {
+    background-color: color(primary);
+    width: 100%;
+    max-width: bp(max_video_width); // NOTE: do not extend wider than video player
+    height: 1.875rem;
+}
+
+.match__prev,
+.match__next {
+    background-color: transparent;
+    color: black;
+}
+
+.match__prev-button,
+.match__next-button {
+    @extend %source-sans;
+
+    background-color: transparent;
+    color: #fff;
+}
+
+.match__prev-button .match__copy {
+    margin-left: 0.325rem; // 5px where 1rem == 16px
+}
+
+.match__next-button .match__copy {
+    margin-right: 0.325rem; // 5px where 1rem == 16px
+}
+
+.match__tick-line {
+    background-color: color(ok-grey);
+    height: 0.125rem;
+    margin: auto 0;
+    position: relative; // needed to position match__tick properly on the line
+}
+
+.match__tick {
+    background-color: #fff;
+    height: 0.875rem;
+    margin: 0em 0em 0em 0em;
+    padding: 0em 0em 0em 0em;
+    position: absolute;
+    top: -0.4375rem; // -7px where 1rem == 16px
+    width: 0.125rem; // 2px where 1rem == 16px
+}
+
+.story-nav {
+    background-color: black;
+    height: 1.875rem;
+    width: 100%;
+    max-width: bp(max_video_width); // NOTE: do not extend wider than video player
+}
+
+.story-nav__prev-button {
+  @extend %source-sans;
+
+  background-color: transparent;
+  color: #fff;
+}
+.story-nav__next-button {
+    @extend %source-sans;
+
+    background-color: transparent;
+    color: #fff;
+}
+
+.story-nav__prev-button-icon {
+    margin-right: 0.325rem; // 5px where 1rem == 16px
+}
+
+.story-nav__next-button-icon {
+    margin-left: 0.325rem; // 5px where 1rem == 16px
+}
+
+.tabs {
+  border-bottom: 1px solid color(ok-grey);
+  font-size: 1.2rem;
+  margin: gutter(thmda-medium) 0 0 0; // top right bottom left
+
+  @media screen and (max-width: bp(thmda_narrow_just_before)) {
+    font-size: 1rem;
+  }
+}
+
+.tabs__tab {
+  @extend %source-sans-bold;
+
+  background-color: color(light-grey);
+  border-radius: 0;
+  color: color(ok-grey);
+  font-size: 1.2rem;
+  height: $buttonHeight;
+
+  &:hover {
+      cursor: pointer;
+  }
+
+  &--active {
+      background-color: color(secondary);
+      color: #fff;
+  }
+
+}
+
+.spaceForWordyLabel { // hide on narrow views exactly the inverse of range for needTightLabel
+  @media screen and (max-width: bp(thmda_wideenough_just_before)) {
+    display: none !important;
+  }
+}
+
+.needTightLabel { // hide on wide views exactly the inverse of range for spaceForWordyLabel
+  @media screen and (min-width: bp(thmda_wideenough)) {
+    display: none !important;
+  }
+}
+
+.slight-gap-above {
+  margin-top: 0.4em;
+}

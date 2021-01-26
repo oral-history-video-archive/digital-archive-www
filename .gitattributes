@@ -1,0 +1,23 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Specific Files
+.editorconfig  text
+.gitattributes text
+.gitignore     text
+LICENSE        text
+
+# Treat these file types as text
+*.md   text
+*.js   text
+*.ts   text
+*.css  text
+*.txt  text
+*.html text
+*.json text
+
+# Binary files such as jpeg images
+*.jpg  binary
+*.png  binary
+*.gif  binary
+*.ico  binary

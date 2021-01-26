@@ -1,0 +1,39 @@
+<!-- bordered panel that opens/closes under user control, with one of 3 "looks"
+  dependent on markAsGrandparent and markAsReverse and one of 2 structures,
+  h3 by default and h4 with overrideToH4Nesting as true -->
+<div [ngClass]="{'panel-parent': !markAsGrandparent && !markAsReverse,
+  'panel-GRANDparent': markAsGrandparent && !markAsReverse,
+  'panel-reverse-parent': markAsReverse}">
+
+    <h3 *ngIf="!overrideToH4Nesting" class="h3-container">
+        <button [ngClass]="{'panel-open-close': !markAsGrandparent && !markAsReverse,
+        'panel-GRANDparent-open-close': markAsGrandparent && !markAsReverse,
+        'panel-reverse-open-close': markAsReverse}"
+          [thdaIsFocused]="setFocusToButtonHoldingMenu"
+          fxLayout="row" fxLayoutAlign="space-between center"
+          [attr.aria-expanded]="opened" (click)="toggle.emit()">
+            <span [ngClass]="{'panel-title-item': !markAsGrandparent && !markAsReverse,
+            'panel-GRANDparent-title-item': markAsGrandparent && !markAsReverse,
+            'panel-reverse-title-item': markAsReverse}" fxFlex="grow">{{title}}</span>
+            <span class="closed-caret" fxFlex="initial" *ngIf="!opened"></span>
+            <span class="opened-caret" fxFlex="initial" *ngIf="opened"></span>
+        </button>
+    </h3>
+    <h4 *ngIf="overrideToH4Nesting" class="h4-container">
+        <button [ngClass]="{'panel-open-close': !markAsGrandparent && !markAsReverse,
+        'panel-GRANDparent-open-close': markAsGrandparent && !markAsReverse,
+        'panel-reverse-open-close': markAsReverse}"
+          [thdaIsFocused]="setFocusToButtonHoldingMenu"
+          fxLayout="row" fxLayoutAlign="space-between center"
+          [attr.aria-expanded]="opened" (click)="toggle.emit()">
+            <span [ngClass]="{'panel-title-item': !markAsGrandparent && !markAsReverse,
+            'panel-GRANDparent-title-item': markAsGrandparent && !markAsReverse,
+            'panel-reverse-title-item': markAsReverse}" fxFlex="grow">{{title}}</span>
+            <span class="closed-caret" fxFlex="initial" *ngIf="!opened"></span>
+            <span class="opened-caret" fxFlex="initial" *ngIf="opened"></span>
+        </button>
+    </h4>
+    <div class="panel-body" *ngIf="opened">
+         <ng-content></ng-content>
+    </div>
+</div>

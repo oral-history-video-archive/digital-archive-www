@@ -1,0 +1,109 @@
+﻿/* Master Styles */
+/* NOTE: taking advice from http://www.creativebloq.com/responsive-web-design/get-flexy-eight-steps-9122828
+         and elsewhere to use em and not px; same source gave the body, h1, etc. suggestions
+   NOTE: with Spring 2019 push for greater accessibility, making use of angular/CDK (e.g., for
+         drop-down menu box overlay that traps focus such as to choose which fields to search)
+*/
+@import '~@angular/cdk/overlay-prebuilt.css';
+@import '~@angular/cdk/a11y-prebuilt.css';
+@import 'my-thmda-material-theme.css'; /* instead of:
+@import '@angular/material/prebuilt-themes/purple-green.css'; */ /* brought in with material styling (slider) of video player */
+
+body {
+  height:100vh;
+  margin: 0;
+  padding: 0;
+  color: black; /* was #64615D; */
+  background-color: white;
+  font-size: 14px;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+.sr-only {
+  /* Old way which had issues for Pagination h2 for historymakers.component and storyset.component,
+  introducing a vertical scrollbar within vertical scrollbar nesting:
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+
+  New way (outside comments, below) follows Sept. 2020 advice from: https://webaim.org/techniques/css/invisiblecontent/
+  */
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+h1 {
+  /* was given before as: color: #1E1810; */
+  font-family: 'Roboto', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+h2 {
+  /* was given before as: color: #5B2325; */
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+}
+h3 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+}
+h4 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+}
+
+input[text] {
+  color: #1E1810;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 1rem;
+}
+
+button {
+  font-family: 'Roboto Condensed', sans-serif;
+  background-color: #5B2325;
+  border: 1px solid #5B2325; /* note: added for accessibility, to provide a button border in high contrast mode */
+  color: white;
+  border: none;
+  border-radius: 0.2em;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #9D1E0D;
+}
+button:disabled {
+  background-color: whitesmoke;
+  color: #808080;
+  cursor: auto;
+}
+
+a {
+    color: #941A1D;
+}
+
+a:hover {
+    color: #941A1D;
+    text-decoration: underline;
+}

@@ -1,0 +1,13 @@
+﻿<!-- NOTE: Unlike other "stamp" components, this one has only a "card" style, not a "list" style too. -->
+<a class="card" tabindex="0" role="link"
+  [routerLink]="['/storiesForBio', {ID: bio.document.accession}]"
+  routerLinkActive="active"
+  fxLayout="column" fxLayoutAlign="space-between stretch" fxLayoutGap="0"
+     [thdaScrollToMe]="isSelected(bio)">
+    <div fxFlex="1 1 calc(240px)" class="card_img-backdrop">
+        <img class="card__img" src="{{myMediaBase}}biography/image/{{bio.document.biographyID}}" alt="" />
+    </div>
+    <div fxFlexFill class="card__info-overlay">
+        <h3 class="card__contents">{{bio.document.preferredName}}</h3>
+    </div>
+</a>

@@ -1,0 +1,83 @@
+@import 'variables'; // e.g., for thmda_narrow
+
+// Typical use: pagination button set to allow paging for a list of items
+.pagination {
+  font-size: 1rem;
+  margin-bottom: em(8);
+  max-width: 22.5rem;
+  width: 100%;
+}
+
+%pagination__item {
+  background-color: #fff;
+  border-bottom: 1px solid color(light-grey);
+  border-left: 1px solid color(light-grey);
+  border-radius: 0;
+  border-top: 1px solid color(light-grey);
+  color: color(secondary);
+  font-size: 1rem;
+  height: $buttonHeight;
+  outline: 0;
+  width: 2.375rem;
+  margin: 0;
+  padding: 0;
+
+  @media screen and (min-width: bp(afl_medium)) {
+      height: $buttonHeight;
+      width: 2rem;
+  }
+
+  &:focus {
+      border: 1px solid color(dark-grey);
+  }
+
+  &:hover {
+      cursor: pointer;
+      border: 1px solid color(dark-grey);
+  }
+}
+
+.pagination__prev,
+.pagination__next {
+  @extend %pagination__item;
+  @extend %source-sans-semi-bold;
+
+  &:disabled {
+      cursor: not-allowed;
+
+      span {
+          opacity: .5;
+      }
+  }
+
+  span {
+      color: color(secondary);
+      padding: 0;
+      border: none;
+  }
+}
+
+.pagination__next {
+  border-right: 1px solid color(light-grey);
+}
+
+.pagination__button {
+  @extend %pagination__item;
+  @extend %source-sans-semi-bold;
+
+  &.active {
+      border: 1px solid color(secondary);
+      background-color: color(secondary);
+      color: #fff;
+
+      &:focus {
+          border: 1px solid color(dark-grey);
+      }
+  }
+
+  &.pagination__button--narrow-hidden {
+      @media screen and (max-width: bp(thmda_narrow_just_before)) {
+          display: none;
+      }
+  }
+}

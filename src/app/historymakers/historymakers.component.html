@@ -1,0 +1,563 @@
+﻿<h1 class="sr-only">{{screenReaderSummaryTitle}}</h1>
+<!-- Formerly, different looks at 320px, 544, 768, and 1200. Now, breaks in style at 600, 960, 1280.
+      Under 600 is "mobile-only", [600-959] via desktop-only and lt-md, greater than or equal to 960px
+      via gt-sm -->
+<!-- filter menu designed to fit well into 599px or less; in rare cases where it might be shown "wide" -
+    don't do it, stop at 599px wide -->
+<!-- Variable note: facetFamilies[number] is used with number indices of 2, 3, 4, 5, 6 which correspond to
+    Category, Gender, BirthDecade, BirthState, and JobType, respectively (see biofilterfamily-type.ts) - index 0 is reserved
+    and index 1 is for LastNameInitial which is treated differently given its different UI and so is less used (but still
+    appears as in clearActiveFacetChoice for example). -->
+<section *ngIf="showingFilterMenu" fxFlex="0 1 calc(599px)" aria-label="Filter Results" class="filter-menu">
+  <!-- Special Filter Menu options only, no real content... -->
+    <!-- The header for the sort/page view/filter options "menu" interface for mobile/narrow views. -->
+    <header fxLayout="row" fxLayoutAlign="space-between center" >
+        <button *ngIf="hasActiveFacet()" fxFlex
+          class="filter-menu-top-level-button button-secondary" (click)="clearFilters()">Clear</button>
+        <h2 id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" fxFlex="grow" class="filter-menu-header-title mobile-only" (mousedown)="noMouseFocus($event)">Filter Results</h2>
+        <h2 id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" fxFlex="grow" class="filter-menu-header-title desktop-only" (mousedown)="noMouseFocus($event)">Filter Results</h2>
+        <button id="closeFilterViewButton" fxFlex="grow" class="filter-menu-top-level-button"
+          [thdaIsFocused]="signalFocusToCloseFilterButton" (click)="closePickFilterMenu()">Close</button>
+    </header>
+
+    <div class="panel-for-narrow-filter">
+
+        <!-- The "current filters" section for the sort/page view/filter options "filter menu" interface. -->
+        <div class="filters-applied" *ngIf="hasActiveFacet()">
+            <h3 id="narrow-label-for-current-filters" class="filters-applied-title">Current Filters:</h3>
+            <ul class="filters-applied-set" aria-labelledby="narrow-label-for-current-filters">
+                <li class="filter-applied-container" *ngFor="let chosenFacet of activeFacets; let activeIndex=index">
+                    <button class="filter-remove-button"
+                      [thdaIsFocused]="activeIndex == signalFocusToRemoveFilterButtonIndicator"
+                      (click)="clearActiveFacetChoice(chosenFacet.setID, chosenFacet.ID, true)">
+                        <span fxLayout="row" fxLayoutAlign="start start" class="applied-field-list-parent">
+                            <span fxFlex.lt-lg="0 0 calc(2em)" fxFlex.gt-md="0 0 calc(3em)">
+                                <span class="sr-only">{{chosenFacet.value}}, remove {{facetFamilies[chosenFacet.setID].nameForLabel}} filter</span>
+                                <svg aria-hidden="true" class="remove-icon" viewBox="0 0 13 14" xmlns="http://www.w3.org/2000/svg">
+                                    <title>
+                                      {{chosenFacet.value}}, remove {{facetFamilies[chosenFacet.setID].nameForLabel}} filter
+                                    </title>
+                                    <path d="M0 0h12.444v14H0V0zm3.457 10.825h1.36L5.68 9.1c.177-.38.343-.75.53-1.198h.045c.222.448.4.817.587 1.198l.885 1.725h1.427l-2.058-3.72L9.02 3.5H7.66l-.763 1.624c-.166.336-.31.683-.487 1.12h-.044c-.22-.437-.376-.784-.553-1.12L5.016 3.5H3.59l1.924 3.55-2.057 3.775z" fill="currentColor " fill-rule="evenodd"/>
+                                </svg>
+                            </span>
+                            <span fxFlex="grow" aria-hidden="true">{{chosenFacet.value}}</span>
+                        </span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- The "pick filters" section for the sort/page view/filter options "filter menu" interface. -->
+        <div class="filter-section">
+            <h3 class="filter-section-title" id="narrow-refine-filter-heading">Refine Results</h3>
+            <ul class="nothing-for-ul" aria-labelledby="narrow-refine-filter-heading">
+              <li class="nothing-for-li last-name-filter" *ngIf="facetFamilies[1].isAllowedToBeShown && lastInitialFacets && lastInitialFacets.length > 0">
+                  <!-- "Pick a filter" for last name, for filter part for the sort/page view/filter options "filter menu" interface.
+                  Note that for accessibility reasons, this is a "my-panel-of-buttons" rather than "my-panel" as its enclosed
+                  list has role of menu with radio buttons of menuitem along with other changes suggested by accessibility experts.
+                  Note "1" is index for last name, as in facetFamilies[1] used in this chunk of elements.  See comment above on variables. -->
+                  <my-panel-of-buttons #rgLastInitialParentInFilterMenu
+                    overrideToH4Nesting="true"
+                    title="Last Name" [opened]="lastNameOpened"
+                    [hasMenu]="lastInitialFacets.length > 1 || (lastInitialFacets.length == 1 && !lastInitialFacets[0].active)"
+                    [setFocusToButtonHoldingMenu]="signalFocusMoveToFilterMenu_LastInitial || facetFamilies[1].signalFocusToFamilyParent"
+                    (toggle)="toggleLastInitialParent(true)">
+                      <p class="sr-only" id="rglastName_label">Last Name Starts With</p>
+                      <!-- If we only have one initial, and it is active, then only display a "Remove X" button.
+                          Else, display a radio group of the last initials, highlighting the first item. -->
+                      <button class="last-name-letter" *ngIf="lastInitialFacets.length == 1 && lastInitialFacets[0].active"
+                        [attr.aria-label]="removeLastInitialLabel(lastInitialFacets[0].value)"
+                        (click)="clearAndResetLastInitialFacet(lastInitialFacets[0].ID, true)">
+                          {{lastInitialFacets[0].value}}
+                      </button>
+
+                      <ul *ngIf="lastInitialFacets.length > 1 || (lastInitialFacets.length == 1 && !lastInitialFacets[0].active)"
+                        class="filter-choice-set" fxLayout="row wrap" fxLayoutAlign="start center"
+                        role="menu" aria-labelledby="rglastName_label">
+                          <!-- Using https://stackoverflow.com/questions/53016596/angular-5-access-divs-list-using-viewchildren
+                            for #stuff child walking below, except changed out [attr.tabindex]="tabIndexForLastInitialOptions(i)"
+                            to just tabindex="0" for now (see comment in tabIndexForLastInitialOptions).... -->
+                          <li #rgLastInitialInFilterMenu fxFlex="none" class="filter--alphabet" *ngFor="let lastInitial of lastInitialFacets;let i=index"
+                            [class.selected]="lastInitial.active" tabindex="0"
+                            role="menuitem" [attr.aria-checked]="lastInitial.active"
+                            (click)="toggleLastInitialFacet(lastInitial)"
+                            (keydown)="setLastInitialOptions($event.key, i, lastInitial.ID, true)"
+                            (focus)="onFocusChangeLastInitialOptions(i, true)"
+                            (focusout)="onFocusChangeLastInitialOptions(i, false)">
+                              <p class="filter-one-choice">
+                                  {{lastInitial.value}}
+                              </p>
+                          </li>
+                      </ul>
+                  </my-panel-of-buttons>
+              </li>
+              <li class="nothing-for-li" *ngFor="let facetFamily of facetFamilies; let fF=index">
+                <!-- "Category" "Gender" etc. filters for filter part for the sort/page view/filter options "filter menu" interface. -->
+                <my-panel *ngIf="facetFamilies[fF].isAllowedToBeShown && facetFamilies[fF].facets && facetFamilies[fF].facets.length > 0"
+                  overrideToH4Nesting="true"
+                  [title]="facetFamilies[fF].title" [opened]="facetFamilies[fF].isOpened"
+                  [setFocusToButtonHoldingMenu]="facetFamilies[fF].signalFocusToFamilyParent"
+                  (toggle)="facetFamilies[fF].isOpened = !facetFamilies[fF].isOpened">
+                    <ul class="filter-choice-set" [attr.aria-label]="facetFamilies[fF].title">
+                        <li class="filter-choices" *ngFor="let oneFacet of facetFamilies[fF].facets">
+                            <button class="filter-one-choice" [attr.aria-label]="appendedCountToValue(oneFacet.value, oneFacet.count)"
+                              [attr.aria-pressed]="oneFacet.active"
+                              [thdaIsFocused]="facetFamilies[fF].signalItemToFocus.length > 0 && facetFamilies[fF].signalItemToFocus == oneFacet.value"
+                              [class.active]="oneFacet.active" (click)="toggleActiveFacetChoice(fF, oneFacet)">
+                                <span fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="calc(0.8em)" class="field-list-parent">
+                                    <span fxFlex="0 0 calc(12px)" *ngIf="oneFacet.active">
+                                        <span class="sr-only">Applied</span>
+                                        <svg aria-hidden="true" [class.aria-selected]="oneFacet.active"
+                                          width="12px" height="11px" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg">
+                                            <title>
+                                                Applied
+                                            </title>
+                                            <path d="M2.115 3.986l2.052 2.065L9.887 0 12 2.115l-7.823 8.172L0 6.101" fill-rule="evenodd"/>
+                                        </svg>
+                                    </span>
+                                    <span fxFlex="grow">{{oneFacet.value}}&nbsp;({{oneFacet.count}})</span>
+                                </span>
+                            </button>
+                        </li>
+                    </ul>
+                </my-panel>
+              </li>
+            </ul>
+            <h2 id="display-options-h-id" class="sr-only">Display Options</h2>
+            <!-- The "sort by" sort results section for the sort/page view/filter options "filter menu" interface. -->
+            <div class="filter-section">
+                <!-- Sort options for current results on "filter menu" interface -->
+                <label for="sort-by-filter-select" class="filter-select-label">Sort by:</label>
+                <!-- fixed with update on blur here and other places with (blur) instead of just (ngModelChange) which is too immediate for keyboard-only users -->
+                <select id="sort-by-filter-select" class="filter-select-parent" [(ngModel)]="myCurrentBiographySearchSorting"
+                  (blur)="setBioSearchSortingAndDoTheSort()" (click)="setBioSearchSortingAndDoTheSort()"
+                  (keyup.enter)="setBioSearchSortingAndDoTheSort()">
+                    <option class="filter-select-option" *ngFor="let oneSortType of bioSearchSortFields" [value]="oneSortType.id">
+                        {{oneSortType.value}}
+                    </option>
+                </select>
+            </div>
+
+            <!-- The "view as" (page view adjustment) section, essentially a toggle button group, for the sort/page view/filter options "filter menu" interface. -->
+            <div class="filter-section">
+              <h3 class="sr-only" id="rg1_label">Results Presentation Options</h3>
+              <p class="filter-select-label">View as:</p>
+              <ul class="unstyled-list-nowhitespace" aria-labelledby="rg1_label"
+                fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap.gt-xs="calc(2em)" fxLayoutGap.lt-sm="calc(4px)">
+                    <li #rg1Pic fxFlex="grow" class="filter-section-rg-item" [class.selected]="cardView"
+                      [attr.tabindex]="cardView ? 0 : -1" role="button" [attr.aria-pressed]="cardView"
+                      (click)="updateViewOptions(true, false)" (keydown)="setViewOptionsInFilterMenu($event.key, true, false)">
+                        <span class="sr-only">Picture stamp grid view</span>
+                        <span fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="calc(0.6em)">
+                            <span fxFlex="0 0 calc(22px)" class="pad-top-a-bit">
+                                <svg aria-hidden="true" width="22px" height="22px" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+                                    <title>
+                                        Picture stamp grid view
+                                    </title>
+                                    <path class="grid" d="M10 1v8c0 .28-.096667.516667-.289333.71C9.516667 9.903333 9.28 10 9 10H1c-.28 0-.516667-.096667-.71-.29C.096667 9.516667 0 9.28 0 9V1C0 .72.096667.483333.29.29.483333.097333.72 0 1 0h8c.28 0 .516667.097333.710667.29C9.903333.483333 10 .72 10 1c0 0 0-.28 0 0zm0 12v8c0 .28-.096667.516667-.289333.71C9.516667 21.903333 9.28 22 9 22H1c-.28 0-.516667-.096667-.71-.29C.096667 21.516667 0 21.28 0 21v-8c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h8c.28 0 .516667.097333.710667.29.192666.193333.289333.43.289333.71 0 0 0-.28 0 0zM22 1v8c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29h-8c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71V1c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h8c.28 0 .516667.097333.710667.29C21.903333.483333 22 .72 22 1c0 0 0-.28 0 0zm0 12v8c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29h-8c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71v-8c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h8c.28 0 .516667.097333.710667.29.192666.193333.289333.43.289333.71z" fill="currentColor" fill-rule="evenodd"/>
+                                </svg>
+                                <span fxFlex="0 0 auto">Grid</span>
+                            </span>
+
+                        </span>
+                    </li>
+                    <li #rg1Text fxFlex="grow" class="filter-section-rg-item" [class.selected]="textView"
+                      [attr.tabindex]="textView ? 0 : -1" role="button" [attr.aria-pressed]="textView"
+                      (click)="updateViewOptions(false, true)" (keydown)="setViewOptionsInFilterMenu($event.key, false, true)">
+                        <span class="sr-only">Text-only grid view</span>
+                        <span fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="calc(0.6em)">
+                            <span fxFlex="0 0 calc(22px)" class="pad-top-a-bit">
+                                <svg aria-hidden="true" width="24px" height="22px" viewBox="0 0 24 22" xmlns="http://www.w3.org/2000/svg">
+                                    <title>
+                                        Text-only grid view
+                                    </title>
+                                    <path class="list" d="M6 1v4c0 .28-.096667.516667-.289333.71C5.516667 5.903333 5.28 6 5 6H1c-.28 0-.516667-.096667-.71-.29C.096667 5.516667 0 5.28 0 5V1C0 .72.096667.483333.29.29.483333.097333.72 0 1 0h4c.28 0 .516667.097333.710667.29C5.903333.483333 6 .72 6 1c0 0 0-.28 0 0zm0 12V9c0-.28-.096667-.516667-.289333-.71C5.516667 8.097333 5.28 8 5 8H1c-.28 0-.516667.097333-.71.29C.096667 8.483333 0 8.72 0 9v4c0 .28.096667.516667.29.71.193333.193333.43.29.71.29h4c.28 0 .516667-.096667.710667-.29C5.903333 13.516667 6 13.28 6 13c0 0 0 .28 0 0zm0 4v4c0 .28-.096667.516667-.289333.71C5.516667 21.903333 5.28 22 5 22H1c-.28 0-.516667-.096667-.71-.29C.096667 21.516667 0 21.28 0 21v-4c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h4c.28 0 .516667.097333.710667.29C5.903333 16.483333 6 16.72 6 17c0 0 0-.28 0 0zM24 1v4c0 .28-.096667.516667-.289333.71C23.516667 5.903333 23.28 6 23 6H9c-.28 0-.516667-.096667-.71-.29C8.096667 5.516667 8 5.28 8 5V1c0-.28.096667-.516667.29-.71C8.483333.097333 8.72 0 9 0h14c.28 0 .516667.097333.710667.29C23.903333.483333 24 .72 24 1c0 0 0-.28 0 0zm0 8v4c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29H9c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71V9c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h14c.28 0 .516667.097333.710667.29C23.903333 8.483333 24 8.72 24 9c0 0 0-.28 0 0zm0 8v4c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29H9c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71v-4c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h14c.28 0 .516667.097333.710667.29.192666.193333.289333.43.289333.71z" fill="currentColor" fill-rule="evenodd"/>
+                                </svg>
+                            </span>
+                            <span fxFlex="0 0 auto">List</span>
+                        </span>
+                    </li>
+                    <li #rg1Map fxFlex="grow" class="filter-section-rg-item" [class.selected]="!cardView && !textView"
+                      [attr.tabindex]="cardView || textView ? -1 : 0" role="button" [attr.aria-pressed]="!cardView && !textView"
+                      (click)="updateViewOptions(false, false)" (keydown)="setViewOptionsInFilterMenu($event.key, false, false)">
+                        <span class="sr-only">U.S. state map view</span>
+                        <span fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="calc(0.6em)">
+                            <span fxFlex="0 0 calc(22px)" class="pad-top-a-bit">
+                                <svg aria-hidden="true" width="24px" height="22px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                                    <title>
+                                        U.S. state map view
+                                    </title>
+                                    <path d="M352,32l-192,96L0,32v352l160,96l192-96l160,96V128L352,32z M176,155.781l160-80v280.438l-160,80V155.781z M32,88.5 l111.531,66.938l0.469,0.281v277.375L32,365.875V88.5z M480,423.469l-111.531-66.906L368,356.281V78.938l112,67.188V423.469z" fill="currentColor" fill-rule="evenodd"/>
+                                </svg>
+                            </span>
+                            <span fxFlex="0 0 auto">Map</span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- The people per page section for the sort/page view/filter options "filter menu" interface. -->
+            <div class="filter-section">
+                <!-- People per page for current results on "filter menu" interface -->
+                <label for="ppl-per-page-filter-select" class="filter-select-label">People per Page:</label>
+                <select id="ppl-per-page-filter-select" class="filter-select-parent" [(ngModel)]="myModelledPageSize"
+                    (blur)="setBiographyPageSize()" (click)="setBiographyPageSize()"
+                    (keyup.enter)="setBiographyPageSize()">
+                    <option class="filter-select-option" *ngFor="let oneSize of globalState.PageSizeCandidates"
+                      [value]="oneSize">{{oneSize}}
+                    </option>
+                </select>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+<div *ngIf="!showingFilterMenu" class="mobile-only" fxLayout="column" fxLayoutAlign="space-between stretch" >
+  <div fxFlex="100%">
+      <button class="launch-filter-menu-button" (click)="openPickFilterMenu()" [disabled]="pages.length < 1"
+        [thdaIsFocused]="signalFocusToOpenFilterButton"
+        fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="calc(0.5em)">
+        <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we already have "Filters" for the button -->
+        <span fxFlex="0 0 calc(24px)">
+            <svg aria-hidden="true" width="24px" height="27px" viewBox="0 0 24 27" xmlns="http://www.w3.org/2000/svg">
+                <g fill-rule="nonzero" fill="#FFF">
+                    <path d="M22.336422 12.623774h-1.868784c-.474612-1.956227-2.254407-3.453963-4.30117-3.453963-2.046764 0-3.796895 1.46717-4.30117 3.453964H1.09754C.474612 12.623774 0 13.11283 0 13.754717c0 .641887.474612 1.130943 1.09754 1.130943h10.79742c.474613 1.956227 2.254407 3.453963 4.271508 3.453963 2.0171 0 3.796895-1.46717 4.30117-3.453963h1.868784c.622928 0 1.09754-.489056 1.09754-1.130943 0-.641887-.504275-1.130943-1.09754-1.130943zm-6.169954 3.85132c-1.4535 0-2.64003-1.22264-2.64003-2.720377 0-1.497736 1.18653-2.720377 2.64003-2.720377 1.4535 0 2.640028 1.22264 2.640028 2.720377 0 1.497736-1.156866 2.720377-2.640028 2.720377zM1.096152 5.71585h1.9553c.47401 1.956225 2.251556 3.45396 4.295732 3.45396s3.792095-1.467168 4.295733-3.45396H22.33781c.62214 0 1.096152-.489058 1.096152-1.130944 0-.641887-.474012-1.130944-1.096152-1.130944H11.61329C11.13928 1.497736 9.361736 0 7.31756 0 5.273382 0 3.525463 1.436604 3.05145 3.453962H1.096153C.474012 3.453962 0 3.94302 0 4.584906 0 5.226792.503638 5.71585 1.096152 5.71585zm6.221406-3.851322c1.451662 0 2.63669 1.222642 2.63669 2.720378 0 1.497736-1.185028 2.720377-2.63669 2.720377-1.45166 0-2.63669-1.22264-2.63669-2.720377 0-1.497736 1.18503-2.720378 2.63669-2.720378zM22.33781 21.28415H11.642917c-.474012-1.956225-2.251557-3.45396-4.295733-3.45396S3.55509 19.297357 3.05145 21.28415H1.096153C.474012 21.28415 0 21.77321 0 22.415095c0 .641887.474012 1.130944 1.096152 1.130944h1.9553C3.52546 25.502264 5.303007 27 7.347183 27s3.792095-1.46717 4.295733-3.453962H22.33781c.62214 0 1.096152-.489057 1.096152-1.130944 0-.641886-.503637-1.130943-1.096152-1.130943zM7.347184 25.135473c-1.45166 0-2.63669-1.222642-2.63669-2.720378 0-1.497736 1.18503-2.720377 2.63669-2.720377 1.451662 0 2.63669 1.22264 2.63669 2.720377 0 1.497736-1.155403 2.720378-2.63669 2.720378z"/>
+                </g>
+            </svg>
+        </span>
+        <span fxFlex="0 0 auto">Filters</span>
+      </button>
+  </div>
+  <section fxFlex="100%" id="results-region-mobile" aria-label="biography results">
+    <div fxLayout="column" fxLayoutAlign="space-between stretch" >
+      <div fxFlex="100%">
+        <h2 id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1"
+          class="biography-set__title" (mousedown)="noMouseFocus($event)">{{biographySetTitle}}</h2>
+      </div>
+      <div *ngIf="cardView || textView" fxFlex="100%">
+          <!-- Biography Stamps section in narrow views -->
+          <!-- FYI, lay out the items using CSS grid -->
+          <ul aria-labelledby="results-region-mobile"
+            [ngClass]="{'biographies': cardView,'biographies-as-list':!cardView}">
+              <li [ngClass]="{'biography': cardView,'biography-as-list':!cardView}"
+                *ngFor="let oneBio of biographies;let i=index">
+                  <thda-bio-res [cardView]="cardView" [bio]="biographies[i]" [selectedID]="signalFocusToBiographyID"></thda-bio-res>
+              </li>
+          </ul>
+      </div>
+      <div *ngIf="!cardView && !textView" fxFlex="100%">
+        <us-map [distributionToShow]="USStateDistribution"></us-map>
+      </div>
+    </div>
+  </section>
+  <div fxFlex="100%">
+      <!-- Pagination for cardView or textView is ONLY at the bottom, for greater accessibility
+        (else the page buttons on top slow down access through linear ordering of controls to get to the actual content). -->
+      <nav *ngIf="pages.length > 1 && (cardView || textView)" aria-labelledby="bio-pagination-label-mobile">
+        <h2 id="bio-pagination-label-mobile" class="sr-only">Pagination</h2>
+        <ul class="pagination list-without-styles" aria-labelledby="bio-pagination-label-mobile"
+          fxLayout="row" fxLayoutAlign="start start">
+            <li *ngIf="myCurrentPage !== 1" class="noSpacing">
+              <button class="pagination__prev" (click)="goBackPage()">
+                <span aria-hidden="true">«</span>
+                <span class="sr-only">
+                  Previous page
+                </span>
+              </button>
+            </li>
+            <li *ngFor="let page of pages" class="noSpacing">
+                <button class="pagination__button" [class.active]="myCurrentPage === page"
+                  [thdaIsFocused]="(page == 1 && signalFocusToPageOne) || (page == lastPageInSet && signalFocusToFinalPage)"
+                  [attr.aria-current]="myCurrentPage === page ? 'page' : null"
+                  [attr.aria-disabled]="myCurrentPage === page ? 'true' : 'false'"
+                  [class.pagination__button--narrow-hidden]="page >= pages[6]" (click)="goToPage(page)">
+                  {{page}}
+                </button>
+            </li>
+            <li *ngIf="myCurrentPage !== lastPageInSet" class="noSpacing">
+                <button class="pagination__next" (click)="goFwdPage()">
+                  <span aria-hidden="true">»</span>
+                  <span class="sr-only">
+                    Next page
+                  </span>
+                </button>
+            </li>
+        </ul>
+    </nav>
+  </div>
+</div>
+<div *ngIf="!showingFilterMenu" class="desktop-only" fxLayout="column" fxLayoutAlign="space-between stretch" >
+  <div fxFlex="100%">
+    <div fxLayout="row" fxLayoutAlign="space-between stretch" fxLayoutGap="18px" >
+      <!-- Biography set for wider screen layout has two panes, a left pane and a right pane.
+      NOTE: setting up a maximum width of 328px via numbers in the calc() sections below for the left column. -->
+      <div fxFlex.lt-md="40%" fxFlex.md="40%" fxFlex.gt-sm="0 0 calc(500px)">
+          <!-- Note: hiding welcome-paragraph via aria-hidden because it is included in another heading verbatim, no need for redundancy -->
+          <p class="welcome-paragraph" aria-hidden="true" *ngIf="totalBiographiesFoundSuffix">{{totalBiographiesFoundSuffix}}</p>
+      </div>
+      <div fxFlex.lt-md="calc(60% - 18px)" fxFlex.md="50%" fxFlex.gt-md="0 0 calc(600px)"> <!-- Ceiling out at breakpoint lg (1280) as 800px -->
+          <!-- Search Form -->
+          <search-form [showResultsPerPage]="false" [showFieldOptions]="false" [showAdvancedSearchLink]="true" ></search-form>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="100%">
+    <div fxLayout="row" fxLayoutAlign="space-between stretch" fxLayoutGap="18px">
+      <!-- Biography set for wider screen layout has two panes, a left pane and a right pane.
+      NOTE: setting up a maximum width of 328px via numbers in the calc() sections below for the left column. -->
+      <section fxFlex.lt-md="34%" fxFlex.gt-sm="0 0 calc(308px)" *ngIf="pages.length > 0"
+        aria-labelledby="wide-filter-heading" class="distinguishFilterPane panel-for-narrow-filter">
+        <h2 class="filters__title" id="wide-filter-heading">Filter Results</h2>
+
+        <!-- Current filters section for filter part of filter side panel for wider views -->
+        <div class="filters-applied" *ngIf="hasActiveFacet()">
+            <h3 id="desktop-label-for-current-filters" class="filters-applied-title">Current Filters:</h3>
+            <ul class="filters-applied-set" aria-labelledby="desktop-label-for-current-filters">
+                <li class="filter-applied-container" *ngFor="let chosenFacet of activeFacets; let activeIndex=index">
+                    <button class="filter-remove-button"
+                      [thdaIsFocused]="activeIndex == signalFocusToRemoveFilterButtonIndicator"
+                      (click)="clearActiveFacetChoice(chosenFacet.setID, chosenFacet.ID, true)">
+                        <span fxLayout="row" fxLayoutAlign="start start" class="applied-field-list-parent">
+                            <span fxFlex="0 0 calc(1.5em)">
+                                <span class="sr-only">{{chosenFacet.value}}, remove {{facetFamilies[chosenFacet.setID].nameForLabel}} filter</span>
+                                <svg aria-hidden="true" class="remove-icon" viewBox="0 0 13 14" xmlns="http://www.w3.org/2000/svg">
+                                    <title>
+                                      {{chosenFacet.value}}, remove {{facetFamilies[chosenFacet.setID].nameForLabel}} filter
+                                    </title>
+                                    <path d="M0 0h12.444v14H0V0zm3.457 10.825h1.36L5.68 9.1c.177-.38.343-.75.53-1.198h.045c.222.448.4.817.587 1.198l.885 1.725h1.427l-2.058-3.72L9.02 3.5H7.66l-.763 1.624c-.166.336-.31.683-.487 1.12h-.044c-.22-.437-.376-.784-.553-1.12L5.016 3.5H3.59l1.924 3.55-2.057 3.775z" fill="currentColor " fill-rule="evenodd"/>
+                                </svg>
+                            </span>
+                            <span fxFlex="grow" aria-hidden="true">{{chosenFacet.value}}</span>
+                        </span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <h3 class="filter-section-title" id="narrow-refine-filter-heading">Refine Results</h3>
+        <ul class="nothing-for-ul" aria-labelledby="wide-filter-heading">
+          <li class="nothing-for-li last-name-filter" *ngIf="facetFamilies[1].isAllowedToBeShown && lastInitialFacets && lastInitialFacets.length > 0">
+              <!-- "Last name" filter for filter part of filter side panel for wider views
+                  Note that for accessibility reasons, this is a "my-panel-of-buttons" rather than "my-panel" as its enclosed
+                  list has role of menu with radio buttons of menuitem along with other changes suggested by accessibility experts.
+                  Also note that the index for last name filter family is 1 as in facetFamilies[1].signalFocusToFamilyParent -->
+              <my-panel-of-buttons #rgLastInitialParent
+                title="Last Name" [opened]="lastNameOpened"
+                [hasMenu]="lastInitialFacets.length > 1 || (lastInitialFacets.length == 1 && !lastInitialFacets[0].active)"
+                [setFocusToButtonHoldingMenu]="signalFocusMoveToMenu_LastInitial || facetFamilies[1].signalFocusToFamilyParent"
+                (toggle)="toggleLastInitialParent(false)">
+                  <p class="sr-only" id="rg2-lastName_label">Last Name Starts With</p>
+                  <!-- If we only have one initial, and it is active, then only display a "Remove X" button.
+                      Else, display a radio group of the last initials, highlighting the first item. -->
+                  <button class="last-name-letter" *ngIf="lastInitialFacets.length == 1 && lastInitialFacets[0].active"
+                    [attr.aria-label]="removeLastInitialLabel(lastInitialFacets[0].value)"
+                    (click)="clearAndResetLastInitialFacet(lastInitialFacets[0].ID, false)">
+                      {{lastInitialFacets[0].value}}
+                  </button>
+                  <ul *ngIf="lastInitialFacets.length > 1 || (lastInitialFacets.length == 1 && !lastInitialFacets[0].active)"
+                    class="filter-choice-set" fxLayout="row wrap" fxLayoutAlign="start center" role="menu" aria-labelledby="rg2-lastName_label">
+                      <!-- Using https://stackoverflow.com/questions/53016596/angular-5-access-divs-list-using-viewchildren
+                        for #stuff child walking below, except changed out [attr.tabindex]="tabIndexForLastInitialOptions(i)"
+                            to just tabindex="0" for now (see comment in tabIndexForLastInitialOptions).... -->
+                      <li #rgLastInitial fxFlex="none" class="filter--alphabet" *ngFor="let lastInitial of lastInitialFacets;let i=index"
+                        [class.selected]="lastInitial.active" tabindex="0"
+                        role="menuitem" [attr.aria-checked]="lastInitial.active"
+                        (click)="toggleLastInitialFacet(lastInitial)"
+                        (keydown)="setLastInitialOptions($event.key, i, lastInitial.ID, false)"
+                        (focus)="onFocusChangeLastInitialOptions(i, true)"
+                        (focusout)="onFocusChangeLastInitialOptions(i, false)">
+                          <p class="filter-one-choice">
+                              {{lastInitial.value}}
+                          </p>
+                      </li>
+                  </ul>
+              </my-panel-of-buttons>
+          </li>
+          <li class="nothing-for-li" *ngFor="let facetFamily of facetFamilies; let fF=index">
+              <!-- "Category" "Gender" etc. filters for filter part of filter side panel for wider views -->
+              <my-panel *ngIf="facetFamilies[fF].isAllowedToBeShown && facetFamilies[fF].facets && facetFamilies[fF].facets.length > 0"
+                [title]="facetFamilies[fF].title" [opened]="facetFamilies[fF].isOpened"
+                [setFocusToButtonHoldingMenu]="facetFamilies[fF].signalFocusToFamilyParent"
+                (toggle)="facetFamilies[fF].isOpened = !facetFamilies[fF].isOpened">
+                  <ul class="filter-choice-set" [attr.aria-label]="facetFamilies[fF].title">
+                      <li class="filter-choices" *ngFor="let oneFacet of facetFamilies[fF].facets">
+                          <button class="filter-one-choice" [attr.aria-label]="appendedCountToValue(oneFacet.value, oneFacet.count)"
+                            [attr.aria-pressed]="oneFacet.active"
+                            [thdaIsFocused]="facetFamilies[fF].signalItemToFocus.length > 0 && facetFamilies[fF].signalItemToFocus == oneFacet.value"
+                            [class.active]="oneFacet.active" (click)="toggleActiveFacetChoice(fF, oneFacet)">
+                              <span fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="calc(0.8em)" class="field-list-parent">
+                                  <span fxFlex="0 0 calc(12px)" *ngIf="oneFacet.active">
+                                      <span class="sr-only">Applied</span>
+                                      <svg aria-hidden="true" [class.aria-selected]="oneFacet.active"
+                                        width="12px" height="11px" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg">
+                                          <title>
+                                              Applied
+                                          </title>
+                                          <path d="M2.115 3.986l2.052 2.065L9.887 0 12 2.115l-7.823 8.172L0 6.101" fill-rule="evenodd"/>
+                                      </svg>
+                                  </span>
+                                  <span fxFlex="grow">{{oneFacet.value}}&nbsp;({{oneFacet.count}})</span>
+                              </span>
+                          </button>
+                      </li>
+                  </ul>
+              </my-panel>
+          </li>
+        </ul>
+        <!-- My Clips section for filter side panel for wider views
+        FYI, removed in 2020 because (a) significantly slows down screen readers as redudant wordy extra info;
+        (b) confuses users with yet more options; (c) menu "My Clips" obviates need to show it, esp. since
+        it was always an incomplete view; (d) did not semantically belong in a filter section; (e) required work
+        to improve its accessibility. -->
+
+        <h2 id="display-options-h-id" class="sr-only">Display Options</h2>
+        <!-- The "sort by" sort results section for the sort/page view/filter options "filter menu" interface. -->
+        <div class="filter-section panel-for-narrow-filter">
+            <!-- Sort options for current results on "filter menu" interface -->
+            <label for="sort-by-filter-select" class="filter-select-label">Sort by:</label>
+            <!-- fixed with update on blur here and other places with (blur) instead of just (ngModelChange) which is too immediate for keyboard-only users -->
+            <select id="sort-by-filter-select" class="filter-select-parent" [(ngModel)]="myCurrentBiographySearchSorting"
+              (blur)="setBioSearchSortingAndDoTheSort()" (click)="setBioSearchSortingAndDoTheSort()"
+              (keyup.enter)="setBioSearchSortingAndDoTheSort()">
+                <option class="filter-select-option" *ngFor="let oneSortType of bioSearchSortFields" [value]="oneSortType.id">
+                    {{oneSortType.value}}
+                </option>
+            </select>
+        </div>
+
+        <!-- The "view as" (page view adjustment) section, essentially a toggle button group, for the sort/page view/filter options "filter menu" interface. -->
+        <div class="filter-section panel-for-narrow-filter">
+          <h3 class="sr-only" id="rg1_label">Results Presentation Options</h3>
+          <p class="filter-select-label">View as:</p>
+          <ul class="unstyled-list-nowhitespace" aria-labelledby="rg1_label" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap.lt-md="0" fxLayoutGap="calc(0.5em)">
+                <li #rg1Pic fxFlex.lt-md="100%" fxFlex="calc(30% - 0.5em)" class="filter-section-rg-item" [class.selected]="cardView"
+                  [attr.tabindex]="cardView ? 0 : -1" role="button" [attr.aria-pressed]="cardView"
+                  (click)="updateViewOptions(true, false)" (keydown)="setViewOptionsInFilterMenu($event.key, true, false)">
+                    <span class="sr-only">Picture stamp grid view</span>
+                    <span fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="calc(0.6em)">
+                        <span fxFlex="0 0 calc(22px)" class="pad-top-a-bit">
+                            <svg aria-hidden="true" width="22px" height="22px" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+                                <title>
+                                    Picture stamp grid view
+                                </title>
+                                <path class="grid" d="M10 1v8c0 .28-.096667.516667-.289333.71C9.516667 9.903333 9.28 10 9 10H1c-.28 0-.516667-.096667-.71-.29C.096667 9.516667 0 9.28 0 9V1C0 .72.096667.483333.29.29.483333.097333.72 0 1 0h8c.28 0 .516667.097333.710667.29C9.903333.483333 10 .72 10 1c0 0 0-.28 0 0zm0 12v8c0 .28-.096667.516667-.289333.71C9.516667 21.903333 9.28 22 9 22H1c-.28 0-.516667-.096667-.71-.29C.096667 21.516667 0 21.28 0 21v-8c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h8c.28 0 .516667.097333.710667.29.192666.193333.289333.43.289333.71 0 0 0-.28 0 0zM22 1v8c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29h-8c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71V1c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h8c.28 0 .516667.097333.710667.29C21.903333.483333 22 .72 22 1c0 0 0-.28 0 0zm0 12v8c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29h-8c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71v-8c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h8c.28 0 .516667.097333.710667.29.192666.193333.289333.43.289333.71z" fill="currentColor" fill-rule="evenodd"/>
+                            </svg>
+                        </span>
+                        <span fxFlex="0 0 auto">Grid</span>
+                    </span>
+                </li>
+                <li #rg1Text fxFlex.lt-md="100%" fxFlex="calc(30% - 0.5em)" class="filter-section-rg-item" [class.selected]="textView"
+                  [attr.tabindex]="textView ? 0 : -1" role="button" [attr.aria-pressed]="textView"
+                  (click)="updateViewOptions(false, true)" (keydown)="setViewOptionsInFilterMenu($event.key, false, true)">
+                    <span class="sr-only">Text-only grid view</span>
+                    <span fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="calc(0.6em)">
+                        <span fxFlex="0 0 calc(22px)" class="pad-top-a-bit">
+                            <svg aria-hidden="true" width="24px" height="22px" viewBox="0 0 24 22" xmlns="http://www.w3.org/2000/svg">
+                                <title>
+                                    Text-only grid view
+                                </title>
+                                <path class="list" d="M6 1v4c0 .28-.096667.516667-.289333.71C5.516667 5.903333 5.28 6 5 6H1c-.28 0-.516667-.096667-.71-.29C.096667 5.516667 0 5.28 0 5V1C0 .72.096667.483333.29.29.483333.097333.72 0 1 0h4c.28 0 .516667.097333.710667.29C5.903333.483333 6 .72 6 1c0 0 0-.28 0 0zm0 12V9c0-.28-.096667-.516667-.289333-.71C5.516667 8.097333 5.28 8 5 8H1c-.28 0-.516667.097333-.71.29C.096667 8.483333 0 8.72 0 9v4c0 .28.096667.516667.29.71.193333.193333.43.29.71.29h4c.28 0 .516667-.096667.710667-.29C5.903333 13.516667 6 13.28 6 13c0 0 0 .28 0 0zm0 4v4c0 .28-.096667.516667-.289333.71C5.516667 21.903333 5.28 22 5 22H1c-.28 0-.516667-.096667-.71-.29C.096667 21.516667 0 21.28 0 21v-4c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h4c.28 0 .516667.097333.710667.29C5.903333 16.483333 6 16.72 6 17c0 0 0-.28 0 0zM24 1v4c0 .28-.096667.516667-.289333.71C23.516667 5.903333 23.28 6 23 6H9c-.28 0-.516667-.096667-.71-.29C8.096667 5.516667 8 5.28 8 5V1c0-.28.096667-.516667.29-.71C8.483333.097333 8.72 0 9 0h14c.28 0 .516667.097333.710667.29C23.903333.483333 24 .72 24 1c0 0 0-.28 0 0zm0 8v4c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29H9c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71V9c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h14c.28 0 .516667.097333.710667.29C23.903333 8.483333 24 8.72 24 9c0 0 0-.28 0 0zm0 8v4c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29H9c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71v-4c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h14c.28 0 .516667.097333.710667.29.192666.193333.289333.43.289333.71z" fill="currentColor" fill-rule="evenodd"/>
+                            </svg>
+                        </span>
+                        <span fxFlex="0 0 auto">List</span>
+                    </span>
+                </li>
+                <li #rg1Map fxFlex.lt-md="100%" fxFlex="calc(30% - 0.5em)" class="filter-section-rg-item" [class.selected]="!cardView && !textView"
+                  [attr.tabindex]="cardView || textView ? -1 : 0" role="button" [attr.aria-pressed]="!cardView && !textView"
+                  (click)="updateViewOptions(false, false)" (keydown)="setViewOptionsInFilterMenu($event.key, false, false)">
+                    <span class="sr-only">U.S. state map view</span>
+                    <span fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="calc(0.6em)">
+                        <span fxFlex="0 0 calc(22px)" class="pad-top-a-bit">
+                            <svg aria-hidden="true" width="24px" height="22px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                                <title>
+                                    U.S. state map view
+                                </title>
+                                <path d="M352,32l-192,96L0,32v352l160,96l192-96l160,96V128L352,32z M176,155.781l160-80v280.438l-160,80V155.781z M32,88.5 l111.531,66.938l0.469,0.281v277.375L32,365.875V88.5z M480,423.469l-111.531-66.906L368,356.281V78.938l112,67.188V423.469z" fill="currentColor" fill-rule="evenodd"/>
+                            </svg>
+                        </span>
+                        <span fxFlex="0 0 auto">Map</span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- The people per page section for the sort/page view/filter options "filter menu" interface. -->
+        <div class="filter-section panel-for-narrow-filter">
+            <!-- People per page for current results on "filter menu" interface -->
+            <label for="ppl-per-page-filter-select" class="filter-select-label">People per Page:</label>
+            <select id="ppl-per-page-filter-select" class="filter-select-parent" [(ngModel)]="myModelledPageSize"
+                (blur)="setBiographyPageSize()" (click)="setBiographyPageSize()"
+                (keyup.enter)="setBiographyPageSize()">
+                <option class="filter-select-option" *ngFor="let oneSize of globalState.PageSizeCandidates"
+                  [value]="oneSize">{{oneSize}}
+                </option>
+            </select>
+        </div>
+
+      </section>
+      <div fxFlex.lt-md="calc(66% - 18px)" fxFlex.gt-sm="calc(100% - 336px)" >
+        <div fxLayout="column" fxLayoutAlign="space-between stretch" >
+
+          <section fxFlex="100%" id="results-region" aria-label="biography results">
+            <div fxLayout="column" fxLayoutAlign="space-between stretch" >
+              <div fxFlex="100%">
+                <h2 id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1"
+                  class="biography-set__title" (mousedown)="noMouseFocus($event)">{{biographySetTitle}}</h2>
+              </div>
+              <div *ngIf="cardView || textView" fxFlex="100%">
+                  <!-- Biography Stamps section -->
+                  <!-- FYI, lay out the items using CSS grid -->
+                  <ul aria-labelledby="results-region"
+                    [ngClass]="{'biographies': cardView,'biographies-as-list':!cardView}">
+                      <li [ngClass]="{'biography': cardView,'biography-as-list':!cardView}"
+                        *ngFor="let oneBio of biographies;let i=index">
+                          <thda-bio-res [cardView]="cardView" [bio]="biographies[i]" [selectedID]="signalFocusToBiographyID"></thda-bio-res>
+                      </li>
+                  </ul>
+              </div>
+              <div *ngIf="!cardView && !textView" fxFlex="100%">
+                <us-map [distributionToShow]="USStateDistribution"></us-map>
+              </div>
+            </div>
+          </section>
+          <div fxFlex="100%">
+              <!-- Pagination for cardView or textView is ONLY at the bottom, for greater accessibility
+              (else the page buttons on top slow down access through linear ordering of controls to get to the actual content). -->
+              <nav *ngIf="pages.length > 1 && (cardView || textView)" aria-labelledby="bio-pagination-label">
+                <h2 id="bio-pagination-label" class="sr-only">Pagination</h2>
+                <ul class="pagination list-without-styles" aria-labelledby="bio-pagination-label"
+                  fxLayout="row" fxLayoutAlign="start start">
+                    <li *ngIf="myCurrentPage !== 1" class="noSpacing" >
+                      <button class="pagination__prev" (click)="goBackPage()">
+                        <span aria-hidden="true">«</span>
+                        <span class="sr-only">
+                          Previous page
+                        </span>
+                      </button>
+                    </li>
+                    <li *ngFor="let page of pages" class="noSpacing" >
+                        <button class="pagination__button" [class.active]="myCurrentPage === page"
+                          [thdaIsFocused]="(page == 1 && signalFocusToPageOne) || (page == lastPageInSet && signalFocusToFinalPage)"
+                          [attr.aria-current]="myCurrentPage === page ? 'page' : null"
+                          [attr.aria-disabled]="myCurrentPage === page ? 'true' : 'false'"
+                          [class.pagination__button--narrow-hidden]="page >= pages[6]" (click)="goToPage(page)">
+                          {{page}}
+                        </button>
+                    </li>
+                    <li *ngIf="myCurrentPage !== lastPageInSet" class="noSpacing" >
+                        <button class="pagination__next" (click)="goFwdPage()">
+                          <span aria-hidden="true">»</span>
+                          <span class="sr-only">
+                            Next page
+                          </span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

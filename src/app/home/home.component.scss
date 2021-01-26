@@ -1,0 +1,157 @@
+﻿@import '../shared/theme/base';
+
+.maker-directory__bottom-row {
+    margin-top: em(10);
+}
+
+//Homepage
+.welcome-paragraph {
+    @extend %source-sans-semi-bold;
+
+    background: color(secondary);
+    color: #fff;
+    font-size: 1.2rem;
+    padding: em(15);
+
+    @media screen and (min-width: bp(afl_medium) ) {
+        margin: em(0) em(0) em(10) em(0); // top right bottom left
+    }
+
+}
+
+.welcome-paragraph__stories {
+    @extend %source-sans-bold;
+
+    font-size: 2rem;
+}
+
+.biographies { // note: sized bigger on this page than the grid of biographies at historymakers.component.scss
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); // the "1fr" makes all rows equal height;
+    // e.g., see https://stackoverflow.com/questions/44488357/equal-height-rows-in-css-grid-layout
+  grid-auto-rows: 1fr;
+  gap: gutter(thmda-tight);
+
+  // For widths between thmda_narrow (which is less than afl_small) and afl_small, be 2 per row
+  @media screen and (min-width: bp(thmda_narrow)) and (max-width: bp(afl_small_just_before)) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: gutter(thmda-medium);
+  }
+
+  // For widths between afl_small and thmda_wideenough, be 3 per row
+  @media screen and (min-width: bp(afl_small)) and (max-width: bp(thmda_wideenough_just_before)) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: gutter(thmda-medium);
+  }
+
+  // For widths between thmda_wideenough and afl_medium, be 4 per row
+  @media screen and (min-width: bp(thmda_wideenough)) and (max-width: bp(afl_medium_just_before)) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: gutter(thmda-medium);
+  }
+
+  // For widths between afl_medium and afl_large, be 3 per row (due to sharing a column of info in the horizontal space)
+  @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: gutter(thmda-medium);
+  }
+
+  // Obsolete wide-screen improvements with maximum of thmda_maxwidth, afl_large < thmda_maxwidth < afl_xlarge < xlarge, simplify to afl_large or larger
+  // For widths of afl_large or more, be 5 per row:
+  @media screen and (min-width: bp(afl_large)) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: gutter(thmda-big);
+  }
+  // For widths between afl_large and xlarge, be 5 per row:
+  //@media screen and (min-width: bp(afl_large)) and (max-width: bp(xlarge_just_before))  {
+  //  grid-template-columns: repeat(5, 1fr);
+  //  gap: gutter(thmda-big);
+  //}
+
+  // For widths of afl_xlarge or more, be 6 per row:
+  //@media screen and (min-width: bp(afl_xlarge)) {
+  //  grid-template-columns: repeat(6, 1fr);
+  //  gap: gutter(thmda-big);
+  //}
+}
+
+.biography {
+  padding: 0;
+  margin: 0;
+}
+
+.homepage__heading {
+    @extend %oswald;
+
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin: 0;
+    color: black;
+
+    @media screen and (min-width: bp(afl_small)) and (max-width: bp(afl_medium_just_before)) {
+        font-size: 1.6rem;
+    }
+
+    @media screen and (min-width: bp(afl_medium)) {
+        font-size: 1.8rem;
+    }
+}
+
+.extra-margin-whitespace {
+    margin-bottom: em(24);
+
+    @media screen and (min-width: bp(afl_small)) and (max-width: bp(afl_medium_just_before)) {
+        margin-bottom: em(25);
+    }
+}
+
+.birthdays__empty-message {
+  @extend %source-sans-semi-bold;
+
+  color: color(dark-grey);
+  font-size: 1.2rem;
+
+  @media screen and (min-width: bp(afl_medium)) {
+      font-size: 1.4rem;
+  }
+}
+
+.mixtape-list-container {
+    margin-bottom: 0.5rem;
+
+    .mixtape-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .mixtape-item {
+      padding: 0;
+      margin: 0 0 0.9rem 0; // top right bottom left
+      vertical-align: top;
+      // Default:  1 per row
+      width: 100%;
+
+      // For widths between afl_small and afl_medium, be 2 per row, with gaps at sides and between
+      @media screen and (min-width: bp(afl_small)) and (max-width: bp(afl_medium_just_before)) {
+          width: calc(50% - 0.5rem);
+          margin-right: 0.9rem;
+          &:nth-of-type(2n+0) {
+              margin-right: 0;
+          }
+      }
+
+      // Obsolete wide-screen improvements with maximum of thmda_maxwidth, afl_large < thmda_maxwidth < afl_xlarge < xlarge
+      // For very wide widths of afl_xlarge or more, also be 2 per row:
+      //@media screen and (min-width: bp(afl_xlarge)) {
+      //    width: calc(50% - 0.5rem);
+      //    margin-right: 0.9rem;
+      //    &:nth-of-type(2n+0) {
+      //        margin-right: 0;
+      //    }
+      //}
+    }
+}
+
+

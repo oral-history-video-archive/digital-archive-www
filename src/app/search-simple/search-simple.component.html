@@ -1,0 +1,8 @@
+<h1 id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title mobile-only" (mousedown)="noMouseFocus($event)">{{simpleSearchPageTitle}}</h1>
+<h1 id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title desktop-only" (mousedown)="noMouseFocus($event)">{{simpleSearchPageTitleLong}}</h1>
+<div fxLayout="row" fxLayoutAlign="start">
+  <div fxFlex="0 1 calc(800px)">
+      <!-- Search Form (capped at 800px width via fxflex line in container div) -->
+      <search-form #mySearchForm [showResultsPerPage]="true" [showFieldOptions]="true" [showAdvancedSearchLink]="true" ></search-form>
+  </div>
+</div>

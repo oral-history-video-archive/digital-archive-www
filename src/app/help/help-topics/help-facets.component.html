@@ -1,0 +1,57 @@
+<h1 id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title mobile-only" (mousedown)="noMouseFocus($event)">Facets for Filtering Down Search Results</h1>
+<h1 id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title desktop-only" (mousedown)="noMouseFocus($event)">Facets for Filtering Down Search Results</h1>
+<p class="helptext">Information specialists like to talk about "facets" that are natural categories for filtering down a set of data.  With The HistoryMakers oral history interviews,
+  the natural facets for categorization include the gender of the person being interviewed, his or her job family, the "Maker" categorization, and the birth year.
+  Because most sets of data would have too many birth years listed, these are collapsed into birth decade.
+  See the <a routerLink="/help/facet-origins" routerLinkActive="active">"What are Facets?"</a> help page for details on how facets are produced.
+</p>
+<p class="helptext mobile-only">
+  For mobile (narrow width browsers), click the "Filters"" button in the upper right to bring up a filtering interface.
+  The facet groups are listed under a "Refine Results" section at the bottom of the page.
+  Tap/click the facet group title to open up a facet of interest.  You will see a count of the number of results within that facet.
+  Facets give you a means of immediately seeing the distribution of results across their categorization, e.g., male and female.
+  You can click a facet to then drill down to just those results having that facet, e.g., just the women.
+  When ready to see the results again, of which you have a count already from this facet interface, click "Close" at the top of the page.
+  The facet interface will close, and the results will show.
+</p>
+<p class="helptext desktop-only">
+  For widescreen browsers, look at the filtering interface in a "Filter Results" pane along the left edge of the page.
+  The facet groups are listed there.
+  Click/tap the facet group title to open up a facet of interest.  You will see a count of the number of results within that facet.
+  Facets give you a means of immediately seeing the distribution of results across their categorization, e.g., male and female.
+  You can click a facet to then drill down to just those results having that facet, e.g., just the women.
+  You immediately see the results of the subset in the right portion of the page.
+</p>
+<p class="helptext">This description says "results" because the result set could be biographies, i.e., the people in the archive.
+  Or, the result set could be stories, i.e., what these people speak about.  See <a routerLink="/help/search" routerLinkActive="active">How To Search</a> for more information.
+</p>
+<h2 class="help-heading">Other Notes about Facets</h2>
+<ul class="helptext">
+    <li class="helptext">Some results may not belong to a facet, e.g., some people that were interviewed did not give a birth date.
+      They and their stories will not be part of the "Decade of Birth" facet.</li>
+    <li class="helptext">Some facets have a one-to-one mapping with results, e.g., each result is in at most one decade of birth.</li>
+    <li class="helptext">Some facets may have a many-to-one mapping with results; a result may have multiple Maker Categories and be in both
+      EducationMaker and ScienceMaker for example.</li>
+    <li class="helptext">Facets may help with some queries more than others, e.g., a researcher may want to drill down into ReligionMakers, or might
+      just wish to watch the count on the ReligionMakers facet change across different queries.
+    </li>
+    <li class="helptext">
+      Some facets may show an overrepresentation or underrepresentation due to The HistoryMakers overall corpus to date, which is growing dynamically
+      and may adjust over time.  For example, early interview work concentrated in Chicago and the Illinois area in general.
+      As a result, for most query sets, the state "Illinois" will be prominent in the U.S. State facet, because there are so many stories from Chicago.
+    </li>
+    <li class="helptext">
+      Since screen space is limited, not every value within a facet type like "Year" will be listed for any set of results.
+      Instead, only the facet values with the highest counts will be shown, much like e-commerce web shopping sites work.
+    </li>
+    <li class="helptext">
+      For U.S. State, there is a "Map" view option so that you can see all 50 states plus D.C. shown on an interactive color-coded
+      map and full list so that you can interact with every state. Should this information visualization view prove valuable,
+      others may be added to support seeing all the facet values at once for other types like year and decade.
+    </li>
+    <li class="helptext">Filtering is also possible through some interfaces shown with advanced search options, e.g., to search only certain fields, or
+      return only interviews conducted in a certain year range.  See <a routerLink="/help/search" routerLinkActive="active">How To Search</a> for more information.
+    </li>
+</ul>
+<p class="helptext"><a routerLink="/help" routerLinkActive="active">Back to FAQ/Help</a></p>
+

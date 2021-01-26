@@ -1,0 +1,69 @@
+<!-- NOTE: As currently implemented, parent (app.component) checks if this is the route and if so turns off the
+     need for header elements with IDs of mmainHeader and dmainHeader for skip to content functionality (not needed
+     for this brief context menu). -->
+<h1 class="sr-only">{{contentLinksPageTitle}}</h1>
+<button #topBackButton fxLayout="row" fxLayoutAlign="center center" class="my-app-button-shorter" (click)="goBack($event)">
+  <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we will have "Back" for the button -->
+  <svg fxFlex="0 0 calc(12px)" aria-hidden="true" class="back-chevron-icon" width="12px" height="16px" viewBox="0 0 12 20" xmlns="http://www.w3.org/2000/svg">
+      <title>
+          Back to previous page
+      </title>
+      <g fill="#FFF" fill-rule="nonzero">
+          <path d="M10 0L0 10l10 10 1.494662-1.494662L2.989324 10l8.505338-8.505338"/>
+      </g>
+  </svg>
+  <span fxFlex="grow">Back{{extraDetailsOnPriorRoute}}</span>
+</button>
+<nav id="nav-menu" aria-labelledby="site-nav-heading-menu">
+  <h2 id="site-nav-heading-menu" class="sr-only">Site Navigation</h2>
+  <ul class="noMargins list-unstyled" aria-labelledby="site-nav-heading-menu">
+        <li>
+            <a class="nav__link-in-one-row" href="javascript:void(0)" (click)="setNavChoice('/home')">
+                Home
+            </a>
+        </li>
+        <li>
+            <a class="nav__link-in-one-row" href="javascript:void(0)" (click)="setNavChoice('/all')">
+                Maker Directory
+            </a>
+        </li>
+        <li *ngIf="showTopicSearch">
+            <a class="nav__link-in-one-row" href="javascript:void(0)" (click)="setNavChoice('/tag')">
+                Topic Search
+            </a>
+        </li>
+        <li>
+            <a class="nav__link-in-one-row" href="javascript:void(0)" (click)="setNavChoice('/settings')">
+                Settings
+            </a>
+        </li>
+        <li>
+            <a class="nav__link-in-one-row" href="javascript:void(0)" [attr.aria-label]="myClipsWithCountMsg"
+              (click)="setNavChoice('/stories/4')">
+                My Clips <span class="badge badge-pill nav__badge-in-one-row">{{myClips.length}}</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav__link-in-one-row" href="javascript:void(0)" (click)="openMyContactUsModalForm()">
+                Contact Us
+            </a>
+        </li>
+        <li>
+            <a class="nav__link-in-one-row" href="javascript:void(0)" (click)="setNavChoice('/help')">
+                FAQ/Help
+            </a>
+        </li>
+    </ul>
+</nav>
+<button fxLayout="row" fxLayoutAlign="center center" class="my-app-button-shorter extra-gap-above" (click)="goBack($event)">
+  <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we will have "Back" for the button -->
+  <svg fxFlex="0 0 calc(12px)" aria-hidden="true" class="back-chevron-icon" width="12px" height="16px" viewBox="0 0 12 20" xmlns="http://www.w3.org/2000/svg">
+      <title>
+          Back to previous page
+      </title>
+      <g fill="#FFF" fill-rule="nonzero">
+          <path d="M10 0L0 10l10 10 1.494662-1.494662L2.989324 10l8.505338-8.505338"/>
+      </g>
+  </svg>
+  <span fxFlex="grow">Back{{extraDetailsOnPriorRoute}}</span>
+</button>

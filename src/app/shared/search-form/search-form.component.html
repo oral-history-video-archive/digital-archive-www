@@ -1,0 +1,130 @@
+<!-- Search Form -->
+<section aria-labelledby="search_heading_in_form" fxLayout="column" fxLayoutAlign="space-between stretch" fxLayoutGap="calc(.2em)" class="search-form-container" role="search">
+  <h2 id="search_heading_in_form" class="sr-only">{{screenReaderLabel}}</h2>
+
+    <!-- Search input: text query with label  -->
+    <label fxFlex="auto" id="queryInputLabel" class="input-preface-label">{{inputPlaceholder}}</label>
+    <input fxFlex="auto" #queryInput class="search__input" type="text"
+      aria-labeledby="queryInputLabel" [(ngModel)]="txtQuery" (keyup.enter)="doSearch()" />
+    <!-- Optional dropdown list of fields to search -->
+    <div fxFlex="auto" *ngIf="showFieldOptions && (activeSearchFieldItem >= 0)" class="search__fields-container">
+        <label for="search-fld-select" class="select-preface-label">Fields to search:</label>
+        <select id="search-fld-select" class="search-field-select" [(ngModel)]="activeSearchFieldItem" aria-label="Search Fields"
+          (blur)="setSearchFieldSpecification()" (click)="setSearchFieldSpecification()"
+          (keyup.enter)="setSearchFieldSpecification()">
+            <option class="search-field-option" *ngFor="let oneSearchField of searchFieldList;let i=index"
+              [value]="i">{{oneSearchField.value}}</option>
+        </select>
+    </div>
+
+    <!-- Sometimes additional advanced options are sandwiched here -->
+    <fieldset *ngIf="showAdvancedBioChosenFields && searchOptions.searchingBiographies" class="markOffLegend">
+        <legend class="mysubheading">"Chosen Fields"</legend>
+        <p class="helptextOpener">"Chosen Fields" are all of the fields checked here.  You have flexibility to search over many or a few fields depending on your needs.  If you uncheck everything, the last name will be searched anyway.
+            You can select "Choose Default Set" which will search last name, preferred name, and the short description as the "chosen fields."</p>
+        <div *ngIf="possibleSearchableBioFields">
+          <ul class="list-unstyled" fxLayout="row wrap" fxLayoutAlign="space-between center">
+              <!-- Style for wrapping columns but at least a min size (changed based on font size change) for each item. -->
+              <li *ngFor="let oneField of possibleSearchableBioFields" fxFlex.xs="0 0 200px" fxFlex.gt-xs="0 0 250px" class="helptext">
+                  <label class="noBreak">
+                      <input type="checkbox" value="{{oneField.id}}" [(ngModel)]="oneField.selected"
+                          (change)="onSearchableBioFieldChange(oneField.id, oneField.label, $event.target.checked)"
+                          (keyup.enter)="onSearchableBioFieldChange(oneField.id, oneField.label, $event.target.checked)">{{oneField.label}}
+                  </label>
+              </li>
+          </ul>
+        </div>
+    </fieldset>
+    <div *ngIf="showAdvancedBioChosenFields && searchOptions.searchingBiographies"
+      fxFlex="auto">
+        <button class="resetFieldsToDefault"
+          (click)="doResetBioFieldsToDefault()">
+            Choose Default Set
+        </button>
+    </div>
+    <fieldset *ngIf="showAdvancedStoryOptions && !searchOptions.searchingBiographies" class="markOffLegend">
+        <legend class="mysubheading">Interview Range for Story Search</legend>
+        <!-- Interviewed date filter via radio buttons for story search -->
+        <div fxLayout="row" fxLayoutAlign="start">
+            <div fxFlex="0 1 calc(800px)" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="calc(.1em)" class="interview_date_panel">
+                <div fxFlex="auto" fxLayout="row wrap" fxLayoutAlign="center center">
+                    <label class="noBreak interview_date_area_terse">
+                        <input type="checkbox" [(ngModel)]="filterByInterviewDate"
+                          (change)="updatedFilterSetting($event.target.checked)" (keyup.enter)="updatedFilterSetting($event.target.checked)">Filter by interview date.
+                    </label>
+                    <label class="noBreak interview_date_area_wordy">
+                        <input type="checkbox" [(ngModel)]="filterByInterviewDate"
+                          (change)="updatedFilterSetting($event.target.checked)" (keyup.enter)="updatedFilterSetting($event.target.checked)">Filter stories by interview date.
+                    </label>
+                </div>
+                <div fxFlex="auto" fxLayout="row wrap" fxLayoutAlign="center center">
+                    <div fxFlex="50%" class="date-panel-piece" *ngIf="filterByInterviewDate">
+                        <label for="lb-interview-yr-select" class="interview-date-preface-label">Keep interviews in/after:</label>
+                        <select id="lb-interview-yr-select" class="select-parent" [(ngModel)]="modelledEarliestYear"
+                          (blur)="setMinInterviewYear()" (click)="setMinInterviewYear()" (keyup.enter)="setMinInterviewYear()">
+                            <option class="select-option" *ngFor="let oneYear of interviewYears"
+                              [value]="oneYear">{{oneYear}}</option>
+                        </select>
+                    </div>
+                    <div fxFlex="50%" class="date-panel-piece" *ngIf="filterByInterviewDate">
+                        <label for="ub-interview-yr-select" class="interview-date-preface-label">Keep interviews in/before:</label>
+                        <select id="ub-interview-yr-select" class="select-parent" [(ngModel)]="modelledLatestYear"
+                          (blur)="setMaxInterviewYear()" (click)="setMaxInterviewYear()" (keyup.enter)="setMaxInterviewYear()">
+                            <option class="select-option" *ngFor="let oneYear of interviewYears"
+                              [value]="oneYear">{{oneYear}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <!-- Two looks: for narrow lt-md	'screen and (max-width: 959px)', links on one row, rpp and button on next.
+         For gt-sm	'screen and (min-width: 960px)', links, rpp and button on same row. -->
+    <div fxFlex="auto" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="calc(0.2em)">
+
+        <!-- Search links -->
+        <div class="search__links-container" [class.search__links-container--no-rpp]="!showResultsPerPage"
+          *ngIf="showAdvancedSearchLink" fxFlex.lt-md="1 0 calc(70% - 0.2em)" fxFlex.gt-sm="1 0 calc(33% - 0.2em)">
+            <div class="search__advanced"><a href="javascript:void(0)" tabindex="0" role="link" class="search__routerLink" (click)="routeToAdvancedSearch()">{{advancedLinkText}}</a></div>
+        </div>
+        <!-- Results per page -->
+        <!--<div class="search__rpp-container" *ngIf="showResultsPerPage" fxFlex.lt-md="1 0 calc(65% - 0.2em)" fxFlex.gt-sm="1 0 calc(42% - 0.2em)">
+            <label for="res-per-pg-select" class="select-preface-label">Results per Page:</label>
+            <select id="res-per-pg-select" class="select-parent" [(ngModel)]="myModelledPageSize" (blur)="setResultsPageSize()" (click)="setResultsPageSize()"
+            (keyup.enter)="setResultsPageSize()">
+                <option class="select-option" *ngFor="let oneSize of globalState.PageSizeCandidates"
+                  [value]="oneSize">{{oneSize}}</option>
+            </select>
+        </div>-->
+        <!-- Submit button (in story search form) -->
+        <button *ngIf="!searchOptions.searchingBiographies" fxFlex.lt-md="1 0 30%" fxFlex.gt-sm="1 0 25%"
+          fxLayout="row" fxLayoutAlign="center center"
+          [ngClass]="{'search__submit': txtQuery !== '','search__submit__disabled':txtQuery === ''}"
+          [disabled]="txtQuery === ''" (click)="doSearch()" value="Search">
+            <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we already have "Search" for the button -->
+            <span fxFlex="grow">Search</span>
+            <svg fxFlex="0 0 calc(20px)" aria-hidden="true" class="search__submit-icon" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <title>
+                    Perform the story search
+                </title>
+                <path d="M17.477 2.523C15.797.84 13.59 0 11.387 0 9.183 0 6.98.84 5.297 2.523c-3.037 3.036-3.33 7.775-.885 11.142L.398 17.678c-.53.53-.53 1.392 0 1.924.266.265.614.398.962.398s.696-.133.962-.398l4.013-4.014c1.502 1.09 3.277 1.638 5.052 1.638 2.204 0 4.41-.84 6.09-2.523 3.364-3.363 3.364-8.817 0-12.18zM16.13 13.357c-1.266 1.267-2.95 1.965-4.743 1.965-1.792 0-3.477-.698-4.744-1.965-2.616-2.616-2.616-6.872 0-9.488C7.91 2.6 9.595 1.903 11.387 1.903c1.792 0 3.477.698 4.744 1.965 1.268 1.266 1.966 2.95 1.966 4.743 0 1.792-.698 3.477-1.965 4.744z" fill-rule="nonzero" fill="#FFF"/>
+            </svg>
+        </button>
+
+        <!-- Submit button (in biography search form) -->
+        <button *ngIf="searchOptions.searchingBiographies" fxFlex.lt-md="1 0 30%" fxFlex.gt-sm="1 0 25%"
+          fxLayout="row" fxLayoutAlign="center center"
+          [ngClass]="{'search__submit': txtQuery !== '','search__submit__disabled':txtQuery === ''}"
+          [disabled]="txtQuery === ''" (click)="doSearch()" value="Search">
+            <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we already have "Search" for the button -->
+            <span fxFlex="grow">Search</span>
+            <svg fxFlex="0 0 calc(20px)" aria-hidden="true" class="search__submit-icon" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <title>
+                    Perform the biography search
+                </title>
+                <path d="M17.477 2.523C15.797.84 13.59 0 11.387 0 9.183 0 6.98.84 5.297 2.523c-3.037 3.036-3.33 7.775-.885 11.142L.398 17.678c-.53.53-.53 1.392 0 1.924.266.265.614.398.962.398s.696-.133.962-.398l4.013-4.014c1.502 1.09 3.277 1.638 5.052 1.638 2.204 0 4.41-.84 6.09-2.523 3.364-3.363 3.364-8.817 0-12.18zM16.13 13.357c-1.266 1.267-2.95 1.965-4.743 1.965-1.792 0-3.477-.698-4.744-1.965-2.616-2.616-2.616-6.872 0-9.488C7.91 2.6 9.595 1.903 11.387 1.903c1.792 0 3.477.698 4.744 1.965 1.268 1.266 1.966 2.95 1.966 4.743 0 1.792-.698 3.477-1.965 4.744z" fill-rule="nonzero" fill="#FFF"/>
+            </svg>
+        </button>
+    </div>
+</section>
+<!-- End Search Form-->

@@ -1,0 +1,149 @@
+﻿@import '../shared/theme/base';
+@import '../shared/theme/search-helpers';
+@import '../shared/theme/filter-helpers';
+@import '../shared/theme/view-option-helpers';
+@import '../shared/theme/pagination-helpers';
+
+.biographies {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  // Default of 2 per row
+  grid-template-columns: repeat(2, 1fr); // the "1fr" makes all rows equal height;
+    // e.g., see https://stackoverflow.com/questions/44488357/equal-height-rows-in-css-grid-layout
+  grid-auto-rows: 1fr;
+  gap: gutter(thmda-tiny);
+
+  // Note: layout set-up assumes that each card plus its gap accounts for roughly ~160 pixels.
+  // At these widths, we have these needs:
+  // Breakpoint Name  Pixel-Value Max-Columns (stamps per row)
+  // thmda_narrow     392px       2
+  // BUT NOW at afl_small and up, only 66% of screen is used for stamp area, so adjust further,
+  // but no more than about 336px ever used for other things.
+  // Breakpoint Name  Pixel-Value 2/3-Value (or 336 less) Max-Columns (stamps per row)
+  // afl_small        600px       400       2
+  // thmda_wideenough 768px       ~512      3
+  // afl_medium       960         640       4
+  // afl_large        1280        934       6
+  // afl_xlarge       1920        1584      10
+  // xlarge           2400        2064      12
+
+  // For widths between thmda_narrow and thmda_wideenough, be 3 per row:
+  @media screen and (min-width: bp(thmda_narrow)) and (max-width: bp(thmda_wideenough_just_before)) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: gutter(thmda-tiny);
+  }
+
+  // For widths between thmda_wideenough and afl_medium, be 3 per row with a bit more gap:
+  @media screen and (min-width: bp(thmda_wideenough)) and (max-width: bp(afl_medium_just_before)) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: gutter(thmda-tight);
+  }
+
+  // For widths between afl_medium and afl_large, be 4 per row:
+  @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: gutter(thmda-medium);
+  }
+
+  // New!  With maximum of thmda_maxwidth, afl_large < thmda_maxwidth < afl_xlarge < xlarge, simply max out now at afl_large or greater...
+  // For widths of afl_large or more, be 6 per row:
+  @media screen and (min-width: bp(afl_large)) {
+    grid-template-columns: repeat(6, 1fr);
+    gap: gutter(thmda-medium);
+  }
+
+  // For widths between afl_large and afl_xlarge, be 6 per row:
+  //@media screen and (min-width: bp(afl_large)) and (max-width: bp(afl_xlarge_just_before))  {
+  //  grid-template-columns: repeat(6, 1fr);
+  //  gap: gutter(thmda-medium);
+  //}
+
+  // For widths between afl_xlarge and xlarge, be 10 per row:
+  //@media screen and (min-width: bp(afl_xlarge)) and (max-width: bp(xlarge_just_before))  {
+  //  grid-template-columns: repeat(10, 1fr);
+  //  gap: gutter(thmda-medium);
+  //}
+
+  // For widths of xlarge or more, be 12 per row:
+  //@media screen and (min-width: bp(xlarge)) {
+  //  grid-template-columns: repeat(12, 1fr);
+  //  gap: gutter(thmda-medium);
+  //}
+}
+
+.biography {
+  padding: 0;
+  margin: 0;
+}
+
+.biography-as-list {
+  padding: 0;
+  margin: 0 0 em(20) 0; // top right bottom left
+}
+
+.biographies-as-list {
+  list-style: none;
+  padding: 0;
+}
+
+//HistoryMakers Total
+.welcome-paragraph {
+    @extend %source-sans-bold;
+
+    background: color(primary);
+    color: #fff;
+    font-size: 2rem;
+    margin: em(12) 0 em(8) 0; // top right bottom left
+    padding: em(8) em(10);
+    position: relative; // needed to get descending triangle magic to work...
+
+    &:after { // magic to draw descending triangle
+        border-left: em(10) solid transparent;
+        border-right: em(10) solid transparent;
+        border-top: em(10) solid color(primary);
+        content: '';
+        height: 0;
+        left: calc(30% - 10px);
+        position: absolute;
+        top: 100%;
+        transform: translateY(-40%);
+        width: 0;
+    }
+}
+
+.distinguishFilterPane {
+  background-color: color(light-grey);
+  border: 1px solid #ccc;
+  padding: gutter(thmda-medium);
+}
+
+.biography-set__title {
+    @extend %oswald;
+
+    color: color(black);
+    font-size: 1.4rem;
+    margin-top: 0;
+    margin-bottom: em(4);
+    padding: 0;
+
+     @media screen and (min-width: bp(afl_small)) and (max-width: bp(afl_medium_just_before)) {
+        font-size: 1.7rem;
+     }
+
+     @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+        font-size: 2rem;
+        margin-top: em(4);
+    }
+
+    @media screen and (min-width: bp(afl_large)) {
+        font-size: 2.3rem;
+        margin-top: em(4);
+    }
+
+    &:focus {
+      outline: 0;
+      text-decoration: underline;
+    }
+
+}

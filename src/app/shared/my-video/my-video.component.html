@@ -1,0 +1,79 @@
+<!-- CREDIT: greatly inspired by mat-video project, but without title, downloads, and a few other items;
+  see https://github.com/nkoehler/mat-video/blob/master/projects/mat-video/src/lib/video.component.html -->
+<!-- !!!TBD!!! NOTE: it is difficult to construct a control line that will resize in rem units while remaining on one line.
+  Yet, it is both aesthetically desirable and offers expected video control behavior to keep the controls aligned closely
+  to the video area itself, i.e., one line of controls, not multiple.  So, for the moment, sizing is done here with pixels
+  rather than rem units for the video control line, so one line of controls is kept for widths of 400px, i.e.,
+  bp(video_controls_one_line), or greater.  -->
+<div #thmplayer class="videoplayer" [ngClass]="getOverlayClass('show-mouse', 'hide-mouse')">
+  <video
+    #video
+    class="video"
+    [attr.autoplay]="defaultAutoPlay ? '' : null"
+    playsinline=''
+    [attr.poster]="poster ? poster : null"
+    crossorigin="anonymous" preload="auto"
+  >
+    <source [src]="src" type="video/mp4">
+    <track *ngIf="currentCCDisplayState && urlToCCIndicator && urlToCCIndicator.length > 0" [src]="urlToCCIndicator"
+        kind="subtitles" srclang="en" label="English"
+        (cuechange)="handleCueChange($event)"
+        default=''>
+    This browser does not support HTML5 video.
+  </video>
+
+  <!--   For typical views, controls will fit all on 1 line -->
+  <div class="controls wider-video-controls-only" *ngIf="videoLoaded">
+    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="calc(4px)" class="menu">
+      <div fxFlex="1 1 calc(30px)" class="left">
+        <my-video-play-button (playChanged)="playing = $event" [video]="video" [keyboard]="keyboard"> </my-video-play-button>
+      </div>
+      <div fxFlex="1 1 calc(92px)">
+          <p class="playtime">{{ video?.currentTime | secondsToTime }} / {{ video?.duration | secondsToTime }}</p>
+      </div>
+      <div fxFlex="grow">
+        <mat-slider aria-label="video progress bar" min="0" max="100" width="100%"
+          step="1" [value]="curTimePercent" (input)="notePercentIsInFlux()" (change)="newPositionAsPercent($event.value)" class="videoSlider"></mat-slider>
+      </div>
+      <div fxFlex="1 1 calc(32px)" class="right">
+        <my-video-rewind-button (RewindIssued)="actOnRewind()"></my-video-rewind-button>
+      </div>
+      <div fxFlex="1 1 calc(32px)" class="right">
+        <my-video-ffwd-button (FFwdIssued)="actOnFastForward()"></my-video-ffwd-button>
+      </div>
+      <div fxFlex="1 1 calc(40px)" class="right">
+        <my-video-cc-button (CCDisplayChanged)="updateCCDisplayState($event)" [video]="video" [CCshown]="currentCCDisplayState"> </my-video-cc-button>
+      </div>
+    </div>
+  </div>
+  <!--   For very narrow views, controls will need to be on 2 lines -->
+  <div class="controls-when-narrow narrow-video-controls-only" *ngIf="videoLoaded">
+    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="calc(4px)" class="menu">
+      <div fxFlex="1 1 calc(30px)" class="left">
+        <my-video-play-button (playChanged)="playing = $event" [video]="video" [keyboard]="keyboard"> </my-video-play-button>
+      </div>
+      <div fxFlex="1 1 calc(92px)">
+          <p class="playtime">{{ video?.currentTime | secondsToTime }} / {{ video?.duration | secondsToTime }}</p>
+      </div>
+      <div fxFlex="grow">
+        <mat-slider aria-label="video progress bar" min="0" max="100" width="100%"
+          step="1" [value]="curTimePercent" (input)="notePercentIsInFlux()" (change)="newPositionAsPercent($event.value)" class="videoSlider"></mat-slider>
+      </div>
+    </div>
+  </div>
+  <div class="controls-when-narrow narrow-video-controls-only" *ngIf="videoLoaded">
+    <div fxLayout="row" fxLayoutAlign="space-between right" fxLayoutGap="calc(4px)" class="menu">
+      <div fxFlex="1 1 calc(32px)" class="right">
+        <my-video-rewind-button (RewindIssued)="actOnRewind()"></my-video-rewind-button>
+      </div>
+      <div fxFlex="1 1 calc(32px)" class="right">
+        <my-video-ffwd-button (FFwdIssued)="actOnFastForward()"></my-video-ffwd-button>
+      </div>
+      <div fxFlex="1 1 calc(40px)" class="right">
+        <my-video-cc-button (CCDisplayChanged)="updateCCDisplayState($event)" [video]="video" [CCshown]="currentCCDisplayState"> </my-video-cc-button>
+      </div>
+    </div>
+  </div>
+  <p class="sr-only" *ngIf="currentCCDisplayState && urlToCCIndicator && urlToCCIndicator.length > 0">{{activeCCPiece}}</p>
+  <my-video-spinner [video]="video"></my-video-spinner>
+</div>

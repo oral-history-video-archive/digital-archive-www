@@ -1,0 +1,418 @@
+﻿<!--NOTE: Within this page there is code with numeric IDs for the array indices, e.g.,
+        let oneTag of tagBranchValues[1]
+    It would have been cleaner to be able to use the named constants (e.g., RACIAL_ISSUES === 1) so that this code would be:
+        let oneTag of tagBranchValues[RACIAL_ISSUES]
+    ...but that was not working as of AngularJS 2 RC4 - gave up on trying to push it through using named constants.
+    NOTE: the hierarchy of the accordion panels in this control is HARD-CODED as a STUB for when a tag tree might become dynamic.
+    As of 2017, the tag tree is a remnant of 2009 coding where the final tag tree in use in the Digital Archive was shaped by 2009 review.
+    Rather than give this old work too much weight, just note that this is a STUB version showing off capability, but NOT constructed
+    to show dynamic UI adjustment based on changes of tags in the data source via API call(s): such a chain of calls is not yet in place.
+    See comment with the declaration of EXPECTED_TAG_BRANCHES as well, and note tagBranchValues index is in range [0, EXPECTED_TAG_BRANCHES-1].
+    Further, the hierarchical arrangement of branches into parent panels is hard-coded here, i.e., 3 branches in block 1, 5 in block 2, 4 in block 3.
+
+    NOTE: a side effect of having the content now neatly nested as unordered lists in unordered lists in unordered lists
+    is that the ul groupings need their own styling instead of using Angular Flex as was done before.
+-->
+<h1 id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title mobile-only" (mousedown)="noMouseFocus($event)">Topic Search</h1>
+<h1 id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title desktop-only" (mousedown)="noMouseFocus($event)">Topic Search</h1>
+<p *ngIf="tagMatchOpeningExcuse.length > 0 && !tagMatchSummary || tagMatchSummary.length == 0">{{tagMatchOpeningExcuse}}</p>
+<p *ngIf="tagMatchSummary && tagMatchSummary.length > 0" class="tagSummary">{{tagMatchSummary}} {{descForSubset}}</p>
+<p *ngIf="!tagMatchSummary || tagMatchSummary.length == 0" class="tagSummary">No tags chosen for a topic search</p>
+<!-- Formerly, the action buttons were here at the top, rather than being at the bottom.  These moved to the bottom based on advice from accessibility experts.
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="calc(2em)" class="smallGapAfter">
+    <button [ngClass]="{'topic_button': tagMatchCountForSummary != 0,'topic_button_disabled':tagMatchCountForSummary === 0}"
+      [disabled]="tagMatchCountForSummary === 0" (click)="doTagSearch()">Show Tagged Stories</button>
+    <button [ngClass]="{'topic_button': !hasNoTagSpec,'topic_button_disabled':hasNoTagSpec}"
+      [disabled]="hasNoTagSpec" (click)="clearTags()">Clear Tags</button>
+</div>
+-->
+
+<!-- Bottom Section -->
+<h2 id="tagCategoryHeading" class="sr-only">Tag Categories</h2>
+<div *ngIf="tagBranches && tagBranches.length == 12" class="limitMaxWidth"> <!-- EXPECTED_TAG_BRANCHES == 12 -->
+  <ul class="top-ul" aria-labelledby="tagCategoryHeading">
+    <!-- Block 1 -->
+    <li class="top-li" aria-label="Historical Context">
+      <my-panel title="Historical Context" [opened]="contextGroupOpened" [markAsGrandparent]="true"
+        (toggle)="contextGroupOpened = !contextGroupOpened">
+          <!-- Block 1 holds tagBranches[0], tagBranches[1], tagBranches[2]. -->
+          <ul class="nothing-for-ul" aria-labelledby="Historical Context">
+            <li class="nothing-for-li" [attr.aria-label]="tagBranches[0].branchName">
+              <!-- tagBranches[0] -->
+              <my-panel
+                title="{{tagBranches[0].branchName}}" [opened]="tagBranches[0].branchOpened"
+                [overrideToH4Nesting]="true"
+                (toggle)="tagBranches[0].branchOpened = !tagBranches[0].branchOpened">
+                  <ul class="filter-choice-set" [attr.aria-label]="tagBranches[0].branchName">
+                      <li class="filter-choices" *ngFor="let oneTag of tagBranches[0].branchValues;let t=index">
+                          <button class="filter-one-choice"
+                            [attr.aria-pressed]="oneTag.selected"
+                            [class.active]="oneTag.selected" (click)="toggleGivenTag(0, t)">
+                              <span fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="calc(0.8em)" class="field-list-parent">
+                                  <span fxFlex="0 0 calc(12px)" *ngIf="oneTag.selected">
+                                      <span class="sr-only">Applied</span>
+                                      <svg aria-hidden="true" [class.aria-selected]="oneTag.selected"
+                                        width="12px" height="11px" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg">
+                                          <title>
+                                              Applied
+                                          </title>
+                                          <path d="M2.115 3.986l2.052 2.065L9.887 0 12 2.115l-7.823 8.172L0 6.101" fill-rule="evenodd"/>
+                                      </svg>
+                                  </span>
+                                  <span fxFlex="grow">{{oneTag.label}}</span>
+                              </span>
+                          </button>
+                      </li>
+                  </ul>
+              </my-panel>
+            </li> <!-- end of tagBranches[0] -->
+            <li class="nothing-for-li" [attr.aria-label]="tagBranches[1].branchName">
+              <!-- tagBranches[1] -->
+              <my-panel
+                title="{{tagBranches[1].branchName}}" [opened]="tagBranches[1].branchOpened"
+                [overrideToH4Nesting]="true"
+                (toggle)="tagBranches[1].branchOpened = !tagBranches[1].branchOpened">
+                  <ul class="filter-choice-set" [attr.aria-label]="tagBranches[1].branchName">
+                      <li class="filter-choices" *ngFor="let oneTag of tagBranches[1].branchValues;let t=index">
+                          <button class="filter-one-choice"
+                            [attr.aria-pressed]="oneTag.selected"
+                            [class.active]="oneTag.selected" (click)="toggleGivenTag(1, t)">
+                              <span fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="calc(0.8em)" class="field-list-parent">
+                                  <span fxFlex="0 0 calc(12px)" *ngIf="oneTag.selected">
+                                      <span class="sr-only">Applied</span>
+                                      <svg aria-hidden="true" [class.aria-selected]="oneTag.selected"
+                                        width="12px" height="11px" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg">
+                                          <title>
+                                              Applied
+                                          </title>
+                                          <path d="M2.115 3.986l2.052 2.065L9.887 0 12 2.115l-7.823 8.172L0 6.101" fill-rule="evenodd"/>
+                                      </svg>
+                                  </span>
+                                  <span fxFlex="grow">{{oneTag.label}}</span>
+                              </span>
+                          </button>
+                      </li>
+                  </ul>
+              </my-panel>
+            </li> <!-- end of tagBranches[1] -->
+            <li class="nothing-for-li" [attr.aria-label]="tagBranches[2].branchName">
+              <!-- tagBranches[2] -->
+              <my-panel
+                title="{{tagBranches[2].branchName}}" [opened]="tagBranches[2].branchOpened"
+                [overrideToH4Nesting]="true"
+                (toggle)="tagBranches[2].branchOpened = !tagBranches[2].branchOpened">
+                  <ul class="filter-choice-set" [attr.aria-label]="tagBranches[2].branchName">
+                      <li class="filter-choices" *ngFor="let oneTag of tagBranches[2].branchValues;let t=index">
+                          <button class="filter-one-choice"
+                            [attr.aria-pressed]="oneTag.selected"
+                            [class.active]="oneTag.selected" (click)="toggleGivenTag(2, t)">
+                              <span fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="calc(0.8em)" class="field-list-parent">
+                                  <span fxFlex="0 0 calc(12px)" *ngIf="oneTag.selected">
+                                      <span class="sr-only">Applied</span>
+                                      <svg aria-hidden="true" [class.aria-selected]="oneTag.selected"
+                                        width="12px" height="11px" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg">
+                                          <title>
+                                              Applied
+                                          </title>
+                                          <path d="M2.115 3.986l2.052 2.065L9.887 0 12 2.115l-7.823 8.172L0 6.101" fill-rule="evenodd"/>
+                                      </svg>
+                                  </span>
+                                  <span fxFlex="grow">{{oneTag.label}}</span>
+                              </span>
+                          </button>
+                      </li>
+                  </ul>
+              </my-panel>
+            </li> <!-- end of tagBranches[2] -->
+          </ul>
+      </my-panel>
+    </li> <!-- End of Block 1 -->
+    <!-- Block 2 -->
+    <li class="top-li" aria-label="Biographical Themes">
+      <my-panel title="Biographical Themes" [opened]="themesGroupOpened" [markAsGrandparent]="true"
+        (toggle)="themesGroupOpened = !themesGroupOpened">
+          <!-- Block 2 holds tagBranches[X] where X is 3, 4, 5, 6, 7. -->
+          <ul class="nothing-for-ul" aria-labelledby="Biographical Themes">
+            <li class="nothing-for-li" [attr.aria-label]="tagBranches[3].branchName">
+              <!-- tagBranches[3] -->
+              <my-panel
+                title="{{tagBranches[3].branchName}}" [opened]="tagBranches[3].branchOpened"
+                [overrideToH4Nesting]="true"
+                (toggle)="tagBranches[3].branchOpened = !tagBranches[3].branchOpened">
+                  <ul class="filter-choice-set" [attr.aria-label]="tagBranches[3].branchName">
+                      <li class="filter-choices" *ngFor="let oneTag of tagBranches[3].branchValues;let t=index">
+                          <button class="filter-one-choice"
+                            [attr.aria-pressed]="oneTag.selected"
+                            [class.active]="oneTag.selected" (click)="toggleGivenTag(3, t)">
+                              <span fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="calc(0.8em)" class="field-list-parent">
+                                  <span fxFlex="0 0 calc(12px)" *ngIf="oneTag.selected">
+                                      <span class="sr-only">Applied</span>
+                                      <svg aria-hidden="true" [class.aria-selected]="oneTag.selected"
+                                        width="12px" height="11px" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg">
+                                          <title>
+                                              Applied
+                                          </title>
+                                          <path d="M2.115 3.986l2.052 2.065L9.887 0 12 2.115l-7.823 8.172L0 6.101" fill-rule="evenodd"/>
+                                      </svg>
+                                  </span>
+                                  <span fxFlex="grow">{{oneTag.label}}</span>
+                              </span>
+                          </button>
+                      </li>
+                  </ul>
+              </my-panel>
+            </li> <!-- end of tagBranches[3] -->
+            <li class="nothing-for-li" [attr.aria-label]="tagBranches[4].branchName">
+              <!-- tagBranches[4] -->
+              <my-panel
+                title="{{tagBranches[4].branchName}}" [opened]="tagBranches[4].branchOpened"
+                [overrideToH4Nesting]="true"
+                (toggle)="tagBranches[4].branchOpened = !tagBranches[4].branchOpened">
+                  <ul class="filter-choice-set" [attr.aria-label]="tagBranches[4].branchName">
+                      <li class="filter-choices" *ngFor="let oneTag of tagBranches[4].branchValues;let t=index">
+                          <button class="filter-one-choice"
+                            [attr.aria-pressed]="oneTag.selected"
+                            [class.active]="oneTag.selected" (click)="toggleGivenTag(4, t)">
+                              <span fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="calc(0.8em)" class="field-list-parent">
+                                  <span fxFlex="0 0 calc(12px)" *ngIf="oneTag.selected">
+                                      <span class="sr-only">Applied</span>
+                                      <svg aria-hidden="true" [class.aria-selected]="oneTag.selected"
+                                        width="12px" height="11px" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg">
+                                          <title>
+                                              Applied
+                                          </title>
+                                          <path d="M2.115 3.986l2.052 2.065L9.887 0 12 2.115l-7.823 8.172L0 6.101" fill-rule="evenodd"/>
+                                      </svg>
+                                  </span>
+                                  <span fxFlex="grow">{{oneTag.label}}</span>
+                              </span>
+                          </button>
+                      </li>
+                  </ul>
+              </my-panel>
+            </li> <!-- end of tagBranches[4] -->
+            <li class="nothing-for-li" [attr.aria-label]="tagBranches[5].branchName">
+              <!-- tagBranches[5] -->
+              <my-panel
+                title="{{tagBranches[5].branchName}}" [opened]="tagBranches[5].branchOpened"
+                [overrideToH4Nesting]="true"
+                (toggle)="tagBranches[5].branchOpened = !tagBranches[5].branchOpened">
+                  <ul class="filter-choice-set" [attr.aria-label]="tagBranches[5].branchName">
+                      <li class="filter-choices" *ngFor="let oneTag of tagBranches[5].branchValues;let t=index">
+                          <button class="filter-one-choice"
+                            [attr.aria-pressed]="oneTag.selected"
+                            [class.active]="oneTag.selected" (click)="toggleGivenTag(5, t)">
+                              <span fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="calc(0.8em)" class="field-list-parent">
+                                  <span fxFlex="0 0 calc(12px)" *ngIf="oneTag.selected">
+                                      <span class="sr-only">Applied</span>
+                                      <svg aria-hidden="true" [class.aria-selected]="oneTag.selected"
+                                        width="12px" height="11px" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg">
+                                          <title>
+                                              Applied
+                                          </title>
+                                          <path d="M2.115 3.986l2.052 2.065L9.887 0 12 2.115l-7.823 8.172L0 6.101" fill-rule="evenodd"/>
+                                      </svg>
+                                  </span>
+                                  <span fxFlex="grow">{{oneTag.label}}</span>
+                              </span>
+                          </button>
+                      </li>
+                  </ul>
+              </my-panel>
+            </li> <!-- end of tagBranches[5] -->
+            <li class="nothing-for-li" [attr.aria-label]="tagBranches[6].branchName">
+              <!-- tagBranches[6] -->
+              <my-panel
+                title="{{tagBranches[6].branchName}}" [opened]="tagBranches[6].branchOpened"
+                [overrideToH4Nesting]="true"
+                (toggle)="tagBranches[6].branchOpened = !tagBranches[6].branchOpened">
+                  <ul class="filter-choice-set" [attr.aria-label]="tagBranches[6].branchName">
+                      <li class="filter-choices" *ngFor="let oneTag of tagBranches[6].branchValues;let t=index">
+                          <button class="filter-one-choice"
+                            [attr.aria-pressed]="oneTag.selected"
+                            [class.active]="oneTag.selected" (click)="toggleGivenTag(6, t)">
+                              <span fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="calc(0.8em)" class="field-list-parent">
+                                  <span fxFlex="0 0 calc(12px)" *ngIf="oneTag.selected">
+                                      <span class="sr-only">Applied</span>
+                                      <svg aria-hidden="true" [class.aria-selected]="oneTag.selected"
+                                        width="12px" height="11px" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg">
+                                          <title>
+                                              Applied
+                                          </title>
+                                          <path d="M2.115 3.986l2.052 2.065L9.887 0 12 2.115l-7.823 8.172L0 6.101" fill-rule="evenodd"/>
+                                      </svg>
+                                  </span>
+                                  <span fxFlex="grow">{{oneTag.label}}</span>
+                              </span>
+                          </button>
+                      </li>
+                  </ul>
+              </my-panel>
+            </li> <!-- end of tagBranches[6] -->
+            <li class="nothing-for-li" [attr.aria-label]="tagBranches[7].branchName">
+              <!-- tagBranches[7] -->
+              <my-panel
+                title="{{tagBranches[7].branchName}}" [opened]="tagBranches[7].branchOpened"
+                [overrideToH4Nesting]="true"
+                (toggle)="tagBranches[7].branchOpened = !tagBranches[7].branchOpened">
+                  <ul class="filter-choice-set" [attr.aria-label]="tagBranches[7].branchName">
+                      <li class="filter-choices" *ngFor="let oneTag of tagBranches[7].branchValues;let t=index">
+                          <button class="filter-one-choice"
+                            [attr.aria-pressed]="oneTag.selected"
+                            [class.active]="oneTag.selected" (click)="toggleGivenTag(7, t)">
+                              <span fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="calc(0.8em)" class="field-list-parent">
+                                  <span fxFlex="0 0 calc(12px)" *ngIf="oneTag.selected">
+                                      <span class="sr-only">Applied</span>
+                                      <svg aria-hidden="true" [class.aria-selected]="oneTag.selected"
+                                        width="12px" height="11px" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg">
+                                          <title>
+                                              Applied
+                                          </title>
+                                          <path d="M2.115 3.986l2.052 2.065L9.887 0 12 2.115l-7.823 8.172L0 6.101" fill-rule="evenodd"/>
+                                      </svg>
+                                  </span>
+                                  <span fxFlex="grow">{{oneTag.label}}</span>
+                              </span>
+                          </button>
+                      </li>
+                  </ul>
+              </my-panel>
+            </li> <!-- end of tagBranches[7] -->
+          </ul>
+      </my-panel>
+    </li> <!-- End of Block 2 -->
+    <!-- Block 3 -->
+    <li class="top-li" aria-label="Interview Qualities">
+      <my-panel title="Interview Qualities" [opened]="qualitiesGroupOpened" [markAsGrandparent]="true"
+        (toggle)="qualitiesGroupOpened = !qualitiesGroupOpened">
+          <!-- Block 3 holds tagBranches[X] where X is 8, 9, 10, 11. -->
+          <ul class="nothing-for-ul" aria-labelledby="Interview Qualities">
+            <li class="nothing-for-li" [attr.aria-label]="tagBranches[8].branchName">
+              <!-- tagBranches[8] -->
+              <my-panel
+                title="{{tagBranches[8].branchName}}" [opened]="tagBranches[8].branchOpened"
+                [overrideToH4Nesting]="true"
+                (toggle)="tagBranches[8].branchOpened = !tagBranches[8].branchOpened">
+                  <ul class="filter-choice-set" [attr.aria-label]="tagBranches[8].branchName">
+                      <li class="filter-choices" *ngFor="let oneTag of tagBranches[8].branchValues;let t=index">
+                          <button class="filter-one-choice"
+                            [attr.aria-pressed]="oneTag.selected"
+                            [class.active]="oneTag.selected" (click)="toggleGivenTag(8, t)">
+                              <span fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="calc(0.8em)" class="field-list-parent">
+                                  <span fxFlex="0 0 calc(12px)" *ngIf="oneTag.selected">
+                                      <span class="sr-only">Applied</span>
+                                      <svg aria-hidden="true" [class.aria-selected]="oneTag.selected"
+                                        width="12px" height="11px" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg">
+                                          <title>
+                                              Applied
+                                          </title>
+                                          <path d="M2.115 3.986l2.052 2.065L9.887 0 12 2.115l-7.823 8.172L0 6.101" fill-rule="evenodd"/>
+                                      </svg>
+                                  </span>
+                                  <span fxFlex="grow">{{oneTag.label}}</span>
+                              </span>
+                          </button>
+                      </li>
+                  </ul>
+              </my-panel>
+            </li> <!-- end of tagBranches[8] -->
+            <li class="nothing-for-li" [attr.aria-label]="tagBranches[9].branchName">
+              <!-- tagBranches[9] -->
+              <my-panel
+                title="{{tagBranches[9].branchName}}" [opened]="tagBranches[9].branchOpened"
+                [overrideToH4Nesting]="true"
+                (toggle)="tagBranches[9].branchOpened = !tagBranches[9].branchOpened">
+                  <ul class="filter-choice-set" [attr.aria-label]="tagBranches[9].branchName">
+                      <li class="filter-choices" *ngFor="let oneTag of tagBranches[9].branchValues;let t=index">
+                          <button class="filter-one-choice"
+                            [attr.aria-pressed]="oneTag.selected"
+                            [class.active]="oneTag.selected" (click)="toggleGivenTag(9, t)">
+                              <span fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="calc(0.8em)" class="field-list-parent">
+                                  <span fxFlex="0 0 calc(12px)" *ngIf="oneTag.selected">
+                                      <span class="sr-only">Applied</span>
+                                      <svg aria-hidden="true" [class.aria-selected]="oneTag.selected"
+                                        width="12px" height="11px" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg">
+                                          <title>
+                                              Applied
+                                          </title>
+                                          <path d="M2.115 3.986l2.052 2.065L9.887 0 12 2.115l-7.823 8.172L0 6.101" fill-rule="evenodd"/>
+                                      </svg>
+                                  </span>
+                                  <span fxFlex="grow">{{oneTag.label}}</span>
+                              </span>
+                          </button>
+                      </li>
+                  </ul>
+              </my-panel>
+            </li> <!-- end of tagBranches[9] -->
+            <li class="nothing-for-li" [attr.aria-label]="tagBranches[10].branchName">
+              <!-- tagBranches[10] -->
+              <my-panel
+                title="{{tagBranches[10].branchName}}" [opened]="tagBranches[10].branchOpened"
+                [overrideToH4Nesting]="true"
+                (toggle)="tagBranches[10].branchOpened = !tagBranches[10].branchOpened">
+                  <ul class="filter-choice-set" [attr.aria-label]="tagBranches[10].branchName">
+                      <li class="filter-choices" *ngFor="let oneTag of tagBranches[10].branchValues;let t=index">
+                          <button class="filter-one-choice"
+                            [attr.aria-pressed]="oneTag.selected"
+                            [class.active]="oneTag.selected" (click)="toggleGivenTag(10, t)">
+                              <span fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="calc(0.8em)" class="field-list-parent">
+                                  <span fxFlex="0 0 calc(12px)" *ngIf="oneTag.selected">
+                                      <span class="sr-only">Applied</span>
+                                      <svg aria-hidden="true" [class.aria-selected]="oneTag.selected"
+                                        width="12px" height="11px" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg">
+                                          <title>
+                                              Applied
+                                          </title>
+                                          <path d="M2.115 3.986l2.052 2.065L9.887 0 12 2.115l-7.823 8.172L0 6.101" fill-rule="evenodd"/>
+                                      </svg>
+                                  </span>
+                                  <span fxFlex="grow">{{oneTag.label}}</span>
+                              </span>
+                          </button>
+                      </li>
+                  </ul>
+              </my-panel>
+            </li> <!-- end of tagBranches[10] -->
+            <li class="nothing-for-li" [attr.aria-label]="tagBranches[11].branchName">
+              <!-- tagBranches[11] -->
+              <my-panel
+                title="{{tagBranches[11].branchName}}" [opened]="tagBranches[11].branchOpened"
+                [overrideToH4Nesting]="true"
+                (toggle)="tagBranches[11].branchOpened = !tagBranches[11].branchOpened">
+                  <ul class="filter-choice-set" [attr.aria-label]="tagBranches[11].branchName">
+                      <li class="filter-choices" *ngFor="let oneTag of tagBranches[11].branchValues;let t=index">
+                          <button class="filter-one-choice"
+                            [attr.aria-pressed]="oneTag.selected"
+                            [class.active]="oneTag.selected" (click)="toggleGivenTag(11, t)">
+                              <span fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="calc(0.8em)" class="field-list-parent">
+                                  <span fxFlex="0 0 calc(12px)" *ngIf="oneTag.selected">
+                                      <span class="sr-only">Applied</span>
+                                      <svg aria-hidden="true" [class.aria-selected]="oneTag.selected"
+                                        width="12px" height="11px" viewBox="0 0 12 11" xmlns="http://www.w3.org/2000/svg">
+                                          <title>
+                                              Applied
+                                          </title>
+                                          <path d="M2.115 3.986l2.052 2.065L9.887 0 12 2.115l-7.823 8.172L0 6.101" fill-rule="evenodd"/>
+                                      </svg>
+                                  </span>
+                                  <span fxFlex="grow">{{oneTag.label}}</span>
+                              </span>
+                          </button>
+                      </li>
+                  </ul>
+              </my-panel>
+            </li> <!-- end of tagBranches[11] -->
+          </ul>
+      </my-panel>
+    </li> <!-- End of Block 3 -->
+  </ul> <!-- end of top-level tag categories (3 of them) -->
+</div>
+
+<!-- Action buttons at the bottom, for those users seeking buttons at the end rather than on top -->
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="calc(2em)" class="smallGapBefore">
+  <button [ngClass]="{'topic_button': tagMatchCountForSummary != 0,'topic_button_disabled':tagMatchCountForSummary === 0}"
+    [disabled]="tagMatchCountForSummary === 0" (click)="doTagSearch()">Show Tagged Stories</button>
+  <button [ngClass]="{'topic_button button-secondary': !hasNoTagSpec,'topic_button_disabled button-secondary--disabled':hasNoTagSpec}"
+    [disabled]="hasNoTagSpec" (click)="clearTags()">Clear Tags</button>
+</div>

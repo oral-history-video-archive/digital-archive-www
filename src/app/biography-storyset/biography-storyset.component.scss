@@ -1,0 +1,336 @@
+﻿@import '../shared/theme/base';
+@import '../shared/theme/button-helpers';
+@import '../shared/theme/view-option-helpers';
+
+// FILTER-PIECE The styles in this portion are the same as styles in shared/theme/filter-helpers, but
+// rather than bring in that relatively large style helper file via an import, only repeat those that are
+// actually used by biography-storyset.  This lets us stay within the 16KB "budget" for styles on components
+// which is a default build setting check.
+.pad-top-a-bit {
+  padding-top: 0.2em;
+}
+
+.filter-section-rg-item {
+  @extend %oswald;
+  background-color: #fff;
+  border: 1px solid color(primary);
+  color: color(primary);
+  padding: em(3) em(3);
+  text-transform: capitalize;
+  font-size: 1.2rem;
+  width: 100%;
+
+  @media screen and (max-width: bp(afl_medium_just_before)) {
+    margin-bottom: em(5);
+  }
+
+  &:hover {
+    border: 1px solid color(primary);
+    background-color:  #fff;
+    color: color(secondary);
+  }
+}
+
+.filter-section-rg-item.selected  {
+  background-color: color(primary);
+  border: 1px solid color(primary);
+  color: #fff;
+}
+
+.filter-section-rg-item:focus {
+  box-shadow: 0 0 0 3px color(tertiary);
+  outline: 3px solid transparent; // For Windows high contrast mode.
+}
+
+.filter-section {
+  min-height: $buttonHeight;
+  margin-bottom: em(10, 16);
+}
+
+// FILTER-PIECE End of the filter-helpers section.
+
+.tapes-and-filters {
+    margin-top: em(20);
+}
+
+.row--top {
+  @media screen and (min-width: bp(afl_medium)) {
+        margin-bottom: em(28);
+    }
+}
+
+.headshot__container_narrow {
+    margin-bottom: em(2);
+    min-height: 332px;
+    overflow: hidden;
+}
+
+.headshot__container {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+.headshot_img-backdrop {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.headshot__img__as_is {
+  height: 332px;
+  object-fit: cover;
+  transform: scale(1.1);
+  width: 100%;
+}
+
+.headshot__img {
+  transform: scale(1.1); // needed to get rid of rounded rectangle edges - will be cropped away via styling
+  object-fit: cover;
+  @media screen and (min-width: bp(afl_small)) and (max-width: bp(thmda_wideenough_just_before)) {
+    width: 100%;
+    height: 332px;
+  }
+  @media screen and (min-width: bp(thmda_wideenough)) and (max-width: bp(afl_medium_just_before)) {
+    width: 352px;
+    height: 352px; // note fxFlex.lt-md in container in html; breakpoints do not fully line up (768px vs. 959 px) so perhaps revisit styling later... !!!TBD!!!
+  }
+  @media screen and (min-width: bp(afl_medium)) {
+    width: 352px; // see container html (a great-great grandparent flex container of this perhaps)
+    height: 352px; // NOTE: see fxFlex.gt-sm in container in html; adjust the fxFlex size value for this style's container (headshot__img-backdrop element) in html to match
+  }
+}
+
+.bio-details-desktop {
+    background-color: color(secondary);
+    border-color: transparent;
+    border-radius: 0;
+    color: #fff;
+}
+
+.bio-details__title-container {
+    margin: em(2) 0 em(2); // top, left and right, bottom
+    padding: 0;
+}
+
+.bio-details__title {
+    @extend %oswald;
+
+    color: #fff;
+    font-size: 1.7rem;
+    padding: 0 em(4) em(4);
+    text-align: center;
+    letter-spacing: .5px;
+    line-height: normal;
+
+    @media screen and (min-width: bp(afl_medium)) {
+        font-size: 2rem;
+        margin-bottom: em(2);
+    }
+}
+
+.bio-details__item {
+    @extend %source-sans;
+    font-size: 1rem;
+    padding: 0 em(2);
+    margin: 0;
+    line-height: 120%;
+
+    .key-piece {
+      display: inline-block;
+      font-weight: 700;
+      padding-right: em(5);
+    }
+    .value-piece {
+      display: inline-block;
+    }
+}
+
+.bio-details__def { // very close to bio-details__item
+  @extend %source-sans;
+  font-size: 1rem;
+  padding: 0 em(4) em(4);
+  margin: 0;
+  line-height: 110%;
+
+  .key-piece {
+    display: inline-block;
+    font-weight: 700;
+    padding-left: em(4);
+
+  }
+  .value-piece {
+    display: inline-block;
+    padding-left: em(6);
+  }
+}
+
+.bio-details__interview {
+    @extend %source-sans;
+    font-size: 1rem;
+    padding: 0 em(9) em(20);
+    margin-top: em(10);
+    margin-bottom: em(0);
+}
+
+.biography__header {
+    @extend %oswald;
+
+    color: black;
+    font-size: 1.4rem;
+    margin-top: em(18);
+}
+
+.biography__abstract {
+    @extend %source-sans;
+    color: black;
+    font-size: 1rem;
+    margin: em(8) 0;
+    padding: 0;
+}
+
+.biography--mobile {
+    @extend %mobile-only;
+
+    border-radius: 0;
+    margin-bottom: em(15);
+}
+
+.total-segments {
+    @extend %oswald;
+
+    color: color(dark-grey);
+    font-size: 1.4rem;
+    letter-spacing: -.5px;
+    margin: 0;
+    padding: 0; // top right bottom left
+
+    @media screen and (min-width: bp(afl_medium)) {
+        font-size: 1.7rem;
+    }
+
+    &:focus {
+      outline: 0;
+      text-decoration: underline;
+    }
+}
+
+.total-segments-mobile {
+  @extend %oswald;
+
+  color: color(dark-grey);
+  font-size: 1.5rem;
+  letter-spacing: -.5px;
+  margin: em(12) 0 em(4) 0;
+  padding: 0 em(2) 0 em(2); // top right bottom left
+
+  &:focus {
+    outline: 0;
+    text-decoration: underline;
+  }
+}
+
+.mobile-controls-line {
+    margin: em(2) 0 em(16) 0; // top right bottom left
+    padding: em(2) 0 em(12) 0; // top right bottom left
+}
+
+.tapes__title {
+    @extend %oswald;
+
+    color: color(primary);
+    font-size: 1.4rem;
+    margin: em(20) 0 0;
+
+    &:first-of-type { // first one has gap before it already, don't add to gap
+        margin-top: 0;
+    }
+
+    @media screen and (min-width: bp(afl_medium)) {
+        font-size: 1.7rem;
+        margin-bottom: em(2);
+    }
+}
+
+.page-view-option-piece {
+  margin: 0; // top right bottom left
+  padding: 0 0 em(12);
+}
+
+.tapes {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  // Default of 2 per row
+  grid-template-columns: repeat(2, 1fr); // the "1fr" makes all rows equal height;
+    // e.g., see https://stackoverflow.com/questions/44488357/equal-height-rows-in-css-grid-layout
+  grid-auto-rows: 1fr;
+  gap: gutter(thmda-tight);
+
+  // Note: layout set-up assumes that each card plus its gap accounts for roughly 128 pixels.
+  // At these widths, we have these needs:
+  // Breakpoint Name  Pixel-Value Max-Columns (stamps per row)
+  // thmda_narrow     392px       3
+  // BUT NOW at afl_small and up, only 70% of screen is used for stamp area, so adjust further:
+  // Breakpoint Name  Pixel-Value 0.7-Value Max-Columns (stamps per row)
+  // afl_small        600px       420       3
+  // thmda_wideenough 768px       537       4
+  // afl_medium       960         672       5 (not 4 as perhaps used elsewhere when just 66% and not 70% saved for stamp area)
+  // afl_large        1280        896       7 (not 6 as perhaps used elsewhere when just 66% and not 70% saved for stamp area)
+  // afl_xlarge       1920        1344      10
+  // xlarge           2400        1680      12
+
+  // Client was not happy with so much squeezing, so relax to:
+  // thmda_wideenough 768px       537       3
+  // afl_medium       960         672       4
+  // afl_large        1280        896       5
+  // But then on Aug. 11, 2020 accessibility experts liked the original layout better.  Reverted back to it
+  // relaxing only the maximum from 7 to 6 (4, 5, 6).
+
+  // For widths between afl_medium and afl_large, be 5 per row with gap increase:
+  @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+    grid-template-columns: repeat(3, 1fr);
+    gap:  gutter(thmda-medium);
+  }
+
+  // New!  With maximum of thmda_maxwidth, afl_large < thmda_maxwidth < afl_xlarge < xlarge, simply max out now at afl_large or greater...
+  // For widths of afl_large or greater, be 6 per row:
+  @media screen and (min-width: bp(afl_large)) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: gutter(thmda-medium);
+  }
+
+  // Obsolete wide-screen styling:
+  // For widths between afl_large and afl_xlarge, be 7 per row:
+  //@media screen and (min-width: bp(afl_large)) and (max-width: bp(afl_xlarge_just_before))  {
+  //  grid-template-columns: repeat(7, 1fr);
+  //  gap: gutter(thmda-medium);
+  //}
+
+  // For widths between afl_xlarge and xlarge, be 10 per row:
+  //@media screen and (min-width: bp(afl_xlarge)) and (max-width: bp(xlarge_just_before))  {
+  //  grid-template-columns: repeat(10, 1fr);
+  //  gap: gutter(thmda-big);
+  //}
+
+  // For widths of xlarge or more, be 12 per row:
+  //@media screen and (min-width: bp(xlarge)) {
+  //  grid-template-columns: repeat(12, 1fr);
+  //  gap: gutter(thmda-big);
+  //}
+}
+
+.tape {
+  padding: 0;
+  margin: 0;
+}
+
+.tape-as-list {
+  padding: 0;
+  margin: 0 0 em(20) 0; // top right bottom left
+}
+
+.tapes-as-list {
+  list-style: none;
+  padding: 0;
+}

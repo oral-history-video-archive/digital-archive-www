@@ -1,0 +1,330 @@
+﻿<!-- NOTE: main content "skip" targets of mmainHeader (mobile) and dmainHeader (desktop) unusual here,
+     targeting a paragraph on total segment count rather than a non-existent top-level h1 element. -->
+<div *ngIf="titleForEmptyStorySet">
+    <h1 id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title mobile-only" (mousedown)="noMouseFocus($event)">{{titleForEmptyStorySet}}</h1>
+    <h1 id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title desktop-only" (mousedown)="noMouseFocus($event)">{{titleForEmptyStorySet}}</h1>
+</div>
+
+<div *ngIf="!titleForEmptyStorySet" fxLayout="row wrap">
+    <h1 class="sr-only">{{titleForCompletedStorySet}}</h1>
+
+    <!-- Bio profile (in mobile/narrow layout form, followed by wider screen layout form) -->
+    <div class="mobile-only" fxLayout="column" fxLayoutAlign="space-between stretch">
+        <!-- Mobile/narrow view of profile:
+          head shot
+          name
+          biography details panel
+          story count and view buttons
+          series of tape header, tape abstract, story stamp sets -->
+        <!-- Headshot and personal info for mobile/narrow view -->
+        <div fxFlex="100%" *ngIf="bioDetail && bioDetail.preferredName"
+          fxLayout="row" fxLayoutAlign="center center" class="headshot__container_narrow">
+            <div fxFlex="1 0 calc(210px)" class="headshot_img-backdrop">
+                <img class="headshot__img__as_is" src="{{tailoredImage}}" alt="head shot, {{bioDetail.preferredName}}" />
+            </div>
+        </div>
+        <div fxFlex="100%" *ngIf="bioDetail && bioDetail.preferredName" class="bio-details__title-container">
+            <!-- NOTE: panel with person's name has a special "reverse" look to it, via markAsReverse being set to true. -->
+            <my-panel title="{{bioDetail.preferredName}}" [markAsReverse]="true" [opened]="bioDetailOpened"
+              (toggle)="bioDetailOpened = !bioDetailOpened">
+                <ul [attr.aria-label]="bioDetail.preferredName" class="unstyled-list-nowhitespace">
+                    <li class="bio-details__item" *ngIf="bioDetail.birthDate" ><span class="key-piece">Born:&nbsp;</span><span class="value-piece">{{tailoredBirthDate}}</span></li>
+                    <li class="bio-details__item" *ngIf="tailoredBirthLocation"><span class="key-piece">Birth Location:&nbsp;</span><span class="value-piece">{{tailoredBirthLocation}}</span></li>
+                    <li class="bio-details__item" *ngIf="bioDetail.deceasedDate"><span class="key-piece">Died:&nbsp;</span><span class="value-piece">{{tailoredDeceasedDate}}</span></li>
+                    <li class="bio-details__item" *ngIf="bioDetail.region"><span class="key-piece">Residence:&nbsp;</span><span class="value-piece">{{bioDetail.region}}</span></li>
+                    <li class="bio-details__item" *ngIf="tailoredMakerGroupList"><span class="key-piece">Category:&nbsp;</span><span class="value-piece">{{tailoredMakerGroupList}}</span></li>
+                    <li class="bio-details__item" *ngIf="tailoredJobFamilyList"><span class="key-piece">Job Type(s):&nbsp;</span><span class="value-piece">{{tailoredJobFamilyList}}</span></li>
+                    <li class="bio-details__item" *ngIf="tailoredOccupationList"><span class="key-piece">Occupation(s):&nbsp;</span><span class="value-piece">{{tailoredOccupationList}}</span></li>
+                    <li class="bio-details__item" *ngIf="biographyFavoriteColor"><span class="key-piece">Favorite Color:&nbsp;</span><span class="value-piece">{{biographyFavoriteColor}}</span></li>
+                    <li class="bio-details__item" *ngIf="biographyFavoriteFood"><span class="key-piece">Favorite Food:&nbsp;</span><span class="value-piece">{{biographyFavoriteFood}}</span></li>
+                    <li class="bio-details__item" *ngIf="biographyFavoriteTimeOfYear"><span class="key-piece">Favorite Time of Year:&nbsp;</span><span class="value-piece">{{biographyFavoriteTimeOfYear}}</span></li>
+                    <li class="bio-details__item" *ngIf="biographyFavoriteVacationSpot"><span class="key-piece">Favorite Vacation Spot:&nbsp;</span><span class="value-piece">{{biographyFavoriteVacationSpot}}</span></li>
+                    <li class="bio-details__item" *ngIf="biographyFavoriteQuote"><span class="key-piece">Favorite Quote:&nbsp;</span><span class="value-piece">{{biographyFavoriteQuote}}</span></li>
+                </ul>
+                <p class="bio-details__interview" *ngFor="let oneInterview of bioSessionDetails">
+                    {{oneInterview}}
+                </p>
+            </my-panel>
+          </div>
+        <!-- Biography details for mobile -->
+        <div fxFlex="100%" *ngIf="bioDetail">
+            <my-panel title="Biography" [opened]="bioDescriptionOpened"
+              (toggle)="bioDescriptionOpened = !bioDescriptionOpened">
+                <p class="biography__abstract">
+                    {{bioDetail.biographyShort}}
+                </p>
+            </my-panel>
+        </div>
+
+        <div fxFlex="100%">
+            <!-- Story segment count (won't quite fit into the next row on narrow phones so make it its own row) -->
+            <p id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="total-segments-mobile" (mousedown)="noMouseFocus($event)">{{tailoredStoryCountInfo}}</p>
+        </div>
+        <div fxFlex="100%" fxLayout="row" fxLayoutAlign="space-between center">
+            <!-- Toggle button group to toggle item presentation as picture stamp or text or map -->
+            <div fxFlex="grow" fxLayout="row wrap" class="mobile-controls-line">
+                <p class="sr-only" id="rg1_label" *ngIf="isNonemptyContent">Story Presentation Options</p>
+
+                <div fxFlex="100%" fxLayout="row" fxLayoutGap="10px">
+                    <!--Summaries button-->
+                    <button class="summaries-button-low-key" *ngIf="isNonemptyContent" (click)="toggleDetails()">{{toggleDetailsLabel}}</button>
+                    <!-- Back button -->
+                    <button fxLayout="row" fxLayoutAlign="center center" class="back-button-low-key" (click)="goBack($event)">
+                        <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we will have "Back" for the button -->
+                        <svg fxFlex="0 0 calc(12px)" aria-hidden="true" class="back-chevron-icon" width="12px" height="16px" viewBox="0 0 12 20" xmlns="http://www.w3.org/2000/svg">
+                            <title>
+                                Back to previous page
+                            </title>
+                            <g fill="#FFF" fill-rule="nonzero">
+                                <path d="M10 0L0 10l10 10 1.494662-1.494662L2.989324 10l8.505338-8.505338"/>
+                            </g>
+                        </svg>
+                        <span fxFlex="grow">Back</span>
+                    </button>
+                </div>
+
+                <ul *ngIf="isNonemptyContent" class="unstyled-list-nowhitespace" aria-labelledby="rg1_label" fxFlex.lt-md="100%" fxLayout="row" fxLayoutAlign="space-between end" fxLayoutGap="10px">
+
+                    <li #rg1Pic fxFlex="grow" class="filter-section-rg-item" [class.selected]="cardView"
+                        [attr.tabindex]="cardView ? 0 : -1" role="button" [attr.aria-pressed]="cardView"
+                        (click)="cardView = true; textView = false" (keydown)="setViewOptionsInNarrowContainer($event.key, true, false)">
+                        <span class="sr-only">Picture stamp grid view</span>
+                        <span fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="calc(0.6em)">
+                            <span fxFlex="0 0 calc(22px)" class="pad-top-a-bit">
+                                <svg aria-hidden="true" width="22px" height="22px" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+                                    <title>
+                                    Picture stamp grid view
+                                    </title>
+                                    <path d="M10 1v8c0 .28-.096667.516667-.289333.71C9.516667 9.903333 9.28 10 9 10H1c-.28 0-.516667-.096667-.71-.29C.096667 9.516667 0 9.28 0 9V1C0 .72.096667.483333.29.29.483333.097333.72 0 1 0h8c.28 0 .516667.097333.710667.29C9.903333.483333 10 .72 10 1c0 0 0-.28 0 0zm0 12v8c0 .28-.096667.516667-.289333.71C9.516667 21.903333 9.28 22 9 22H1c-.28 0-.516667-.096667-.71-.29C.096667 21.516667 0 21.28 0 21v-8c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h8c.28 0 .516667.097333.710667.29.192666.193333.289333.43.289333.71 0 0 0-.28 0 0zM22 1v8c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29h-8c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71V1c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h8c.28 0 .516667.097333.710667.29C21.903333.483333 22 .72 22 1c0 0 0-.28 0 0zm0 12v8c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29h-8c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71v-8c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h8c.28 0 .516667.097333.710667.29.192666.193333.289333.43.289333.71z" fill="currentColor" fill-rule="evenodd"/>
+                                </svg>
+                            </span>
+                            <span fxFlex="0 0 auto">Grid</span>
+                        </span>
+                    </li>
+                    <li #rg1Text fxFlex="grow" class="filter-section-rg-item" [class.selected]="textView"
+                        [attr.tabindex]="textView ? 0 : -1" role="button" [attr.aria-pressed]="textView"
+                        (click)="textView = true; cardView = false" (keydown)="setViewOptionsInNarrowContainer($event.key, false, true)">
+                        <span class="sr-only">Text-only grid view</span>
+                        <span fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="calc(0.6em)">
+                            <span fxFlex="0 0 calc(22px)" class="pad-top-a-bit">
+                                <svg aria-hidden="true" width="24px" height="22px" viewBox="0 0 24 22" xmlns="http://www.w3.org/2000/svg">
+                                    <title>
+                                        Text-only grid view
+                                    </title>
+                                    <path d="M6 1v4c0 .28-.096667.516667-.289333.71C5.516667 5.903333 5.28 6 5 6H1c-.28 0-.516667-.096667-.71-.29C.096667 5.516667 0 5.28 0 5V1C0 .72.096667.483333.29.29.483333.097333.72 0 1 0h4c.28 0 .516667.097333.710667.29C5.903333.483333 6 .72 6 1c0 0 0-.28 0 0zm0 12V9c0-.28-.096667-.516667-.289333-.71C5.516667 8.097333 5.28 8 5 8H1c-.28 0-.516667.097333-.71.29C.096667 8.483333 0 8.72 0 9v4c0 .28.096667.516667.29.71.193333.193333.43.29.71.29h4c.28 0 .516667-.096667.710667-.29C5.903333 13.516667 6 13.28 6 13c0 0 0 .28 0 0zm0 4v4c0 .28-.096667.516667-.289333.71C5.516667 21.903333 5.28 22 5 22H1c-.28 0-.516667-.096667-.71-.29C.096667 21.516667 0 21.28 0 21v-4c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h4c.28 0 .516667.097333.710667.29C5.903333 16.483333 6 16.72 6 17c0 0 0-.28 0 0zM24 1v4c0 .28-.096667.516667-.289333.71C23.516667 5.903333 23.28 6 23 6H9c-.28 0-.516667-.096667-.71-.29C8.096667 5.516667 8 5.28 8 5V1c0-.28.096667-.516667.29-.71C8.483333.097333 8.72 0 9 0h14c.28 0 .516667.097333.710667.29C23.903333.483333 24 .72 24 1c0 0 0-.28 0 0zm0 8v4c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29H9c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71V9c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h14c.28 0 .516667.097333.710667.29C23.903333 8.483333 24 8.72 24 9c0 0 0-.28 0 0zm0 8v4c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29H9c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71v-4c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h14c.28 0 .516667.097333.710667.29.192666.193333.289333.43.289333.71z" fill="currentColor" fill-rule="evenodd"/>
+                                </svg>
+                            </span>
+                            <span fxFlex="0 0 auto">List</span>
+                        </span>
+                    </li>
+                    <li #rg1Map fxFlex="grow" class="filter-section-rg-item" [class.selected]="!cardView && !textView"
+                        [attr.tabindex]="cardView || textView ? -1 : 0" role="button" [attr.aria-pressed]="!cardView && !textView"
+                        (click)="cardView = false; textView = false" (keydown)="setViewOptionsInNarrowContainer($event.key, false, false)">
+                        <span class="sr-only">U.S. state map view</span>
+                        <span fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="calc(0.6em)">
+                            <span fxFlex="0 0 calc(22px)" class="pad-top-a-bit">
+                                <svg aria-hidden="true" width="24px" height="22px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                                    <title>
+                                        U.S. state map view
+                                    </title>
+                                    <path d="M352,32l-192,96L0,32v352l160,96l192-96l160,96V128L352,32z M176,155.781l160-80v280.438l-160,80V155.781z M32,88.5 l111.531,66.938l0.469,0.281v277.375L32,365.875V88.5z M480,423.469l-111.531-66.906L368,356.281V78.938l112,67.188V423.469z" fill="currentColor" fill-rule="evenodd"/>
+                                </svg>
+                            </span>
+                            <span fxFlex="0 0 auto">Map</span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tape details and story stamps for mobile -->
+        <div *ngIf="cardView || textView" fxFlex="100%" class="biography-storyset">
+            <div *ngFor="let oneSummary of tapeSummariesCache;let m=index">
+                <h3 [attr.id]="'tape_' + m" class="tapes__title" >{{tapeTitlesCache[m]}}</h3>
+                <p *ngIf="tapeSummariesShown">{{oneSummary}}</p>
+                <!-- FYI, lay out the items using CSS grid, hiding interview date as that is elsewhere in this UI -->
+                <ul [attr.aria-labelledby]="'tape_' + m"
+                  [ngClass]="{'tapes': cardView,'tapes-as-list':!cardView}">
+                    <li [ngClass]="{'tape': cardView,'tape-as-list':!cardView}"
+                      *ngFor="let oneStory of myStoryListByTape[m];let j=index">
+                        <thda-story
+                          [cardView]="cardView"
+                          hideInterviewDate="true"
+                          overrideToH4Nesting="true"
+                          [story]="myStoryListByTape[m][j]"
+                          [selectedID]="signalFocusToStoryID"
+                          [highlights]="myStoryListByTape[m][j].highlights"
+                        ></thda-story>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div *ngIf="!cardView && !textView" fxFlex="100%">
+          <us-map [distributionToShow]="USStateDistribution"></us-map>
+        </div>
+    </div>
+
+    <!-- Bio profile for wider screen layout has two panes, a left pane and a right pane.
+         NOTE: setting up a maximum width of 352px via numbers in the calc() sections below for the left column. -->
+    <div class="desktop-only" fxLayout="row wrap" fxLayoutAlign="space-between flex-start" fxLayoutGap.lt-sm="0" fxLayoutGap="calc(20px)">
+        <!--Bio column-->
+        <div fxFlex="calc(30% - 20px)" fxLayout="column" fxLayoutAlign="space-between stretch">
+            <!-- Left pane has image, name, details, description, and in the past an
+                  optional My Clips component too perhaps which is being left out in this redo. -->
+            <div fxFlex="100%" *ngIf="bioDetail && bioDetail.preferredName"
+              fxLayout="column" fxLayoutAlign="center center" class="headshot__container">
+                <div class="headshot_img-backdrop">
+                    <img class="headshot__img" src="{{tailoredImage}}" alt="head shot, {{bioDetail.preferredName}}" />
+                </div>
+            </div>
+            <div *ngIf="bioDetail && bioDetail.preferredName" class="bio-details-desktop">
+                <h2 id="bioDetailsHeader" class="bio-details__title">{{bioDetail.preferredName}}</h2>
+                <ul aria-labelledby="bioDetailsHeader" class="unstyled-list-nowhitespace">
+                    <li class="bio-details__def" *ngIf="bioDetail.birthDate" ><span class="key-piece">Born:&nbsp;</span><span class="value-piece">{{tailoredBirthDate}}</span></li>
+                    <li class="bio-details__def" *ngIf="tailoredBirthLocation"><span class="key-piece">Birth Location:&nbsp;</span><span class="value-piece">{{tailoredBirthLocation}}</span></li>
+                    <li class="bio-details__def" *ngIf="bioDetail.deceasedDate"><span class="key-piece">Died:&nbsp;</span><span class="value-piece">{{tailoredDeceasedDate}}</span></li>
+                    <li class="bio-details__def" *ngIf="bioDetail.region"><span class="key-piece">Residence:&nbsp;</span><span class="value-piece">{{bioDetail.region}}</span></li>
+                    <li class="bio-details__def" *ngIf="tailoredMakerGroupList"><span class="key-piece">Category:&nbsp;</span><span class="value-piece">{{tailoredMakerGroupList}}</span></li>
+                    <li class="bio-details__def" *ngIf="tailoredJobFamilyList"><span class="key-piece">Job Type(s):&nbsp;</span><span class="value-piece">{{tailoredJobFamilyList}}</span></li>
+                    <li class="bio-details__def" *ngIf="tailoredOccupationList"><span class="key-piece">Occupation(s):&nbsp;</span><span class="value-piece">{{tailoredOccupationList}}</span></li>
+                    <li class="bio-details__def" *ngIf="biographyFavoriteColor"><span class="key-piece">Favorite Color:&nbsp;</span><span class="value-piece">{{biographyFavoriteColor}}</span></li>
+                    <li class="bio-details__def" *ngIf="biographyFavoriteFood"><span class="key-piece">Favorite Food:&nbsp;</span><span class="value-piece">{{biographyFavoriteFood}}</span></li>
+                    <li class="bio-details__def" *ngIf="biographyFavoriteTimeOfYear"><span class="key-piece">Favorite Time of Year:&nbsp;</span><span class="value-piece">{{biographyFavoriteTimeOfYear}}</span></li>
+                    <li class="bio-details__def" *ngIf="biographyFavoriteVacationSpot"><span class="key-piece">Favorite Vacation Spot:&nbsp;</span><span class="value-piece">{{biographyFavoriteVacationSpot}}</span></li>
+                    <li class="bio-details__def" *ngIf="biographyFavoriteQuote"><span class="key-piece">Favorite Quote:&nbsp;</span><span class="value-piece">{{biographyFavoriteQuote}}</span></li>
+                </ul>
+                <p class="bio-details__interview" *ngFor="let oneInterview of bioSessionDetails">
+                    {{oneInterview}}
+                </p>
+            </div>
+            <div fxFlex="100%" *ngIf="bioDetail">
+                <h2 class="biography__header">Biography</h2>
+                <p class="biography__abstract">{{bioDetail.biographyShort}}</p>
+            </div>
+            <!-- Formerly, squeezed in My Clips too, but that made height of page too long for too little gain
+                  according to some Higher Education Advisory Board (HEAB) comments from 2019 especially -
+                  interface simplified as a result to keep this view on-point and focused on ONE person. -->
+        </div>
+
+        <!--Main content-->
+        <div fxFlex="calc(70% - 20px)" fxLayout="column" fxLayoutAlign="space-between stretch">
+            <!--Search block-->
+            <!-- Desktop story search, restricted to just stories from this particular person; shown only after person is loaded -->
+            <div *ngIf="bioDetail" fxFlex="grow" fxLayout="row" fxLayoutAlign="end">
+                <div fxFlex="0 1 calc(800px)">
+                    <!-- Search Form (capped at 800px width via fxflex line in container div) -->
+                    <search-form [showResultsPerPage]="false" [showFieldOptions]="false" [showAdvancedSearchLink]="true"></search-form>
+                </div>
+            </div>
+            <!-- Tapes and filters -->
+            <h2 class="sr-only">Stories for this biography</h2>
+            <div class="tapes-and-filters" fxFlex="100%" fxLayout="column" fxLayoutAlign="space-between start" fxLayoutGap="0">
+
+                <!-- Story segment count -->
+                <div fxFlex="100%" fxLayout="row" class="page-view-option-piece">
+                    <p id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="total-segments" (mousedown)="noMouseFocus($event)">{{tailoredStoryCountInfo}}</p>
+                </div>
+
+                <!--View toggles-->
+                <!-- Toggle button group to toggle item presentation as picture stamp or text or map -->
+                <div class="filter-section desktop-only" fxFlex="100%" fxLayout="row wrap" fxLayoutAlign="space-around center">
+                    <p class="sr-only" id="rg2_label" *ngIf="isNonemptyContent">Story Presentation Options</p>
+                    <div fxFlex.lt-md="100%" fxFlex="50%" fxLayout="row" fxLayoutGap="20px">
+                        <!--Summaries button-->
+                        <button class="summaries-button-low-key" *ngIf="isNonemptyContent" (click)="toggleDetails()">{{toggleDetailsLabel}}</button>
+                        <!-- Back button -->
+                        <button fxLayout="row" fxLayoutAlign="center center" class="back-button-low-key" (click)="goBack($event)">
+                            <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we will have "Back" for the button -->
+                            <svg fxFlex="0 0 calc(12px)" aria-hidden="true" class="back-chevron-icon" width="12px" height="16px" viewBox="0 0 12 20" xmlns="http://www.w3.org/2000/svg">
+                                <title>
+                                    Back to previous page
+                                </title>
+                                <g fill="#FFF" fill-rule="nonzero">
+                                    <path d="M10 0L0 10l10 10 1.494662-1.494662L2.989324 10l8.505338-8.505338"/>
+                                </g>
+                            </svg>
+                            <span fxFlex="grow">Back</span>
+                        </button>
+                    </div>
+                    <ul *ngIf="isNonemptyContent" class="unstyled-list-nowhitespace" aria-labelledby="rg2_label" fxFlex.lt-md="100%" fxFlex="50%" fxLayout="row" fxLayoutAlign="space-between end" fxLayoutGap.gt-xs="10px" fxLayoutGap.lt-sm="20px">
+
+                        <li #rg2Pic fxFlex="grow" class="filter-section-rg-item" [class.selected]="cardView"
+                            [attr.tabindex]="cardView ? 0 : -1" role="button" [attr.aria-pressed]="cardView"
+                            (click)="cardView = true; textView = false" (keydown)="setViewOptions($event.key, true, false)">
+                            <span class="sr-only">Picture stamp grid view</span>
+                            <span fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="calc(0.6em)">
+                                <span fxFlex="0 0 calc(22px)" class="pad-top-a-bit">
+                                    <svg aria-hidden="true" width="22px" height="22px" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+                                        <title>
+                                        Picture stamp grid view
+                                        </title>
+                                        <path d="M10 1v8c0 .28-.096667.516667-.289333.71C9.516667 9.903333 9.28 10 9 10H1c-.28 0-.516667-.096667-.71-.29C.096667 9.516667 0 9.28 0 9V1C0 .72.096667.483333.29.29.483333.097333.72 0 1 0h8c.28 0 .516667.097333.710667.29C9.903333.483333 10 .72 10 1c0 0 0-.28 0 0zm0 12v8c0 .28-.096667.516667-.289333.71C9.516667 21.903333 9.28 22 9 22H1c-.28 0-.516667-.096667-.71-.29C.096667 21.516667 0 21.28 0 21v-8c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h8c.28 0 .516667.097333.710667.29.192666.193333.289333.43.289333.71 0 0 0-.28 0 0zM22 1v8c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29h-8c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71V1c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h8c.28 0 .516667.097333.710667.29C21.903333.483333 22 .72 22 1c0 0 0-.28 0 0zm0 12v8c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29h-8c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71v-8c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h8c.28 0 .516667.097333.710667.29.192666.193333.289333.43.289333.71z" fill="currentColor" fill-rule="evenodd"/>
+                                    </svg>
+                                </span>
+                                <span fxFlex="0 0 auto">Grid</span>
+                            </span>
+                        </li>
+                        <li #rg2Text fxFlex="grow" class="filter-section-rg-item" [class.selected]="textView"
+                            [attr.tabindex]="textView ? 0 : -1" role="button" [attr.aria-pressed]="textView"
+                            (click)="textView = true; cardView = false" (keydown)="setViewOptions($event.key, false, true)">
+                            <span class="sr-only">Text-only grid view</span>
+                            <span fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="calc(0.6em)">
+                                <span fxFlex="0 0 calc(22px)" class="pad-top-a-bit">
+                                    <svg aria-hidden="true" width="24px" height="22px" viewBox="0 0 24 22" xmlns="http://www.w3.org/2000/svg">
+                                        <title>
+                                            Text-only grid view
+                                        </title>
+                                        <path d="M6 1v4c0 .28-.096667.516667-.289333.71C5.516667 5.903333 5.28 6 5 6H1c-.28 0-.516667-.096667-.71-.29C.096667 5.516667 0 5.28 0 5V1C0 .72.096667.483333.29.29.483333.097333.72 0 1 0h4c.28 0 .516667.097333.710667.29C5.903333.483333 6 .72 6 1c0 0 0-.28 0 0zm0 12V9c0-.28-.096667-.516667-.289333-.71C5.516667 8.097333 5.28 8 5 8H1c-.28 0-.516667.097333-.71.29C.096667 8.483333 0 8.72 0 9v4c0 .28.096667.516667.29.71.193333.193333.43.29.71.29h4c.28 0 .516667-.096667.710667-.29C5.903333 13.516667 6 13.28 6 13c0 0 0 .28 0 0zm0 4v4c0 .28-.096667.516667-.289333.71C5.516667 21.903333 5.28 22 5 22H1c-.28 0-.516667-.096667-.71-.29C.096667 21.516667 0 21.28 0 21v-4c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h4c.28 0 .516667.097333.710667.29C5.903333 16.483333 6 16.72 6 17c0 0 0-.28 0 0zM24 1v4c0 .28-.096667.516667-.289333.71C23.516667 5.903333 23.28 6 23 6H9c-.28 0-.516667-.096667-.71-.29C8.096667 5.516667 8 5.28 8 5V1c0-.28.096667-.516667.29-.71C8.483333.097333 8.72 0 9 0h14c.28 0 .516667.097333.710667.29C23.903333.483333 24 .72 24 1c0 0 0-.28 0 0zm0 8v4c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29H9c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71V9c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h14c.28 0 .516667.097333.710667.29C23.903333 8.483333 24 8.72 24 9c0 0 0-.28 0 0zm0 8v4c0 .28-.096667.516667-.289333.71-.194.193333-.430667.29-.710667.29H9c-.28 0-.516667-.096667-.71-.29-.193333-.193333-.29-.43-.29-.71v-4c0-.28.096667-.516667.29-.71.193333-.192667.43-.29.71-.29h14c.28 0 .516667.097333.710667.29.192666.193333.289333.43.289333.71z" fill="currentColor" fill-rule="evenodd"/>
+                                    </svg>
+                                </span>
+                                <span fxFlex="0 0 auto">List</span>
+                            </span>
+                        </li>
+                        <li #rg2Map fxFlex="grow" class="filter-section-rg-item" [class.selected]="!cardView && !textView"
+                            [attr.tabindex]="cardView || textView ? -1 : 0" role="button" [attr.aria-pressed]="!cardView && !textView"
+                            (click)="cardView = false; textView = false" (keydown)="setViewOptions($event.key, false, false)">
+                            <span class="sr-only">U.S. state map view</span>
+                            <span fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="calc(0.6em)">
+                                <span fxFlex="0 0 calc(22px)" class="pad-top-a-bit">
+                                    <svg aria-hidden="true" width="24px" height="22px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                                        <title>
+                                            U.S. state map view
+                                        </title>
+                                        <path d="M352,32l-192,96L0,32v352l160,96l192-96l160,96V128L352,32z M176,155.781l160-80v280.438l-160,80V155.781z M32,88.5 l111.531,66.938l0.469,0.281v277.375L32,365.875V88.5z M480,423.469l-111.531-66.906L368,356.281V78.938l112,67.188V423.469z" fill="currentColor" fill-rule="evenodd"/>
+                                    </svg>
+                                </span>
+                                <span fxFlex="0 0 auto">Map</span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tape details and story stamps for desktop -->
+            <div *ngIf="cardView || textView" fxFlex="100%" class="biography-storyset">
+                <div *ngFor="let oneSummary of tapeSummariesCache;let m=index">
+                    <h3 [attr.id]="'tape__' + m" class="tapes__title" >{{tapeTitlesCache[m]}}</h3>
+                    <p *ngIf="tapeSummariesShown">{{oneSummary}}</p>
+                    <!-- FYI, lay out the items using CSS grid, hiding interview date as that is elsewhere in this UI -->
+                    <ul [attr.aria-labelledby]="'tape__' + m"
+                      [ngClass]="{'tapes': cardView,'tapes-as-list':!cardView}">
+                        <li [ngClass]="{'tape': cardView,'tape-as-list':!cardView}"
+                          *ngFor="let oneStory of myStoryListByTape[m];let j=index">
+                            <thda-story
+                              [cardView]="cardView"
+                              hideInterviewDate="true"
+                              overrideToH4Nesting="true"
+                              [story]="myStoryListByTape[m][j]"
+                              [selectedID]="signalFocusToStoryID"
+                              [highlights]="myStoryListByTape[m][j].highlights"
+                            ></thda-story>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div *ngIf="!cardView && !textView" fxFlex="100%">
+              <us-map [distributionToShow]="USStateDistribution"></us-map>
+            </div>
+        </div>
+    </div>
+</div>

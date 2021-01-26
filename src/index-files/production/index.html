@@ -1,0 +1,88 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>The HistoryMakers Digital Archive</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="assets/THM_favicon.png" type="image/png" />
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- LibLynx and COUNTER compliance -->
+  <script type="text/javascript">
+    var _ll = _ll || [];
+
+    // load tracker asynchronously
+    (function() {
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src='//connect.liblynx.com/log/js/counter5.min.js'; s.parentNode.insertBefore(g,s);
+    })();
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        // Return nothing if we can't find the cookie
+        return "";
+    }
+
+    // Base64 algorithm borrowed from
+    // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/atob
+    function decodeAuthCookie(jwt) {
+        const b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        var result = "";
+        if (jwt != "") {
+            var payload = jwt.split('.')[1];
+            // Adding the padding if missing, for simplicity
+            payload += "==".slice(2 - (payload.length & 3));
+            var bitmap, r1, r2, i = 0;
+            for (; i < payload.length;) {
+                bitmap = b64.indexOf(payload.charAt(i++)) << 18 | b64.indexOf(payload.charAt(i++)) << 12 |
+                    (r1 = b64.indexOf(payload.charAt(i++))) << 6 | (r2 = b64.indexOf(payload.charAt(i++)));
+
+                result += r1 === 64 ? String.fromCharCode(bitmap >> 16 & 255) :
+                    r2 === 64 ? String.fromCharCode(bitmap >> 16 & 255, bitmap >> 8 & 255) :
+                    String.fromCharCode(bitmap >> 16 & 255, bitmap >> 8 & 255, bitmap & 255);
+            }
+        }
+
+        return JSON.parse(result);
+    }
+
+    // Immediately Invoked Function Expression (IIFE) to look for what we need in the cookie.
+    (function() {
+        var token = decodeAuthCookie(getCookie('da_auth'));
+
+        if (token == "")
+          console.log("Cookie not as expected: logging will not work.");
+        else {
+          // assuming all pieces are there set provider id and defaults for all tracking calls
+          // (suppress reporting to console on success for now) console.log("fyi, aid and aname and publisher_reference: " + token.account_id + ", " + token.account_name + ", " + token.publisher_reference);
+          _ll.push(['setDefaults', {
+              pid: token.publisher_id,
+              aid: token.publisher_reference,
+              aname: token.account_name,
+              sid: token.session_id
+          }]);
+        }
+    })();
+
+  </script>
+
+</head>
+<body>
+  <my-app >Loading...</my-app>
+</body>
+</html>

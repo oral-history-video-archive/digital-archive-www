@@ -1,0 +1,200 @@
+﻿@import '../shared/theme/base';
+@import '../shared/theme/search-helpers';
+@import '../shared/theme/filter-helpers';
+@import '../shared/theme/view-option-helpers';
+@import '../shared/theme/pagination-helpers';
+
+.tapes {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  // Default of 2 per row
+  grid-template-columns: repeat(2, 1fr); // the "1fr" makes all rows equal height;
+    // e.g., see https://stackoverflow.com/questions/44488357/equal-height-rows-in-css-grid-layout
+  grid-auto-rows: 1fr;
+  gap: gutter(thmda-tight);
+
+  // Note: layout set-up assumes that each card plus its gap accounts for roughly 128 pixels.
+  // At these widths, we have these needs:
+  // Breakpoint Name  Pixel-Value Max-Columns (stamps per row)
+  // thmda_narrow     392px       3
+  // BUT NOW at afl_small and up, only 66% of screen is used for stamp area or a max of 336 pixels, so adjust further:
+  // Breakpoint Name  Pixel-Value 2/3-Value or down 336px Max-Columns (stamps per row)
+  // afl_small        600px       400       3
+  // thmda_wideenough 768px       ~512      3 (4 could fit but less readable short text, so leaving wider at 3 per row)
+  // afl_medium       960         640       4
+  // afl_large        1280        944       7
+  // afl_xlarge       1920        1584      12
+  // xlarge           2400        2064      16
+
+
+  // For widths between afl_medium and afl_large, be 4 per row:
+  @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: gutter(thmda-medium);
+  }
+
+  // New!  With maximum of thmda_maxwidth, afl_large < thmda_maxwidth < afl_xlarge < xlarge, simply max out now at afl_large or greater...
+  // For widths of afl_large or greater, be 7 per row:
+  @media screen and (min-width: bp(afl_large)) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: gutter(thmda-big);
+  }
+
+  // Obsolete wide-screen styling:
+  // For widths between afl_large and afl_xlarge, be 7 per row:
+  //@media screen and (min-width: bp(afl_large)) and (max-width: bp(afl_xlarge_just_before))  {
+  //  grid-template-columns: repeat(7, 1fr);
+  //  gap: gutter(thmda-big);
+  //}
+
+  // For widths between afl_xlarge and xlarge, be 12 per row:
+  //@media screen and (min-width: bp(afl_xlarge)) and (max-width: bp(xlarge_just_before))  {
+  //  grid-template-columns: repeat(12, 1fr);
+  //  gap: gutter(thmda-big);
+  //}
+
+  // For widths of xlarge or more, be 16 per row:
+  //@media screen and (min-width: bp(xlarge)) {
+  //  grid-template-columns: repeat(16, 1fr);
+  //  gap: gutter(thmda-big);
+  //}
+}
+
+.tape {
+  padding: 0;
+  margin: 0;
+}
+
+.tape-as-list {
+  padding: 0;
+  margin: 0 0 gutter(thmda-tiny) 0; // top right bottom left
+}
+
+.tapes-as-list {
+  list-style: none;
+  padding: 0;
+}
+
+//My Clips
+.welcome-paragraph {
+  @extend %source-sans-bold;
+
+  background: color(primary);
+  color: #fff;
+  font-size: 2rem;
+  margin: em(12) 0 em(8) 0; // top right bottom left
+  padding: em(8) em(10);;
+  position: relative; // needed to get descending triangle magic to work...
+
+  &:after { // magic to draw descending triangle
+    border-left: em(10) solid transparent;
+    border-right: em(10) solid transparent;
+    border-top: em(10) solid color(primary);
+    content: '';
+    height: 0;
+    left: calc(30% - 10px);
+    position: absolute;
+    top: 100%;
+    transform: translateY(-40%);
+    width: 0;
+  }
+}
+
+.distinguishFilterPane {
+  background-color: color(light-grey);
+  border: 1px solid #ccc;
+  padding: gutter(thmda-medium);
+}
+
+.story-set__title {
+  @extend %oswald;
+
+  color: color(black);
+  font-size: 2rem;
+  line-height: 120%;
+  margin-bottom: 0;
+  margin-top: em(4);
+  padding: 0;
+
+  @media screen and (min-width: bp(afl_small)) and (max-width: bp(afl_medium_just_before)) {
+      font-size: 1.7rem;
+  }
+
+  @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+      font-size: 2rem;
+  }
+
+  @media screen and (min-width: bp(afl_large)) {
+      font-size: 2.3rem;
+  }
+
+  &:focus {
+    outline: 0;
+    text-decoration: underline;
+  }
+}
+
+.mixtape-set__title {
+  @extend %oswald;
+
+  color: color(dark-grey);
+  font-size: 1.2rem;
+  margin: 0 0 em(8) 0;
+  padding-top: 0;
+
+  @media screen and (min-width: bp(afl_small)) {
+      font-size: 1.4rem;
+  }
+}
+
+.attrib {
+    font-size: 1.2rem;
+    color: #1E1810;
+}
+
+.gap-my-clips-action-container {
+    margin-bottom: em(12);
+}
+
+.my-clips-action-button { // note similarity with launch-filter-menu-button
+  @extend %oswald;
+
+  background-color: color(primary);
+  border: 1px solid color(primary); // note: added for accessibility, to provide a button border in high contrast mode
+  border-radius: 0;
+  cursor: pointer;
+  margin: gutter(thmda-tight) 0 gutter(thmda-tiny) 0; // top right bottom left
+  padding: em(4) em(12);
+  font-size: 1.2rem;
+  height: $buttonHeight;
+
+  &:hover,
+  &:focus {
+      box-shadow: inset 0 0 5px rgba(51,51,51,.6);
+      background-color: color(secondary);
+  }
+}
+
+.my-clips-action-button__inverse {
+  @extend %oswald;
+
+  background-color: color(secondary);
+  border: 1px solid color(secondary); // note: added for accessibility, to provide a button border in high contrast mode
+  border-radius: 0;
+  cursor: pointer;
+  margin: gutter(thmda-tight) 0 gutter(thmda-tiny) 0; // top right bottom left
+  padding: em(4) em(12);
+  font-size: 1.2rem;
+  height: $buttonHeight;
+
+  &:hover,
+  &:focus {
+      box-shadow: inset 0 0 5px rgba(51,51,51,.6);
+      background-color: color(primary);
+  }
+}
+
+.action-button-top-gap {
+  margin-top: em(6);
+}

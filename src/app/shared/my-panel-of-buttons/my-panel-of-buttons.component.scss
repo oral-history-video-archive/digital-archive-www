@@ -1,0 +1,201 @@
+@import '../theme/base';
+
+.panel-parent {
+  margin-bottom: em(8, 14);
+  border-radius: 0;
+  box-shadow: none;
+  border: 1px solid color(primary);
+  box-sizing: border-box;
+} // End of .panel-parent
+
+.panel-title-item {
+  @extend %source-sans;
+  @extend %oswald;
+
+  font-size: 1.2rem;
+  margin: auto;
+  text-align: left;
+}
+
+.panel-open-close {
+  padding: 0;
+
+  background-color: color(primary);
+  border: 0;
+  border-radius: 0;
+  color: #fff;
+  height: $buttonHeight;
+  width: 100%;
+
+  padding-left: em(8,16);
+  padding-right: em(8,16);
+
+  @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+    padding-left: em(12,16);
+    padding-right: em(12,16);
+  }
+
+  @media screen and (min-width: bp(afl_large)) {
+    padding-left: em(16,16);
+    padding-right: em(16,16);
+  }
+
+  &:hover,
+  &:focus {
+    background-color: color(secondary);
+    color: #fff;
+  }
+
+  &.active {
+    background-color: color(primary);
+    color: #fff;
+  }
+}
+
+.panel-reverse-parent {
+  margin-bottom: em(8, 14);
+  border-radius: 0;
+  box-shadow: none;
+  border: 1px solid color(secondary);
+  box-sizing: border-box;
+} // End of .panel-reverse-parent
+
+.panel-reverse-title-item {
+  @extend %oswald;
+  font-size: 1.2rem;
+  margin: auto;
+
+  @media screen and (min-width: bp(afl_small)) {
+      font-size: 1.4rem;
+  }
+}
+
+.panel-reverse-open-close {
+  padding: 0;
+
+  background-color: color(secondary);
+  border: 0;
+  border-radius: 0;
+  color: #fff;
+  height: $buttonHeight;
+  width: 100%;
+
+  padding-left: em(8,16);
+  padding-right: em(8,16);
+
+  @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+    padding-left: em(12,16);
+    padding-right: em(12,16);
+  }
+
+  @media screen and (min-width: bp(afl_large)) {
+    padding-left: em(16,16);
+    padding-right: em(16,16);
+  }
+
+  &:hover,
+  &:focus {
+    background-color: color(primary);
+    color: #fff;
+  }
+
+  &.active {
+    background-color: color(secondary);
+    color: #fff;
+  }
+}
+
+.panel-GRANDparent {
+  border-radius: 0;
+  box-shadow: none;
+  border: 1px solid color(black);
+  box-sizing: border-box;
+  margin-bottom: em(8, 14);
+} // End of .panel-GRANDparent
+
+.panel-GRANDparent-title-item {
+  @extend %source-sans;
+  font-size: 1rem;
+  font-style: italic;
+  margin: auto;
+
+  @media screen and (min-width: bp(afl_small)) {
+      font-size: 1.2rem;
+  }
+}
+
+.panel-GRANDparent-open-close {
+  padding: 0;
+
+  background-color: color(black);
+  border: 0;
+  border-radius: 0;
+  color: #fff;
+  height: 1.875rem;
+  width: 100%;
+
+  padding-left: em(8,16);
+  padding-right: em(8,16);
+
+  @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+    padding-left: em(12,16);
+    padding-right: em(12,16);
+  }
+
+  @media screen and (min-width: bp(afl_large)) {
+    padding-left: em(16,16);
+    padding-right: em(16,16);
+  }
+
+  &:hover,
+  &:focus {
+    background-color: color(secondary);
+    color: #fff;
+  }
+
+  &.active {
+    background-color: color(black);
+    color: #fff;
+  }
+}
+
+.h3-container {
+  margin: auto;
+  padding: 0;
+}
+
+.h4-container {
+  margin: auto;
+  padding: 0;
+}
+
+.opened-caret {
+  display: inline-block;
+  width: 0;
+  max-width: 8px;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-bottom: 4px dashed;
+  border-bottom: 4px solid\9;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+
+.closed-caret {
+  display: inline-block;
+  width: 0;
+  max-width: 8px;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 4px dashed;
+  border-top: 4px solid\9;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+
+.panel-body {
+  padding: em(4,14) em(6,14);
+  background-color: white;
+}

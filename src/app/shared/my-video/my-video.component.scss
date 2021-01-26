@@ -1,0 +1,126 @@
+@import '../../shared/theme/base';
+
+// !!!TBD!!! NOTE: it is difficult to construct a control line that will resize in rem units while remaining on one line.
+// Yet, it is both aesthetically desirable and offers expected video control behavior to keep the controls aligned closely
+// to the video area itself, i.e., one line of controls, not multiple.  So, for the moment, sizing is done here with pixels
+// rather than rem units for the video control line, so one line of controls is kept for widths of 400px, i.e.,
+// bp(video_controls_one_line), or greater.
+
+.videoplayer {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: black;
+  position: relative;
+  width: 100%;
+  max-width: bp(max_video_width); // !!!TBD!!! decide later whether to remove max-width restriction here for "zooming in" too much into low-res video
+                                  // If changed, change out other uses of bp(max_video_width) for controls tied to video player too!!!
+  height: 100%;
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.controls {
+  color: white;
+  background-color: color(mid-grey);
+  width: 100%;
+  height: 44px;
+}
+
+.controls-when-narrow { // like controls with less height
+  color: white;
+  background-color: color(mid-grey);
+  width: 100%;
+  height: 36px;
+}
+
+.narrow-video-controls-only { // for narrow view, video controls must be on 2 lines
+  // Clause 1: Video is in the one and only column.  Don't show this "narrow" view if we are wide enough.
+  @media screen and (min-width: bp(video_controls_one_line)) and (max-width: bp(required_video_in_column_just_before)) {
+    display: none !important;
+  }
+  // Clause 2: Video is in left column.  Don't show this "narrow" view if we are wide enough.
+  // Could actually simplify to just (min-width: bp(need_two_video_control_lines) + 1) since
+  // required_video_in_column is much less than need_two_video_control_lines, but leave as is for clarity:
+  @media screen and (min-width: bp(required_video_in_column)) and (min-width: bp(need_two_video_control_lines)) {
+    display: none !important;
+  }
+}
+
+.wider-video-controls-only { // for typical "wider" view, video controls fit on 1 line; same, too, for wider views with video in one column of that view
+  // Clause 1: Video is in the one and only column (assuming video_controls_one_line less than required_video_in_column).
+  // Don't show this "wide" view if we are too narrow.
+  @media screen and (max-width: bp(video_controls_one_line_just_before)) {
+    display: none !important;
+  }
+  // Clause 2: Video is in left column.  Don't show this "wide" view if we are too narrow.
+  @media screen and (min-width: bp(required_video_in_column)) and (max-width: bp(need_two_video_control_lines_just_before)) {
+    display: none !important;
+  }
+}
+
+.controls .menu .left {
+  justify-content: flex-start;
+}
+
+.controls .menu .right {
+  justify-content: flex-end;
+}
+
+.show-mouse {
+  cursor: default;
+}
+
+.hide-mouse {
+  cursor: none;
+}
+
+// Two speakers: S1 as interviewer, S2 as the HistoryMaker.
+video::cue(v[voice="S1"]) {
+  color: yellow;
+}
+video::cue(v[voice="S2"]) {
+  color: white;
+}
+
+.playtime {
+  color: black;
+  font-size: 14px; // see note above, using pixels instead of rem units to ALWAYS maintain a tight display in the video control line
+  width: 100%;
+  text-align: center;
+}
+
+.videoSlider {
+  width: 100%;
+  color: white;
+}
+/* !!!TBD!!! Change look of the mat-slider used for video slider, too (currently done by bringing in
+  our own generated my-thmda-material-theme.css with some accessibility updates commented in, rather
+  than using @angular/material/prebuilt-themes/purple-green.css or attempting additional styling updates
+  here at this level, which didn't work....
+.mat-accent .mat-slider-track-fill, .mat-accent .mat-slider-thumb, .mat-accent .mat-slider-thumb-label {
+    background-color: #69f0ae; // currently a shade of green, if in the main style.css there is this theme:
+    // @import '@angular/material/prebuilt-themes/purple-green.css';
+}
+!!!BUT!!! Unfortunately, the below attempts did not work
+.mat-accent .mat-slider-track-fill, .mat-accent .mat-slider-thumb, .mat-accent .mat-slider-thumb-label {
+    background-color: purple;
+}
+...or...
+.mat-slider.mat-slider-horizontal .mat-accent .mat-slider-track-fill {
+  background-color: purple;
+}
+.mat-slider.mat-slider-horizontal .mat-accent .mat-slider-thumb{
+  background-color: purple;
+}
+...or...
+.mat-slider.mat-slider-horizontal .mat-slider-track-fill {
+  background-color: purple;
+}
+.mat-accent .mat-slider-thumb{
+  background-color: purple;
+}
+*/

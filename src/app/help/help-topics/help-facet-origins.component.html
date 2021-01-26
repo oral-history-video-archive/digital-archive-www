@@ -1,0 +1,59 @@
+<h1 id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title mobile-only" (mousedown)="noMouseFocus($event)">Facet Origins and Descriptions</h1>
+<h1 id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title desktop-only" (mousedown)="noMouseFocus($event)">Facet Origins and Descriptions</h1>
+<p class="helptext-before-list">Information specialists like to talk about "facets" that are natural categories for filtering down a set of data.  With The HistoryMakers oral history interviews,
+  there are two types of facets:</p>
+<ul class="helptext-no-nargin-top">
+  <li class="helptext"><span class="helpEmphasis">HistoryMaker facets</span> which are facets regarding the people being interviewed and their biographical information.
+  </li>
+  <li class="helptext"><span class="helpEmphasis">Story facets</span> which are facets for the spoken stories.
+  </li>
+</ul>
+<p class="helptext">Facets are populated in two ways.  Unless otherwise noted below, the facets are added manually by a trained staff at The HistoryMakers, the nonprofit group assembling this collection.
+  The other way facets are populated are through automated programs.  Facets that are produced through automation, i.e., a set of programs running across the transcripts for
+  the collections, will be noted as "automated" in the list below.  Automated facets can be quite precise, i.e., they typically will be what is noted, but also can be lacking in recall.
+  For example, a story with a "1960s" facet likely will include discussion that is about that decade.  Automated programs may not have all the knowledge to be better in recall.  For example,
+  a story about the Lyndon Johnson administration may not have a 1960s facet if it only talked about the administration without mentioning years.
+  So, when doing research with automated facets, be cognizant of their better precision than recall and supplement your filtering with additional searching as needed.
+</p>
+<p class="helptext-before-list">For HistoryMakers, i.e., biographies, the facet types are:</p>
+<ul class="helptext-no-nargin-top">
+  <li class="helptext"><span class="helpEmphasis">Category: </span>The Maker category for the HistoryMaker.  A person can belong to more than one Maker category.</li>
+  <li class="helptext"><span class="helpEmphasis">Gender: </span>The gender for the HistoryMaker.</li>
+  <li class="helptext"><span class="helpEmphasis">Last Name: </span>The first letter of the last name of the HistoryMaker.</li>
+  <li class="helptext"><span class="helpEmphasis">Decade of Birth: </span>The decade of birth for the HistoryMaker, if birth date was shared.</li>
+  <li class="helptext"><span class="helpEmphasis">Birth State: </span>For those born in the U.S., the state of birth for the HistoryMaker.</li>
+  <li class="helptext"><span class="helpEmphasis">Job Type: </span>More focused than the Maker Category, the job types, i.e., occupations, for the HistoryMaker, where a person can belong to more than one job type.</li>
+</ul>
+<p class="helptext-before-list">For stories, the facet types are:</p>
+<ul class="helptext-no-nargin-top">
+  <li class="helptext"><span class="helpEmphasis">Category: </span>The Maker category or categories for the HistoryMaker delivering the story.</li>
+  <li class="helptext"><span class="helpEmphasis">Gender: </span>The gender for the HistoryMaker delivering the story.</li>
+  <li class="helptext"><span class="helpEmphasis">Job Type: </span>The occupation(s) for the HistoryMaker delivering the story.</li>
+  <li class="helptext"><span class="helpEmphasis">Decade of Birth: </span>The decade of birth for the HistoryMaker delivering the story.</li>
+  <li class="helptext"><span class="helpEmphasis">U.S. State: </span>Automated, the U.S. states in a story, with the state itself or cities and places
+    within the state mentioned in the story transcript as determined by a set of programs.</li>
+  <li class="helptext"><span class="helpEmphasis">Organization: </span>Automated, the organizations mentioned in a story transcript,
+    as determined by a set of programs.</li>
+  <li class="helptext"><span class="helpEmphasis">Year: </span>Automated, the years mentioned in a story,
+    as determined by a set of programs.</li>
+  <li class="helptext"><span class="helpEmphasis">Decade: </span>Automated, the decades mentioned in a story, which is a convenient way to look
+    at years for a large set of stories.  An inspection of decades for large story sets may be
+    more useful to then filter down into a story subset than only seeing the most frequently occurring years.</li>
+</ul>
+<p class="helptext">
+  Screen space is limited, and you may not want to see all the facets, e.g., you may prefer to always use Category rather than Job Type.
+  You can turn off facets from showing up in the display (and turn them back on again) using the <a routerLink="/settings" routerLinkActive="active">user settings page</a>.
+  Each user is different, and some may want extra emphasis on time or geography or biographical details.
+</p>
+<p class="helptext">
+  Again, with screen space being limited, not every value within a facet type like "Year" will be listed for any set of results.
+  Instead, only the facet values with the highest counts will be shown, much like e-commerce web shopping sites work.
+  For U.S. State, there is a "Map" view option so that you can see all 50 states plus D.C. shown on an interactive color-coded
+  map and full list so that you can interact with every state. Should this information visualization view prove valuable,
+  others may be added to support seeing all the facet values at once for other types like year and decade.
+</p>
+<p class="helptext">
+  See <a routerLink="/help/facets" routerLinkActive="active">How To Use Facets</a> for more information on using facets to filter down sets of information.
+</p>
+<p class="helptext"><a routerLink="/help" routerLinkActive="active">Back to FAQ/Help</a></p>
+

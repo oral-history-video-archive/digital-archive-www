@@ -1,0 +1,304 @@
+﻿<!-- Formerly, different looks at various widths. Now, breaks in style at 600 pixels.
+     Under 600 is "video-narrow-view", 600+ via video-desktop-view. Without a significant rewrite,
+     it is easiest to have this "600" breakpoint line up with the Angular Flex breakpoint for fxFlex.sm which is 600px too.
+-->
+<div *ngIf="myStory" fxLayout="row wrap" fxLayoutAlign="space-between flex-start" class="videoInfoContainer">
+    <div class="titleRow" fxLayout="row wrap" fxFlex="100%">
+        <h1 id="mmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title-video-page video-narrow-view" (mousedown)="noMouseFocus($event)">{{storyDetailsTitle}}</h1>
+        <h1 id="dmainHeader" [thdaIsFocused]="signalFocusToTitle" tabindex="-1" class="page-title-video-page video-desktop-view" (mousedown)="noMouseFocus($event)">{{storyDetailsTitle}}</h1>
+    </div>
+
+    <div fxLayout="row wrap" fxLayoutAlign="space-between flex-start" fxLayoutGap.lt-sm="0" fxLayoutGap="calc(20px)" fxFlex="100%">
+        <!--Video Content-->
+        <div fxFlex.lt-sm="100%" fxFlex.lt-md="calc(60% - 20px)" fxFlex="calc(40% - 20px)" fxLayout="column" fxLayoutAlign="space-between stretch">
+            <div class="title-buttons-area" fxLayout="column">
+                <!-- Button Bar With Title but ONLY when in video-desktop-view! -->
+                <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxFlex="100%" class="limitButtonRowWidth video-desktop-view">
+                    <!-- NOTE: horizontal sizing just like container for videoContents! -->
+                    <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="calc(20px)">
+                        <div fxFlex="auto" class="button-bar-piece">
+                            <button fxLayout="row" fxLayoutAlign="center center" class="back-button-low-key-video-line" (click)="goBack($event)">
+                                <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we will have " Back" for the button -->
+                                <svg fxFlex="0 0 calc(12px)" aria-hidden="true" class="back-chevron-icon" width="12px" height="16px" viewBox="0 0 12 20" xmlns="http://www.w3.org/2000/svg">
+                                    <title>
+                                        Go back to the previous page
+                                    </title>
+                                    <g fill="#FFF" fill-rule="nonzero">
+                                        <path d="M10 0L0 10l10 10 1.494662-1.494662L2.989324 10l8.505338-8.505338"/>
+                                    </g>
+                                </svg>
+                                <span fxFlex="grow">Back</span>
+                            </button>
+                        </div>
+                        <div fxFlex="auto" class="button-bar-piece">
+                            <button fxLayout="row" fxLayoutAlign="center center" class="myclips-add-delete-low-key-video-line" (click)="toggleAddToMyClips()">
+                                <span *ngIf="storyInMyClips" fxFlex="grow" class="spaceForWordyLabel">Remove from My Clips</span>
+                                <span *ngIf="storyInMyClips" fxFlex="grow" class="needTightLabel">Remove</span>
+                                <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we already have "Remove from My Clips" for the button -->
+                                <svg *ngIf="storyInMyClips" fxFlex="0 0 calc(15px)" aria-hidden="true" class="myclips-add-delete-icon" width="15" height="15" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                    <title>
+                                        Remove story from My Clips
+                                    </title>
+                                    <g fill="#FFF" fill-rule="evenodd">
+                                        <path d="M15 0C6.716 0 0 6.716 0 15c0 8.284 6.716 15 15 15 3.978 0 7.794-1.58 10.607-4.393C28.42 22.794 30 18.977 30 15c0-8.284-6.716-15-15-15zm0 2.57c3.297 0 6.46 1.308 8.79 3.64 2.332 2.33 3.64 5.493 3.64 8.79 0 3.297-1.308 6.46-3.64 8.79-2.33 2.332-5.493 3.64-8.79 3.64-3.297 0-6.46-1.308-8.79-3.64-2.332-2.33-3.64-5.493-3.64-8.79 0-3.297 1.308-6.46 3.64-8.79C8.54 3.878 11.703 2.57 15 2.57z" fill-rule="nonzero"/>
+                                        <path d="M9 14h12v2H9z"/>
+                                    </g>
+                                </svg>
+                                <span *ngIf="!storyInMyClips" fxFlex="grow">Add to My Clips</span>
+                                <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we already have "Add to My Clips" for the button -->
+                                <svg *ngIf="!storyInMyClips" fxFlex="0 0 calc(16px)" aria-hidden="true" class="myclips-add-delete-icon" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                    <title>
+                                        Add story to My Clips
+                                    </title>
+                                    <path d="M8 0C3.582 0 0 3.582 0 8s3.582 8 8 8c2.122 0 4.157-.843 5.657-2.343S16 10.122 16 8c0-4.418-3.582-8-8-8zm0 1.37c1.758 0 3.445.7 4.688 1.942C13.93 4.555 14.63 6.242 14.63 8c0 1.758-.7 3.445-1.942 4.688C11.445 13.93 9.758 14.63 8 14.63c-1.758 0-3.445-.7-4.688-1.942C2.07 11.445 1.37 9.758 1.37 8c0-1.758.7-3.445 1.942-4.688C4.555 2.07 6.242 1.37 8 1.37zm-.365 2.333c-.216 0-.39.174-.39.39v3.152H4.093c-.216 0-.39.174-.39.39v.73c0 .216.174.39.39.39h3.152v3.152c0 .216.174.39.39.39h.73c.216 0 .39-.174.39-.39V8.755h3.152c.216 0 .39-.174.39-.39v-.73c0-.216-.174-.39-.39-.39H8.755V4.093c0-.216-.174-.39-.39-.39h-.73z" fill-rule="nonzero" fill="#FFF"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div fxFlex="grow" fxLayout="row wrap" fxLayoutAlign="space-between start" fxLayoutGap="calc(0.2em)" class="contentRow">
+                <div class="videoColumn">
+                    <div class="videoContents">
+                        <h2 class="sr-only">Video Player</h2>
+                        <!-- NOTE: it is a cleaner load - play - load - play ... sequencing experience when chaining stories
+                        if the poster is not tuned per story as with poster="{{myMediaBase}}story/image/{{myStory.storyID}}"
+                        but is instead just a solid black asset.
+                        (The backgroundPoster has sizes of either 320x180 or 320x240 dependent on the aspect ratio
+                        of the content myStory (which is 320x240 for early interviews, and 320x180 for current ones.)
+                        TRYING TO BRING BACK POSTER: clean advance is just poster="{{backgroundPoster}}""
+                        and weak advance with some visual artifacts but also with actual poster and not just black area,
+                        is poster="{{myMediaBase}}story/image/{{myStory.storyID}}" ...choosing the latter option. -->
+                        <my-video #myVideoPlayer
+                                    src="{{myMediaBase}}story/video/{{myStory.storyID}}"
+                                    [urlToCCIndicator]="calcVTTName(myStory.storyID)"
+                                    (timeChange)="adjustVideoCurrentTime($event)"
+                                    (ended)="autoAdvanceToNext()"
+                                    poster="{{myMediaBase}}story/image/{{myStory.storyID}}">
+                        </my-video>
+                    </div>
+
+                    <!-- Prev and Next match buttons -->
+                    <div class="match" *ngIf="storyHasMatches" fxLayout="row" fxLayoutAlign="space-between center">
+                        <div fxFlex="none" class="match__prev">
+                            <button fxLayout="row" fxLayoutAlign="center center" class="match__prev-button" (click)="gotoPrevMatch()">
+                                <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we will have "Previous Match" for the button -->
+                                <svg fxFlex="0 0 calc(8px)" aria-hidden="true" width="8" height="14" viewBox="0 0 8 14" xmlns="http://www.w3.org/2000/svg">
+                                    <title>
+                                        Previous Match
+                                    </title>
+                                    <path d="M7 0L0 7l7 7 1.046-1.046L2.093 7l5.953-5.954" fill-rule="nonzero" fill="currentColor"/>
+                                </svg>
+                                <span fxFlex="grow" class="match__copy">Previous Match</span>
+                            </button>
+                        </div>
+                        <div fxFlex="grow" class="match__tick-line">
+                            <div *ngFor="let oneMatch of videoMatches" class="match__tick"
+                                    [style.left.%]=oneMatch.percentOffset></div>
+                        </div>
+                        <div fxFlex="none" class="match__next">
+                            <button fxLayout="row" fxLayoutAlign="center center" class="match__next-button" (click)="gotoNextMatch()">
+                                <span fxFlex="grow" class="match__copy">Next Match</span>
+                                <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we have "Next Match" for the button -->
+                                <svg fxFlex="0 0 calc(8px)" aria-hidden="true" width="8" height="14" viewBox="0 0 8 14" xmlns="http://www.w3.org/2000/svg">
+                                    <title>
+                                        Next Match
+                                    </title>
+                                    <path d="M1.046 14l7-7-7-7L0 1.046 5.954 7 0 12.954" fill-rule="nonzero" fill="currentColor"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Prev and Next buttons -->
+                    <div class="story-nav" fxLayout="row" fxLayoutAlign="space-between center">
+                        <div fxFlex="none">
+                            <button fxLayout="row" fxLayoutAlign="center center" *ngIf="myStory.prevStory != 0" class="story-nav__prev-button" (click)="gotoPrevStory()">
+                                <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we will have "Previous Story" for the button -->
+                                <svg fxFlex="0 0 calc(8px)" aria-hidden="true" class="story-nav__prev-button-icon"
+                                width="8" height="14" viewBox="0 0 8 14" xmlns="http://www.w3.org/2000/svg">
+                                    <title>
+                                        Previous Story
+                                    </title>
+                                    <path d="M7 0L0 7l7 7 1.046-1.046L2.093 7l5.953-5.954" fill-rule="nonzero" fill="currentColor"/>
+                                </svg>
+                                <span fxFlex="grow">Previous Story</span>
+                            </button>
+                        </div>
+                        <div fxFlex="none">
+                            <button fxLayout="row" fxLayoutAlign="center center" *ngIf="myStory.nextStory != 0" class="story-nav__next-button" (click)="gotoNextStory()">
+                                <span fxFlex="grow">Next Story</span>
+                                <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we have "Next Story" for the button -->
+                                <svg fxFlex="0 0 calc(8px)" aria-hidden="true" class="story-nav__next-button-icon"
+                                width="8" height="14" viewBox="0 0 8 14" xmlns="http://www.w3.org/2000/svg">
+                                    <title>
+                                        Next Story
+                                    </title>
+                                    <path d="M1.046 14l7-7-7-7L0 1.046 5.954 7 0 12.954" fill-rule="nonzero" fill="currentColor"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Add to/remove from My Clips button but only when in video-narrow-view. -->
+                    <div class="video-narrow-view slight-gap-above">
+                        <button fxLayout="row" fxLayoutAlign="center center" class="myclips-add-delete-low-key-video-line" (click)="toggleAddToMyClips()">
+                            <span *ngIf="storyInMyClips" fxFlex="grow">Remove from My Clips</span>
+                            <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we already have "Remove from My Clips" for the button -->
+                            <svg *ngIf="storyInMyClips" fxFlex="0 0 calc(15px)" aria-hidden="true" class="myclips-add-delete-icon" width="15" height="15" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                                <title>
+                                    Remove story from My Clips
+                                </title>
+                                <g fill="#FFF" fill-rule="evenodd">
+                                    <path d="M15 0C6.716 0 0 6.716 0 15c0 8.284 6.716 15 15 15 3.978 0 7.794-1.58 10.607-4.393C28.42 22.794 30 18.977 30 15c0-8.284-6.716-15-15-15zm0 2.57c3.297 0 6.46 1.308 8.79 3.64 2.332 2.33 3.64 5.493 3.64 8.79 0 3.297-1.308 6.46-3.64 8.79-2.33 2.332-5.493 3.64-8.79 3.64-3.297 0-6.46-1.308-8.79-3.64-2.332-2.33-3.64-5.493-3.64-8.79 0-3.297 1.308-6.46 3.64-8.79C8.54 3.878 11.703 2.57 15 2.57z" fill-rule="nonzero"/>
+                                    <path d="M9 14h12v2H9z"/>
+                                </g>
+                            </svg>
+                            <span *ngIf="!storyInMyClips" fxFlex="grow">Add to My Clips</span>
+                            <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we already have "Add to My Clips" for the button -->
+                            <svg *ngIf="!storyInMyClips" fxFlex="0 0 calc(16px)" aria-hidden="true" class="myclips-add-delete-icon" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                <title>
+                                    Add story to My Clips
+                                </title>
+                                <path d="M8 0C3.582 0 0 3.582 0 8s3.582 8 8 8c2.122 0 4.157-.843 5.657-2.343S16 10.122 16 8c0-4.418-3.582-8-8-8zm0 1.37c1.758 0 3.445.7 4.688 1.942C13.93 4.555 14.63 6.242 14.63 8c0 1.758-.7 3.445-1.942 4.688C11.445 13.93 9.758 14.63 8 14.63c-1.758 0-3.445-.7-4.688-1.942C2.07 11.445 1.37 9.758 1.37 8c0-1.758.7-3.445 1.942-4.688C4.555 2.07 6.242 1.37 8 1.37zm-.365 2.333c-.216 0-.39.174-.39.39v3.152H4.093c-.216 0-.39.174-.39.39v.73c0 .216.174.39.39.39h3.152v3.152c0 .216.174.39.39.39h.73c.216 0 .39-.174.39-.39V8.755h3.152c.216 0 .39-.174.39-.39v-.73c0-.216-.174-.39-.39-.39H8.755V4.093c0-.216-.174-.39-.39-.39h-.73z" fill-rule="nonzero" fill="#FFF"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Tabs for details/transcript and add or remove when in video-narrow-view view -->
+                    <div class="video-narrow-view tabs" fxLayout="row" fxLayoutAlign="space-between center">
+                        <div fxFlex="0 0 calc(12.5em)" fxLayout="row" fxLayoutAlign="start end"> <!-- pack two tabs together at left -->
+                            <button fxFlex="45%" class="tabs__tab" (click)="mobileDetailsClick(true)" [attr.aria-pressed]="mobileDetails" [class.tabs__tab--active]="mobileDetails">Details</button>
+                            <button fxFlex="55%" class="tabs__tab" (click)="mobileDetailsClick(false)" [attr.aria-pressed]="!mobileDetails" [class.tabs__tab--active]="!mobileDetails">Transcript</button>
+                        </div>
+                    </div>
+
+                    <!-- About -->
+                    <div class="about about--desktop" *ngIf="biographyDetailsReady">
+                        <section class="about__section">
+                            <h2 class="about__heading">About {{myStory.citation.preferredName}}</h2>
+                            <p class="about__copy">{{biographyAbstract}}</p>
+                            <p class="about__copy">
+                                <a class="about__link" tabindex="0" role="link" [routerLink]="['/storiesForBio', {ID: biographyAccession}]" routerLinkActive="active">To see the entire interview, click here</a>.
+                            </p>
+                        </section>
+                        <section class="about__section"
+                        *ngIf="myStory.favorites.color || myStory.favorites.food || myStory.favorites.timeOfYear || myStory.favorites.vacationSpot || myStory.favorites.quote">
+                            <h2 class="about__heading" id="Favorites_Heading-Desktop">Favorites</h2>
+                            <ul class="favorites-list" aria-labelledby="Favorites_Heading-Desktop">
+                            <li class="about__copy about__copy--favorites" *ngIf="myStory.favorites.color"><span class="bold">Favorite Color:</span> {{myStory.favorites.color}}</li>
+                            <li class="about__copy about__copy--favorites" *ngIf="myStory.favorites.food"><span class="bold">Favorite Food:</span> {{myStory.favorites.food}}</li>
+                            <li class="about__copy about__copy--favorites" *ngIf="myStory.favorites.timeOfYear"><span class="bold">Favorite Time of Year:</span> {{myStory.favorites.timeOfYear}}</li>
+                            <li class="about__copy about__copy--favorites" *ngIf="myStory.favorites.vacationSpot"><span class="bold">Favorite Vacation Spot:</span> {{myStory.favorites.vacationSpot}}</li>
+                            <li class="about__copy about__copy--favorites" *ngIf="myStory.favorites.quote"><span class="bold">Favorite Quote:</span> {{myStory.favorites.quote}}</li>
+                            </ul>
+                        </section>
+                    </div>
+
+                    <!-- About on video-narrow-view-->
+                    <div class="about about--narrow-view" *ngIf="biographyDetailsReady" [class.about--mobile-active]="mobileDetails">
+                        <section class="about__section">
+                            <h2 class="about__heading">About {{myStory.citation.preferredName}}</h2>
+                            <p class="about__copy">{{biographyAbstract}}</p>
+                            <p class="about__copy">
+                                <a class="about__link" tabindex="0" role="link" [routerLink]="['/storiesForBio', {ID: biographyAccession}]" routerLinkActive="active">To see the entire interview, click here</a>.
+                            </p>
+                        </section>
+                        <section class="about__section">
+                            <h2 class="about__heading">Citation</h2>
+                            <p class="about__copy">{{storyCitation}}</p>
+                        </section>
+                        <section class="about__section"
+                        *ngIf="myStory.favorites.color || myStory.favorites.food || myStory.favorites.timeOfYear || myStory.favorites.vacationSpot || myStory.favorites.quote">
+                            <h2 class="about__heading" id="Favorites_Heading-Mobile">Favorites</h2>
+                            <ul class="favorites-list" aria-labelledby="Favorites_Heading-Mobile">
+                            <li class="about__copy about__copy--favorites" *ngIf="myStory.favorites.color"><span class="bold">Favorite Color:</span> {{myStory.favorites.color}}</li>
+                            <li class="about__copy about__copy--favorites" *ngIf="myStory.favorites.food"><span class="bold">Favorite Food:</span> {{myStory.favorites.food}}</li>
+                            <li class="about__copy about__copy--favorites" *ngIf="myStory.favorites.timeOfYear"><span class="bold">Favorite Time of Year:</span> {{myStory.favorites.timeOfYear}}</li>
+                            <li class="about__copy about__copy--favorites" *ngIf="myStory.favorites.vacationSpot"><span class="bold">Favorite Vacation Spot:</span> {{myStory.favorites.vacationSpot}}</li>
+                            <li class="about__copy about__copy--favorites" *ngIf="myStory.favorites.quote"><span class="bold">Favorite Quote:</span> {{myStory.favorites.quote}}</li>
+                            </ul>
+                        </section>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!--Transcript column-->
+        <div fxFlex.lt-sm="100%" fxFlex.lt-md="40%" fxFlex="calc(60% - 20px)" fxLayout="column" fxLayoutAlign="space-between stretch">
+            <div class="transcriptColumnParent" [class.transcriptColumnParent--mobile-active]="!mobileDetails"
+            role="region" aria-labelledby="transcript-heading">
+
+                <h2 id="transcript-heading" class="sr-only noSpacing">Story Transcript</h2>
+
+                <button class="video-desktop-view button-low-key-toggle" (click)="toggleTranscriptDisplay()" [attr.aria-expanded]="isTranscriptShowing">
+                    {{toggleTranscriptLabel}}
+                </button>
+
+                <div *ngIf="isTranscriptShowing" class="transcriptColumn" [class.transcriptColumn--mobile-active]="!mobileDetails"
+                    tabindex="0" role="region" aria-labelledby="transcript-heading">
+                    <!-- Allow all users to toggle off the transcript text, which might be distracting, via
+                    a button by the transcript (as asked for by accessibility experts) in desktop view, with
+                    narrow view not needing that since the transcript tab (column) is enough to toggle display on or off. -->
+
+                    <p class="transcriptArea" *ngIf="isTranscriptShowing"
+                        [innerHTML]="transcriptTextBlock">
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div fxLayout="row wrap" fxLayoutAlign="space-between flex-start" fxLayoutGap.lt-md="0" fxLayoutGap="calc(20px)">
+        <!--About Content-->
+        <div fxFlex.lt-sm="100%"  fxFlex.lt-md="100%" fxFlex="calc(40% - 20px)" fxLayout="column" fxLayoutAlign="space-between stretch">
+            <!-- About for wide views (with "about" for "about--mobile" and "about--desktop" hidden for wide views) -->
+            <div fxFlex="grow" class="about about--wide-desktop" *ngIf="biographyDetailsReady">
+                <section class="about__section">
+                    <h2 class="about__heading">About {{myStory.citation.preferredName}}</h2>
+                    <p class="about__copy">{{biographyAbstract}}</p>
+                    <p class="about__copy">
+                        <a class="about__link" tabindex="0" role="link" [routerLink]="['/storiesForBio', {ID: biographyAccession}]" routerLinkActive="active">To see the entire interview, click here</a>.
+                    </p>
+                </section>
+                <section class="about__section"
+                *ngIf="myStory.favorites.color || myStory.favorites.food || myStory.favorites.timeOfYear || myStory.favorites.vacationSpot || myStory.favorites.quote">
+                    <h2 class="about__heading" id="Favorites_Heading-WideView">Favorites</h2>
+                    <ul class="favorites-list" aria-labelledby="Favorites_Heading-WideView">
+                    <li class="about__copy about__copy--favorites" *ngIf="myStory.favorites.color"><span class="bold">Favorite Color:</span> {{myStory.favorites.color}}</li>
+                    <li class="about__copy about__copy--favorites" *ngIf="myStory.favorites.food"><span class="bold">Favorite Food:</span> {{myStory.favorites.food}}</li>
+                    <li class="about__copy about__copy--favorites" *ngIf="myStory.favorites.timeOfYear"><span class="bold">Favorite Time of Year:</span> {{myStory.favorites.timeOfYear}}</li>
+                    <li class="about__copy about__copy--favorites" *ngIf="myStory.favorites.vacationSpot"><span class="bold">Favorite Vacation Spot:</span> {{myStory.favorites.vacationSpot}}</li>
+                    <li class="about__copy about__copy--favorites" *ngIf="myStory.favorites.quote"><span class="bold">Favorite Quote:</span> {{myStory.favorites.quote}}</li>
+                    </ul>
+                </section>
+            </div>
+            <!-- Back button but only when in video-narrow-view (see earlier for goBack() interface when not in mobile, i.e., desktop) -->
+            <button fxFlex="grow"
+            fxLayout="row" fxLayoutAlign="center center" class="video-narrow-view back-button-for-story" (click)="goBack($event)">
+                <!-- Extra visual decoration, not needing svg-title nor sr-only text descriptor as we will have "Back to Story Set" for the button -->
+                <svg fxFlex="0 0 calc(12px)" aria-hidden="true" class="back-chevron-icon" width="12px" height="16px" viewBox="0 0 12 20" xmlns="http://www.w3.org/2000/svg">
+                    <title>
+                        Go back to the previous page
+                    </title>
+                    <g fill="#FFF" fill-rule="nonzero">
+                        <path d="M10 0L0 10l10 10 1.494662-1.494662L2.989324 10l8.505338-8.505338"/>
+                    </g>
+                </svg>
+                <span fxFlex="grow">Back to Previous Page</span>
+            </button>
+        </div>
+        <!--Citation Content-->
+        <div fxFlex.sm="100%" fxFlex.lt-md="100%" fxFlex="calc(60% - 20px)" fxLayout="column" fxLayoutAlign="space-between stretch">
+            <!-- Citation only for video-desktop-view -->
+            <div class="video-desktop-view">
+                <div class="citationContainer" *ngIf="biographyDetailsReady">
+                    <h2 class="about__heading">Citation</h2>
+                    <p class="about__copy__widescreen">{{storyCitation}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+@import '../shared/theme/base';
+
+.help-heading {
+  color: color(dark-grey);
+  font-size: 1.4rem;
+  margin: 0 0 0.3em;
+  padding: 0;
+
+  @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+    font-size: 1.6rem;
+  }
+
+  @media screen and (min-width: bp(afl_large)) {
+    font-size: 1.8rem;
+  }
+
+}
+
+.helptext {
+    font-size: 1rem;
+    color: black;
+
+    @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+      font-size: 1.2rem;
+    }
+    @media screen and (min-width: bp(afl_large)) {
+      font-size: 1.4rem;
+    }
+}
+
+.helptext-before-list { // same as helptext but reduced margin-bottom
+  font-size: 1rem;
+  color: black;
+  margin-bottom: gutter(thmda-extremely_tiny);
+
+  @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+    font-size: 1.2rem;
+  }
+  @media screen and (min-width: bp(afl_large)) {
+    font-size: 1.4rem;
+  }
+}
+
+.helptext-no-nargin-top { // same as helptext but zeroed out margin-top
+  font-size: 1rem;
+  color: black;
+  margin-top: 0;
+
+  @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+    font-size: 1.2rem;
+  }
+  @media screen and (min-width: bp(afl_large)) {
+    font-size: 1.4rem;
+  }
+}
+
+.helpEmphasis {
+  font-weight: bold;
+}
+
+.help__img {
+  max-width: 100%;
+  height: auto;
+  border: em(2) solid #ccc;
+  border-radius: em(6);
+  padding: gutter(thmda-tight);
+  margin: gutter(thmda-tiny);
+
+  @media screen and (max-width: bp(afl_small_just_before)) {
+    padding: gutter(thmda-tiny);
+    margin: gutter(thmda-extremely_tiny);
+  }
+}

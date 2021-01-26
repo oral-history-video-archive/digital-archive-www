@@ -1,0 +1,21 @@
+<!-- NOTE: *very* similar to biography-stamp.component.html, with one difference in the fxFlex height of
+     a card image at 150px instead of 240px and a big one in the support for a list view rather than card view. -->
+<a tabindex="0" role="link" [ngClass]="{'card': cardView,'list':!cardView}"
+  [routerLink]="['/storiesForBio', {ID: bio.document.accession}]"
+  routerLinkActive="active"
+  fxLayout="column" fxLayoutAlign="space-between stretch" fxLayoutGap="0"
+  [thdaScrollToMe]="isSelected(bio)">
+    <div *ngIf="cardView" fxFlex="1 1 calc(150px)" class="card_img-backdrop">
+        <img class="card__img" src="{{myMediaBase}}biography/image/{{bio.document.biographyID}}" alt="" />
+    </div>
+    <div *ngIf="cardView" fxFlexFill class="card__info-overlay">
+        <h3 class="card__contents">{{bio.document.preferredName}}</h3>
+    </div>
+    <div *ngIf="!cardView" fxFlex="auto">
+        <h3 class="list__name">{{bio.document.preferredName}}</h3>
+        <p class="list__contents"><span class="bold">Born:</span> {{bio.document.birthDate | date}}</p>
+        <div *ngIf="bio.highlights">
+            <span *ngFor="let description of bio.highlights.descriptionShort" class="list__contents" [innerHTML]="description"></span>
+        </div>
+    </div>
+</a>

@@ -1,0 +1,17 @@
+<!-- CREDIT:  https://github.com/nkoehler/mat-video/blob/master/projects/mat-video/src/lib/ui/mat-play-button/mat-play-button.component.html -->
+<button class="myVideoButton" (click)="toggleVideoPlayback()">
+    <!-- NOTE: this is the filled play arrow and pause from Angular Material icon, e.g., https://material.io/resources/icons/?icon=play_arrow&style=baseline -->
+    <span *ngIf="!play" class="sr-only">Play video</span>
+    <!-- NOTE: accessibility experts noted svg can be aria-hidden since span gives the label for this control -->
+    <svg *ngIf="!play" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+        <title>Play video</title>
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M8 5v14l11-7z" fill="currentColor" />
+    </svg>
+    <span *ngIf="play" class="sr-only">Pause video</span>
+    <svg *ngIf="play" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+      <title>Pause video</title>
+      <path d="M0 0h24v24H0z" fill="none"/>
+      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="currentColor" />
+    </svg>
+</button>

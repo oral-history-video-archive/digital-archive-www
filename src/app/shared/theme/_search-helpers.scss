@@ -1,0 +1,49 @@
+.input-preface-label {
+  @extend %source-sans;
+  font-weight: normal;
+  color:black;
+  font-size: 1rem;
+  height: 1.5rem;
+  padding-top: em(4);
+  padding-right: em(4);
+}
+
+.select-preface-label {
+  @extend %source-sans;
+  font-weight: normal;
+  color:black;
+  font-size: 1rem;
+  height: 1.5rem;
+  padding-top: em(4);
+  padding-right: em(4);
+
+}
+
+.select-parent {
+  @extend %source-sans;
+
+  background-color: #f2f2f2;
+  border-radius: 0;
+  border: 1px solid color(ok-grey);
+  color:black;
+  font-size: 1rem;
+  height: 1.5rem;
+  padding: 0 em(4);
+  transition: background-color .2s ease-in-out, box-shadow .2s ease-in-out;
+
+  // Safari will "zoom in" on the select with font-size like this, so it needs more space.
+  // Rather than "fight it" and try to control Safari html-select element styling, give it the space
+  // to do what it is doing (at least for Safari 13 on mobile, works as of May 2020).
+  &:not(:root:root) {
+    margin-left: em(8);
+  }
+
+  &:focus {
+      outline: 1px solid color(dark-grey);
+  }
+}
+
+.select-option {
+  background-color:  #fff;
+  color: black;
+}

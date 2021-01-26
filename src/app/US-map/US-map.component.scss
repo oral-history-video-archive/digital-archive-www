@@ -1,0 +1,60 @@
+@import '../shared/theme/base';
+@import '../shared/theme/search-helpers';
+@import '../shared/theme/filter-helpers';
+@import '../shared/theme/button-helpers';
+
+.myMapStyling {
+  fill:#aaaaaa;
+  fill-opacity:1;
+  stroke:#ffffff;
+  stroke-width:1.25;
+  stroke-miterlimit:4;
+  stroke-opacity:1;
+  stroke-dasharray:none
+}
+
+.myMapLineForLabels {
+  fill:none;
+  stroke:#b9b9b9;
+  stroke-width:1.25;
+  stroke-linecap:butt;
+  stroke-linejoin:miter
+}
+
+text {
+  font-size: 1.4rem;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  font-stretch: normal;
+  line-height: 125%;
+  letter-spacing: 0px;
+  word-spacing: 0px;
+  fill: white;
+  fill-opacity: 1;
+  stroke: none;
+  font-family: 'Trebuchet MS', 'Helvetica', Arial, sans-serif
+}
+
+.keyRectangle {
+  fill-opacity:1;
+  width: 20px;
+  height: 20px;
+}
+
+.mapDetailInset {
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+}
+
+.mapExtraHelpInfo {
+  font-style: oblique;
+}
+
+.mapTextDetail {
+  margin: 0 0 em(8) 0; // top right bottom left
+  padding: gutter(thmda-tiny) gutter(thmda-tiny) gutter(thmda-tiny) gutter(thmda-tiny); // top right bottom left
+  border: 1px solid color(dark-grey);
+  background-color: color(light-grey);
+  color: black;
+}

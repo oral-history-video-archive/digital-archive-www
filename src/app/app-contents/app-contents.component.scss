@@ -1,0 +1,37 @@
+@import '../shared/theme/base';
+
+/* Importantly, this ":host" magic (along with flex markup in the parent container) lets the contents fill
+   the remaining browser viewport with a vertical scrollbar on any overflow.  Coupled with other
+   layout and flex styling in the parent (app.component.html) this lets the header remain at the top
+   while the contents and only the contents have a vertical scrollbar. */
+.appContents {
+  margin: 0;
+  padding: em(30) gutter(thmda-big) gutter(thmda-big); // top, left and right, bottom
+
+  &:focus {
+      outline: 0;
+  }
+
+  @media screen and (max-width: bp(thmda_extreme_narrow_just_before)) {
+      padding: gutter(thmda-extremely_tiny) gutter(thmda-extremely_tiny) gutter(thmda-extremely_tiny); // top, left and right, bottom
+  }
+
+  @media screen and (min-width: bp(afl_small)) and (max-width: bp(afl_medium_just_before)) {
+      padding: gutter(thmda-medium) gutter(thmda-medium) gutter(thmda-tiny); // top, left and right, bottom
+  }
+
+  @media screen and (min-width: bp(afl_medium)) {
+      padding: gutter(thmda-big) gutter(thmda-big) gutter(thmda-tight); // top, left and right, bottom
+  }
+}
+:host {
+  // NOTE:  with introduction of thmda_maxwidth, and pillar boxes to center contents, we also brought back jitter
+  // and scroll-in-scroll issues (e.g., person's stories at roughly 600 pixels to 718 pixels wide would have proper
+  // vertical scroll bar on content but also a horizontal and vertical scroll bar on browser, improperly).  So,
+  // make use of overflow-y: scroll almost always now, except for widths at thmda_maxwidt or larger.
+  overflow-y: auto;
+
+  @media screen and (max-width: bp(thmda_narrow)) {
+    overflow-y: scroll; // avoid jitters of scrollbar hide/show/hide on narrow widths by always having it there
+  }
+}

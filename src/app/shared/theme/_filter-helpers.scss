@@ -1,0 +1,409 @@
+.launch-filter-menu-button {
+  @extend %source-sans;
+
+  background-color: color(primary);
+  border: 1px solid color(primary); // note: added for accessibility, to provide a button border in high contrast mode
+  border-radius: 0;
+  cursor: pointer;
+  height: $buttonHeight;
+  margin-bottom: em(10);
+  padding: em(4) em(12);
+  font-size: 1rem;
+
+  @media screen and (max-width: bp(afl_small_just_before)) {
+    font-size: 1.2rem;
+  }
+
+  &:hover,
+  &:focus {
+      box-shadow: inset 0 0 5px rgba(51,51,51,.6);
+      background-color: color(secondary);
+  }
+
+  &:disabled {
+      color: #fff;
+      cursor: not-allowed;
+      opacity: .4;
+  }
+}
+
+.filters__title {
+  @extend %oswald;
+
+  background-color: transparent;
+  color: color(dark-grey);
+  font-size: 1.7rem;
+  margin-bottom: em(10, 20);
+}
+
+// Filter menu styles
+.filter-menu {
+  border: 0;
+  font-size: 1.2rem;
+  padding: 0;
+  width: 100%;
+
+  .panel-for-narrow-filter-header {
+      background-color: #fff;
+      padding: em(12, 16) em(14, 16) em(8, 16);
+  }
+
+  .filter-menu-header-title {
+      @extend %oswald;
+
+      font-size: 1.4rem;
+      letter-spacing: em(.5, 18);
+      text-align: center; // center text within its flex container
+
+      @media screen and (max-width: bp(thmda_wideenough_just_before)) {
+          font-size: 1.6rem;
+          text-align: left;
+      }
+
+      &:focus {
+        outline: 0;
+        text-decoration: underline;
+      }
+  }
+
+  .panel--first { margin-top: em(14, 16); }
+
+  .filter-menu-top-level-button {
+    @extend %oswald;
+
+    background-color: color(primary);
+    border: 1px solid color(primary); // note: added for accessibility, to provide a button border in high contrast mode
+    border-radius: 0;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1.2rem;
+    max-width: 6.25rem;
+    height: $buttonHeight;
+    letter-spacing: em(.61);
+    transition: box-shadow .15s ease-in-out;
+
+    &:hover,
+    &:focus {
+        box-shadow: inset 0 0 5px rgba(51,51,51,.6);
+        background-color: color(secondary);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: .4;
+    }
+
+    span {
+        width: 100%;
+    }
+
+    @media screen and (min-width: bp(thmda_narrow)) {
+        font-size: 1.2rem;
+        max-width: 9.75rem;
+        height: $buttonHeight;
+    }
+  }
+
+  .filter-menu-top-level-button.button-secondary {
+    margin-right: em(32);
+  }
+
+  .button-secondary {
+    background: color(secondary);
+    border: 1px solid color(secondary); // note: added for accessibility, to provide a button border in high contrast mode
+  }
+
+}
+
+.filter-section {
+  min-height: $buttonHeight;
+  margin-bottom: em(10, 16);
+
+  .filter-select-parent {
+    padding-left: 0.25em;
+  }
+}
+
+.filter-section.panel-for-narrow-filter {
+  margin-bottom: 0;
+}
+
+// Last name active filter styles
+.last-name-filter .last-name-letter {
+    border-radius: 0;
+    height: em(36);
+    padding-bottom: em(4);
+    padding-top: em(4);
+    width: em(36);
+  }
+
+// For typically narrow view
+.panel-for-narrow-filter {
+  padding: em(9) 0;
+}
+
+.filter-section {
+    min-height: $buttonHeight;
+}
+
+.filter-select-label {
+  @extend %source-sans-semi-bold;
+
+  color: color(dark-grey);
+  font-size: 1rem;
+  line-height: 2rem;
+  margin: 0;
+}
+
+.filter-section-rg-item:focus {
+    box-shadow: 0 0 0 3px color(tertiary);
+    outline: 3px solid transparent; // For Windows high contrast mode.
+}
+
+.pad-top-a-bit {
+  padding-top: 0.2em;
+}
+
+.filter-section-rg-item {
+  @extend %oswald;
+  background-color: #fff;
+  border: 1px solid color(primary);
+  color: color(primary);
+  padding: em(3) em(3);
+  text-transform: capitalize;
+  font-size: 1.2rem;
+  width: 100%;
+
+  @media screen and (max-width: bp(afl_medium_just_before)) {
+    margin-bottom: em(5);
+  }
+
+  &:hover {
+    border: 1px solid color(primary);
+    background-color:  #fff;
+    color: color(secondary);
+  }
+}
+
+.filter-section-rg-item.selected  {
+    background-color: color(primary);
+    border: 1px solid color(primary);
+    color: #fff;
+}
+
+//This style applies to both wide and narrow screens
+.filter-section-title {
+  @extend %oswald;
+
+  color: color(dark-grey);
+  font-size: 1.4rem;
+  margin-bottom: em(6, 16);
+}
+
+.filter-select-parent {
+  @extend %oswald;
+  margin: auto;
+
+  background-color: color(primary);
+  border: 1px solid color(primary); // note: added for accessibility, to provide a border in high contrast mode
+  border-radius: 0;
+  color: #fff;
+  height: $buttonHeight; // corresponds to 30px(42px) with 16px default
+  width: 100%;
+  font-size: 1.2rem;
+
+  padding-left: em(8,16);
+  padding-right: em(8,16);
+
+  // Safari will "zoom in" on the select with font-size like this, so it needs more space.
+  // Rather than "fight it" and try to control Safari html-select element styling, give it the space
+  // to do what it is doing (at least for Safari 13 on mobile, works as of May 2020).
+  &:not(:root:root) {
+    margin-left: em(8);
+  }
+
+  @media screen and (min-width: bp(afl_medium)) and (max-width: bp(afl_large_just_before)) {
+    padding-left: em(12,16);
+    padding-right: em(12,16);
+  }
+
+  @media screen and (min-width: bp(afl_large)) {
+    padding-left: em(16,16);
+    padding-right: em(16,16);
+  }
+
+  &:hover,
+  &:focus {
+    background-color: color(secondary);
+    color: #fff;
+  }
+
+  &.active {
+    background-color: color(primary);
+    color: #fff;
+  }
+}
+
+.filter-select-option {
+  background-color:  #fff;
+  color: black;
+}
+
+.filter-choice-set {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.filter-choices {
+  margin: em(5);
+  padding: 0;
+  transition: color .2s ease-in-out;
+
+  @media screen and (max-width: bp(thmda_filterui_maxpt)) {
+    line-height: 100%;
+    margin-bottom: em(12);
+    text-align: left;
+  }
+
+  &:hover {
+      color: color(secondary);
+  }
+}
+
+.filter-one-choice {
+  @extend %source-sans-semi-bold;
+
+  font-size: 1rem; // must stay small because filters often squeezed into narrow filter panes
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: color(unchosen-shade);
+  font-weight: normal;
+
+  &.active {
+      color: color(primary);
+  }
+
+  &:hover {
+      color: color(secondary);
+  }
+}
+
+.field-list-parent {
+  @extend %source-sans;
+  font-size: 1rem; // must stay small because filters often squeezed into narrow filter panes
+  text-align: center;
+
+  margin: auto;
+
+  @media screen and (max-width: bp(thmda_filterui_maxpt)) {
+    text-align: left; //accordion content on Topic Search page
+  }
+
+  @media screen and (max-width: bp(afl_medium_just_before)) {
+    font-size: 1rem;
+    word-break: break-word;
+  }
+
+  @media screen and (max-width: bp(afl_small_just_before)) {
+    font-size: em(20);
+  }
+}
+
+.filter--alphabet {
+  border: 1px solid color(ok-grey);
+  color: color(dark-grey);
+  margin: em(3);
+  height: em(30);
+  width: em(30);
+  padding-bottom: em(4);
+  padding-top: em(4);
+  text-align: center;
+  text-transform: uppercase;
+  transition: border .2s ease-in-out;
+
+  &:hover {
+      border: 1px solid color(dark-grey);
+      color: color(dark-grey);
+  }
+
+  @media screen and (max-width: bp(afl_medium_just_before)) {
+    margin: em(5);
+    height: $buttonHeight;
+    width: $buttonHeight;
+    padding-bottom: em(10);
+    padding-top: em(10);
+  }
+}
+
+.filters-applied {
+  margin-bottom: em(18);
+
+  .filters-applied-title {
+    @extend %oswald;
+
+    color: color(primary);
+    letter-spacing: -.5px;
+    padding: em(3) 0;
+  }
+
+  .filters-applied-set {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+  }
+
+  .filter-applied-container {
+      margin-bottom: em(10);
+
+      &:hover {
+          color: color(secondary);
+      }
+  }
+
+  .filter-remove-button {
+      font-size: 1rem; // must stay small because filters often squeezed into narrow filter panes
+      margin: 0;
+      border: 0;
+      background: transparent;
+      color: color(unchosen-shade);
+      font-weight: normal;
+      cursor: pointer;
+      padding: 0;
+      transition: color .2s ease-in-out;
+
+      &.active {
+          color: color(primary);
+      }
+
+      &:hover {
+          color: color(secondary);
+      }
+  }
+
+  .filter-remove-button:focus {
+      color: color(secondary);
+      box-shadow: 0 0 0 3px color(tertiary);
+      // NOTE: accessibility experts asked for this to be removed... outline: 3px solid transparent; // For Windows high contrast mode.
+  }
+
+  .applied-field-list-parent {
+    @extend %source-sans-semi-bold;
+    font-size: 1rem; // must stay small because filters often squeezed into narrow filter panes
+
+    margin: auto;
+    vertical-align: middle;
+  }
+
+  .remove-icon {
+    height: 1.5rem;
+    width: 1.5rem;
+    @media screen and (min-width: bp(afl_large)) {
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+  }
+}
+// End of filters-applied
